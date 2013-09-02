@@ -1,0 +1,123 @@
+﻿ExportUtil = {
+
+MASKMODE_TABLE : {
+	6013: "add",
+	6014: "subtract",
+
+	6213: "add",
+	6214: "subtract",
+},
+
+LayerType : {
+	UNKNOWN:"unknown",
+	COMPOSITION:"composition",
+	STILL:"still",
+	SOLID:"solid",
+	PLACEHOLDER:"placeholder",
+	TEXT:"text",
+	SHAPE:"shape",
+	CAMERA:"camera",
+	LIGHT:"light",
+},
+
+getLayerType : function(layer)
+{
+	if(layer.source) {
+		var s = layer.source;
+		if(s instanceof CompItem) {
+			return this.LayerType.COMPOSITION;
+		}
+		else if(s.mainSource instanceof FileSource) {
+			if(s.mainSource.isStill) {
+				return this.LayerType.STILL;
+			}
+		}
+		else if(s.mainSource instanceof SolidSource) {
+			return this.LayerType.SOLID;
+		}
+		else if(s.mainSource instanceof PlaceHolderSource) {
+			return this.LayerType.PLACEHOLDER;
+		}
+	}
+	else {
+		var l = layer;
+		if(l instanceof TextLayer) {
+			return this.LayerType.TEXT;
+		}
+		else if(l instanceof ShapeLayer) {
+			return this.LayerType.SHAPE;
+		}
+		else if(l instanceof CameraLayer) {
+			return this.LayerType.CAMERA;
+		}
+		else if(l instanceof LightLayer) {
+			return this.LayerType.LIGHT;
+		}
+	}
+	return this.LayerType.UNKNOWN;
+},
+
+compare : function(a0, a1)
+{
+	if(typeof(a0) !== typeof(a1)) {
+		return false;
+	}
+	if(a0 instanceof Array) {
+		if(a0.length != a1.length) {
+			return false;
+		}
+		for(var i = 0; i < a0.length; ++i) {
+			if(a0[i] !== a1[i]) {
+				return false;
+			}
+		}
+	}
+	else if(a0 !== a1) {
+		return false;
+	}
+	/*
+	if(!a0 && !a1) {
+		return true;
+	}
+	if(!a0 || !a1) {
+		return false;
+	}
+	if(a0 instanceof Array) {
+		if(a0.length != a1.length) {
+			return false;
+		}
+		for(var i = 0; i < a0.length; ++i) {
+			if(a0[i] !== a1[i]) {
+				return false;
+			}
+		}
+	}
+	else if(a0 === a1) {
+		return true;
+	}
+	*/
+	return true;
+},
+
+toSource : function(obj)
+{
+	var str = obj.toSource();
+	str = str.replace(/\(\{/g,"{").replace(/\}\)/g,"}");
+	str = str.replace(/([^[{(,\s:]+):/g, "\"$1\":");
+	return str;
+},
+
+hasKey : function(layer, prop_name)
+{
+	if(!layer || !prop_name) {
+		return false;
+	}
+	var prop = layer.property(prop_name);
+	if(!prop) {
+		return false;
+	}
+	return prop.numKeys > 0;
+},
+
+};
+

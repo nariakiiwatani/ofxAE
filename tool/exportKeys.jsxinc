@@ -1,0 +1,110 @@
+﻿#include "./exportUtil.jsxinc"
+function getLayerKeys(layer, startTime, duration) {
+	var comp = layer.containingComp;
+
+	function getFrameTime(f) {
+		return startTime + f*comp.frameDuration;
+	}
+	endFrame = function() {
+		return Math.ceil(duration/comp.frameDuration)+1;
+	}();
+	function procKeysArray(targets, valueFunc)
+	{
+		var ret = new Object();
+		var prevValue = null;
+		var target_size = targets.length;
+		for(var f = 0; f < endFrame; ++f) {
+			var val = new Array();
+			for(var t = 0; t < target_size; ++t) {
+				val = val.concat(valueFunc(targets[t], getFrameTime(f)));
+			}
+			if(!ExportUtil.compare(prevValue, val)) {
+				ret[f] = val;
+				prevValue = val;
+			}
+		}
+		return ret;
+	}
+	function procKeys(target, valueFunc)
+	{
+		var ret = new Object();
+		var prevValue = null;
+		for(var f = 0; f < endFrame; ++f) {
+			var val = valueFunc(target, getFrameTime(f));
+			if(!ExportUtil.compare(prevValue, val)) {
+				ret[f] = val;
+				prevValue = val;
+			}
+		}
+		return ret;
+	}
+	function procMaskShapeKeys(dst, target)
+	{
+		var size = target.value.vertices.length;
+		var props = [
+			"vertices",
+			"inTangents",
+			"outTangents"
+		];
+		for(var j = 0; j < props.length; ++j) {
+			var prop = props[j];
+			dst[prop] = new Array();
+			for(var i = 0; i < size; ++i) {
+				dst[prop].push(new Object());
+				var prevValue = new Array();
+				for(var f = 0; f < endFrame; ++f) {
+					var value = target.valueAtTime(getFrameTime(f), true)[prop][i];
+					if(!ExportUtil.compare(prevValue, value)) {
+						dst[prop][i][f] = value;
+						prevValue = value;
+					}
+				}
+			}
+		}
+	}
+	function isMaskHasKeys(mask)
+	{
+		if(mask.property("maskShape").numKeys > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	function proc() {
+		var obj = new Object();
+
+		obj.active = procKeys(layer, function(l,time){return l.activeAtTime(time);});
+		var props = [
+			"Position",
+			"Scale",
+			"Opacity",
+			"Rotation X",
+			"Rotation Y",
+			"Rotation Z",
+			"Anchor Point",
+			"Orientation",
+			"Zoom"
+		];
+		for(var i = 0; i < props.length; ++i) {
+			var prop = props[i];
+			if(layer.property(prop)) {
+				obj[prop.replace(/ /,"")] = procKeys(layer.property(prop), function(prop,time){return prop.valueAtTime(time,true);});
+			}
+		}
+		if(layer.mask && layer.mask.numProperties > 0) {
+			obj.mask = new Array();
+			for(var i = 1; i <= layer.mask.numProperties; ++i) {
+				var m = layer.mask(i);
+				var mask = new Object();
+				mask.name = m.name;
+				mask.mode = ExportUtil.MASKMODE_TABLE[m.maskMode];
+				mask.inverted = m.inverted;
+				procMaskShapeKeys(mask, m.property("maskShape"));
+				obj.mask.push(mask);
+			}
+		}
+		return obj;
+	}
+	return proc();
+}
+// -----------------------------------
