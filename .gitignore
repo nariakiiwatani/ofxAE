@@ -1,1 +1,4 @@
 .DS_Store
+example/*
+!example/src
+!example/bin/data
