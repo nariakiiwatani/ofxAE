@@ -7,7 +7,7 @@ namespace ofxAE {
 
 void Composition::allocate(int width, int height)
 {
-	fbo_.allocate(width, height, GL_RGB);
+	fbo_.allocate(width, height, GL_RGBA);
 	width_ = width;
 	height_ = height;
 }
