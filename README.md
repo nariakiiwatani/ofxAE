@@ -17,31 +17,31 @@ Currently so buggy, So I need community help. :)
 ### Load and play on OF
 testApp.h  
 
-	ofxAELoader loader_;
-	ofxAEComposition *composition_;
+	ofxAE::Loader loader_;
+	ofxAE::Composition composition_;
 	int frame_;
 testApp.cpp  
 
 	void testApp::setup(){
 		ofSetFrameRate(30);
-		composition_ = loader_.loadComposition("foo.json");
-		frame_ = 0;
+		ofEnableAlphaBlending();
+		loader_.loadComposition(composition_, "foo.json");
 	}
 
 	//--------------------------------------------------------------
 	void testApp::update(){
-		composition_->update();
-		composition_->setFrame(frame_);
+		composition_.setFrame(frame);
+		composition_.update();
 		// loop 30 frames
-		if(++frame_>=30) {
-			frame_ = 0;
+		if(++frame>=30) {
+			frame = 0;
 		}
 	}
 
 	//--------------------------------------------------------------
 	void testApp::draw(){
 		ofBackground(0);
-		composition_->draw();
+		composition_.draw();
 	}
 
 ## The goal is...
