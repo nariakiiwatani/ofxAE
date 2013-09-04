@@ -5,16 +5,16 @@
 void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	composition_ = loader_.loadComposition("simple2d.json");
+	composition_ = loader_.loadComposition("3d_priority.json");
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	static int frame = 0;
 	
-	composition_->update();
 	composition_->setFrame(frame);
-	if(++frame>=30) {
+	composition_->update();
+	if(++frame>=30*10) {
 		frame = 0;
 	}
 }
