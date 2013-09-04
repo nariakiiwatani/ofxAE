@@ -7,11 +7,13 @@ namespace ofxAE {
 class CameraLayer : public Layer {
 	friend class Loader;
 public:
+	void update();
 	void begin();
 	void end();
 	
 	void setFov(float fov);
 	void setAnchorPoint(const ofVec3f& anchor);
+	ofVec3f worldToCamera(const ofVec3f& world);
 
 protected:
 	ofCamera camera_;

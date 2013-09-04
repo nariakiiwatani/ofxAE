@@ -16,12 +16,12 @@ class Loader {
 public:
 	Composition* loadComposition(const string& filepath);
 private:
-	Composition* loadCompositionJson(const Json::Value& json);
-	void loadLayerJson(const Json::Value& json, Composition *comp);
-	Marker* loadMarkerJson(const Json::Value& json);
-	Mask* loadMaskJson(const Json::Value& json);
-	AVLayer* loadAVLayerJson(const Json::Value& json);
-	CameraLayer* loadCameraLayerJson(const Json::Value& json, Composition *comp);
+	void setupCompositionJson(Composition* comp, const Json::Value& json);
+	void setupLayerJson(Layer* layer, const Json::Value& json);
+	void setupMarkerJson(Marker* marker, const Json::Value& json);
+	void setupMaskJson(Mask* mask, const Json::Value& json);
+	void setupAVLayerJson(AVLayer* layer, const Json::Value& json);
+	void setupCameraLayerJson(CameraLayer* camera, const Json::Value& json, Composition *comp);
 };
 }
 

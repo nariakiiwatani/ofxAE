@@ -17,60 +17,67 @@ Composition* Loader::loadComposition(const string& filepath)
 	if(ext == "json") {
 		ofxJSONElement json;
 		if(json.open(filepath)) {
-			return loadCompositionJson(json);
+			Composition *comp = new Composition();
+			setupCompositionJson(comp, json);
+			return comp;
 		}
 		return NULL;
 	}
 }
-Composition* Loader::loadCompositionJson(const Json::Value& json)
+void Loader::setupCompositionJson(Composition *comp, const Json::Value& json)
 {
-	Composition *ret = new Composition();
 	// Basics
-	ret->name_ = json.get("name", "noname").asString();
-	ret->allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
+	comp->name_ = json.get("name", "noname").asString();
+	comp->allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
 	// Layers
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
-		map<string, Layer*> work;
+		vector<Layer*> all;
+		map<string, Layer*> children;
 		int layer_count = layers.size();
 		for(int i = layer_count; i--;) {	// reverse iterate for draw priority
 			const Json::Value& layer = layers.get(i, Json::Value::null);
-			loadLayerJson(layer, ret);
+			const string& type_name = layer.get("layerType", "unknown").asString();
+			Layer *l = NULL;
+			if(type_name == "composition"
+			   || type_name == "solid"
+			   || type_name == "still") {
+				AVLayer *av = new AVLayer();
+				setupAVLayerJson(av, layer);
+				comp->av_.push_back(av);
+				l = av;
+			}
+			if(type_name == "camera") {
+				CameraLayer *camera = new CameraLayer();
+				setupCameraLayerJson(camera, layer, comp);
+				comp->camera_.push_back(camera);
+				l = camera;
+			}
+			if(l) {
+				setupLayerJson(l, layer);
+			}
+			else {
+				continue;
+			}
+			all.push_back(l);
 			if(layer.isMember("parent")) {
-				work.insert(pair<string,Layer*>(layer.get("parent", Json::Value::null).asString(), ret->layer_.back()));
+				children.insert(pair<string,Layer*>(layer.get("parent", Json::Value::null).asString(), l));
 			}
 		}
 		// search parent
-		for(map<string,Layer*>::iterator it_w = work.begin(); it_w != work.end(); ++it_w) {
-			for(vector<Layer*>::iterator it_l = ret->layer_.begin(); it_l != ret->layer_.end(); ++it_l) {
-				if((*it_w).first == (*it_l)->name_) {
-					(*it_w).second->setParent(*it_l);
+		for(map<string,Layer*>::iterator child = children.begin(); child != children.end(); ++child) {
+			for(vector<Layer*>::iterator one = all.begin(); one != all.end(); ++one) {
+				if((*child).first == (*one)->name_) {
+					(*child).second->setParent(*one);
 					break;
 				}
 			}
 		}
 	}
-	
-	return ret;
 }
 
-void Loader::loadLayerJson(const Json::Value &json, Composition *comp)
+void Loader::setupLayerJson(Layer *layer, const Json::Value &json)
 {
-	Layer *layer = NULL;
-	const string& type_name = json.get("layerType", "unknown").asString();
-	if(type_name == "composition"
-	   || type_name == "solid"
-	   || type_name == "still") {
-		layer = loadAVLayerJson(json);
-	}
-	if(type_name == "camera") {
-		CameraLayer *c_layer = loadCameraLayerJson(json, comp);
-		comp->camera_.push_back(c_layer);
-		layer = c_layer;
-	}
-	if(!layer) {
-		layer = new Layer();
-	}
 	layer->name_ = json.get("name", "noname").asString();
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	if(properties.isMember("active")) {
@@ -188,15 +195,15 @@ void Loader::loadLayerJson(const Json::Value &json, Composition *comp)
 		int marker_count = markers.size();
 		for(int i = 0; i < marker_count; ++i) {
 			const Json::Value& marker = markers.get(i, Json::Value::null);
-			layer->marker_.push_back(loadMarkerJson(marker));
+			Marker *m = new Marker();
+			setupMarkerJson(m, marker);
+			layer->marker_.push_back(m);
 		}
 	}
 	layer->resetPropertyFrame();
-	comp->layer_.push_back(layer);
 }
-AVLayer* Loader::loadAVLayerJson(const Json::Value &json)
+void Loader::setupAVLayerJson(AVLayer *av, const Json::Value &json)
 {
-	AVLayer *ret = new AVLayer();
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	bool use_mask = properties.isMember("mask");
 	// Propaties
@@ -205,7 +212,8 @@ AVLayer* Loader::loadAVLayerJson(const Json::Value &json)
 		int mask_count = masks.size();
 		for(int i = 0; i < mask_count; ++i) {
 			const Json::Value& mask = masks.get(i, Json::Value::null);
-			Mask *target = loadMaskJson(mask);
+			Mask *target = new Mask();
+			setupMaskJson(target, mask);
 			{
 				const Json::Value& array = mask.get("vertices", Json::Value::null);
 				if(array.isArray()) {
@@ -221,7 +229,7 @@ AVLayer* Loader::loadAVLayerJson(const Json::Value &json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeVertexArg(j, value));
 						}
-						ret->property_.push_back(prop);
+						av->property_.push_back(prop);
 					}
 				}
 			}
@@ -240,7 +248,7 @@ AVLayer* Loader::loadAVLayerJson(const Json::Value &json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeInTangentArg(j, value));
 						}
-						ret->property_.push_back(prop);
+						av->property_.push_back(prop);
 					}
 				}
 			}
@@ -259,52 +267,51 @@ AVLayer* Loader::loadAVLayerJson(const Json::Value &json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeOutTangentArg(j, value));
 						}
-						ret->property_.push_back(prop);
+						av->property_.push_back(prop);
 					}
 				}
 			}
-			ret->mask_.push_back(target);
+			av->mask_.push_back(target);
 		}
 	}
-	ret->allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
+	av->allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
+	av->is_3d_ = json.get("is3d", false).asBool(); 
 	
 	// Type specified
 	// Solid
 	const Json::Value& solid = json.get("solid", Json::Value::null);
 	if(!solid.isNull()) {
 		SolidLayerHelper *helper = new SolidLayerHelper();
-		helper->setTarget(ret);
+		helper->setTarget(av);
 		helper->color_.set(solid[0].asFloat(), solid[1].asFloat(), solid[2].asFloat());
-		ret->helper_.push_back(helper);
+		av->helper_.push_back(helper);
 	}
 	// Still(Image)
 	const Json::Value& still = json.get("still", Json::Value::null);
 	if(!still.isNull()) {
 		StillLayerHelper *helper = new StillLayerHelper();
-		helper->setTarget(ret);
+		helper->setTarget(av);
 		helper->loadImage(still.asString());
-		ret->helper_.push_back(helper);
+		av->helper_.push_back(helper);
 	}
 	// Composition
 	const Json::Value& composition = json.get("composition", Json::Value::null);
 	if(!composition.isNull()) {
 		CompositionLayerHelper *helper = new CompositionLayerHelper();
-		helper->setTarget(ret);
-		helper->composition_ = loadCompositionJson(composition);
-		ret->helper_.push_back(helper);
+		helper->setTarget(av);
+		helper->composition_ = new Composition();
+		setupCompositionJson(helper->composition_, composition);
+		av->helper_.push_back(helper);
 	}
-	return ret;
 }
 	
-CameraLayer* Loader::loadCameraLayerJson(const Json::Value &json, Composition *comp)
+void Loader::setupCameraLayerJson(CameraLayer *camera, const Json::Value &json, Composition *comp)
 {
-	CameraLayer *ret = new CameraLayer();
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	// Propaties
 	if(properties.isMember("Zoom")) {
 		CameraLayerFovProp *prop = new CameraLayerFovProp();
-		prop->setTarget(ret);
-		ret->property_.push_back(prop);
+		prop->setTarget(camera);
 		const Json::Value& keys = properties.get("Zoom", Json::Value::null);
 		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
 			const string& name = key.key().asString();
@@ -312,28 +319,24 @@ CameraLayer* Loader::loadCameraLayerJson(const Json::Value &json, Composition *c
 			float value = 2 * atan(comp->getHeight() / (2 * keys[name].asFloat())) * (180 / PI);
 			prop->addKey(key_frame, value);
 		}
+		camera->property_.push_back(prop);
 	}
-	return ret;
-}
-	
-Marker* Loader::loadMarkerJson(const Json::Value &json)
-{
-	Marker *ret = new Marker();
-	ret->name_ = json.get("name", "noname").asString();
-	ret->from_ = json.get("from", 0).asInt();
-	ret->to_ = json.get("from", 0).asInt();
-	return ret;
 }
 
-Mask* Loader::loadMaskJson(const Json::Value &json)
+void Loader::setupMarkerJson(Marker *marker, const Json::Value &json)
 {
-	Mask *ret = new Mask();
-	ret->name_ = json.get("name", "noname").asString();
-	ret->is_inverted_ = json.get("inverted", false).asBool();
+	marker->name_ = json.get("name", "noname").asString();
+	marker->from_ = json.get("from", 0).asInt();
+	marker->to_ = json.get("from", 0).asInt();
+}
+
+void Loader::setupMaskJson(Mask *mask, const Json::Value &json)
+{
+	mask->name_ = json.get("name", "noname").asString();
+	mask->is_inverted_ = json.get("inverted", false).asBool();
 	const string& blend_mode = json.get("mode", "add").asString();
-	if(blend_mode == "add")			{ ret->blend_mode_ = OF_BLENDMODE_ADD; }
-	if(blend_mode == "subtract")	{ ret->blend_mode_ = OF_BLENDMODE_SUBTRACT; }
-	return ret;
+	if(blend_mode == "add")			{ mask->blend_mode_ = OF_BLENDMODE_ADD; }
+	if(blend_mode == "subtract")	{ mask->blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 }
 	
 }

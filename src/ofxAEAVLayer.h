@@ -12,11 +12,14 @@ class AVLayer : public Layer {
 	friend class Loader;
 public:
 	void allocate(int width, int height, bool use_mask);
+	void draw();
 	void render();
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
+	bool is3D() { return is_3d_; }
 
 protected:
+	bool is_3d_;
 	float width_;
 	float height_;
 	bool is_use_mask_;

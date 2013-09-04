@@ -14,19 +14,6 @@ void Layer::update()
 	}
 }
 
-void Layer::draw()
-{
-	pushMatrix();
-	render();
-	popMatrix();
-}
-void Layer::render()
-{
-	for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
-		(*helper)->render();
-	}
-}
-
 void Layer::setOrientation(const ofVec3f& orientation)
 {
 	switch(getRotationOrder()) {

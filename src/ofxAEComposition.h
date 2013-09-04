@@ -4,7 +4,7 @@
 #include "ofFbo.h"
 
 namespace ofxAE {
-	class Layer;
+	class AVLayer;
 	class CameraLayer;
 }
 
@@ -23,7 +23,7 @@ private:
 	string name_;
 	float width_;
 	float height_;
-	vector<Layer*> layer_;
+	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 };
 }

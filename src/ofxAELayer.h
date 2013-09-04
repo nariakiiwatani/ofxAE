@@ -9,12 +9,10 @@ class Layer : public TransformNode {
 	friend class Loader;
 public:
 	virtual void update();
-	virtual void render();
 	void setPropertyFrame(int frame);
 	void resetPropertyFrame();
 	
-	void draw();
-
+	bool isActive() { return active_; }
 	float getOpacity() { return opacity_; }
 
 	void setActive(bool active) { active_=active; }
@@ -26,6 +24,7 @@ public:
 	void setOrientation(const ofVec3f& orientation);
 
 protected:
+	Composition *containing_comp_;
 	string name_;
 	float opacity_;
 	bool active_;

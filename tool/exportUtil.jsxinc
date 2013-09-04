@@ -57,6 +57,19 @@ getLayerType : function(layer)
 	return this.LayerType.UNKNOWN;
 },
 
+isAVLayer : function(layer)
+{
+	switch(this.getLayerType(layer)) {
+		case "composition":
+		case "still":
+		case "solid":
+		case "text":
+		case "shape":
+			return true;
+	}
+	return false;
+},
+
 compare : function(a0, a1)
 {
 	if(typeof(a0) !== typeof(a1)) {

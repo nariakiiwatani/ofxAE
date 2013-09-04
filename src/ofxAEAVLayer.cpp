@@ -36,13 +36,25 @@ void AVLayer::render()
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
-		Layer::render();
+		for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
+			(*helper)->render();
+		}
 		ofx_mask_.end();
 		ofx_mask_.draw();
 	}
 	else {
-		Layer::render();
+		for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
+			(*helper)->render();
+		}
 	}
 }
+
+void AVLayer::draw()
+{
+	pushMatrix();
+	render();
+	popMatrix();
+}
+
 }
 /* EOF */
