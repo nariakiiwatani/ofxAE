@@ -11,6 +11,7 @@ namespace ofxAE {
 class AVLayer : public Layer {
 	friend class Loader;
 public:
+	virtual ~AVLayer();
 	void allocate(int width, int height, bool use_mask);
 	void draw();
 	void render();

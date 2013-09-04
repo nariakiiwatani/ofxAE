@@ -4,6 +4,15 @@
 #include "ofxAECameraLayer.h"
 
 namespace ofxAE {
+Composition::~Composition()
+{
+	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
+		delete *it;
+	}
+	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+		delete *it;
+	}
+}
 
 void Composition::allocate(int width, int height)
 {

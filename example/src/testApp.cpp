@@ -1,19 +1,18 @@
 #include "testApp.h"
-#include "ofxAEComposition.h"
 
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	composition_ = loader_.loadComposition("3d_priority.json");
+	loader_.loadComposition(composition_, "3d_priority.json");
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 	static int frame = 0;
 	
-	composition_->setFrame(frame);
-	composition_->update();
+	composition_.setFrame(frame);
+	composition_.update();
 	if(++frame>=30*10) {
 		frame = 0;
 	}
@@ -22,7 +21,7 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofBackground(0);
-	composition_->draw();
+	composition_.draw();
 }
 
 //--------------------------------------------------------------

@@ -8,6 +8,7 @@ namespace ofxAE {
 class Layer : public TransformNode {
 	friend class Loader;
 public:
+	virtual ~Layer();
 	virtual void update();
 	void setPropertyFrame(int frame);
 	void resetPropertyFrame();
@@ -24,7 +25,6 @@ public:
 	void setOrientation(const ofVec3f& orientation);
 
 protected:
-	Composition *containing_comp_;
 	string name_;
 	float opacity_;
 	bool active_;

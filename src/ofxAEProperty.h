@@ -13,6 +13,7 @@ namespace ofxAE {
 
 class PropertyBase_ {
 public:
+	virtual ~PropertyBase_(){}
 	virtual void resetFrame()=0;
 	virtual void setFrame(int frame)=0;
 };
@@ -21,8 +22,6 @@ template<class Target, typename Type>
 class Property_ : public PropertyBase_ {
 	friend class Loader;
 public:
-	Property_();
-	~Property_();
 	void setTarget(Target *target) { target_=target; }
 	void addKey(int frame, const Type& val);
 	

@@ -11,17 +11,14 @@
 #include "ofxAECameraLayer.h"
 
 namespace ofxAE {
-Composition* Loader::loadComposition(const string& filepath)
+void Loader::loadComposition(Composition& comp, const string& filepath)
 {
 	string ext = ofFilePath::getFileExt(filepath);
 	if(ext == "json") {
 		ofxJSONElement json;
 		if(json.open(filepath)) {
-			Composition *comp = new Composition();
-			setupCompositionJson(comp, json);
-			return comp;
+			setupCompositionJson(&comp, json);
 		}
-		return NULL;
 	}
 }
 void Loader::setupCompositionJson(Composition *comp, const Json::Value& json)

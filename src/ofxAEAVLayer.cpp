@@ -3,6 +3,12 @@
 #include "ofxAEMask.h"
 
 namespace ofxAE {
+AVLayer::~AVLayer()
+{
+	for(vector<Mask*>::iterator it = mask_.begin(); it != mask_.end(); ++it) {
+		delete *it;
+	}
+}
 void AVLayer::allocate(int width, int height, bool use_mask)
 {
 	width_ = width;

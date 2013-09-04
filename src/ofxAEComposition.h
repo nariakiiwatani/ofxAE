@@ -12,6 +12,7 @@ namespace ofxAE {
 class Composition {
 	friend class Loader;
 public:
+	~Composition();
 	void allocate(int width, int height);
 	void update();
 	void draw();

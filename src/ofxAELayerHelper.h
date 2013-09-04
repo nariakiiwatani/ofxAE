@@ -51,13 +51,6 @@ public:
 private:
 	Composition *composition_;
 };
-class CameraLayerHelper : public LayerHelper<CameraLayer> {
-	friend class Loader;
-public:
-	void begin();
-	void end();
-private:
-};
 }
 
 /* EOF */

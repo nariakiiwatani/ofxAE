@@ -4,6 +4,19 @@
 #include "ofxAEMask.h"
 
 namespace ofxAE {
+Layer::~Layer()
+{
+	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
+		delete *it;
+	}
+	for(vector<LayerHelper_*>::iterator it = helper_.begin(); it != helper_.end(); ++it) {
+		delete *it;
+	}
+	for(vector<PropertyBase_*>::iterator it = property_.begin(); it != property_.end(); ++it) {
+		delete *it;
+	}
+}
+
 void Layer::update()
 {
 	if(isDirty()) {

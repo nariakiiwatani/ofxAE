@@ -28,14 +28,6 @@ void Property_<Target,Type>::resetFrame()
 	resetCallback(val);
 	prev_ = val;
 }
-template<class Target, typename Type>
-Property_<Target,Type>::Property_()
-{
-}
-template<class Target, typename Type>
-Property_<Target,Type>::~Property_()
-{
-}
 
 void LayerActiveProp::changedCallback(const bool& val)
 {
