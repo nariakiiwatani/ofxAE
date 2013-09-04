@@ -309,7 +309,7 @@ CameraLayer* Loader::loadCameraLayerJson(const Json::Value &json, Composition *c
 		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
 			const string& name = key.key().asString();
 			int key_frame = ofToInt(name);
-			float value = 2 * atan(comp->getWidth() / (2 * keys[name].asFloat())) * (180 / PI);
+			float value = 2 * atan(comp->getHeight() / (2 * keys[name].asFloat())) * (180 / PI);
 			prop->addKey(key_frame, value);
 		}
 	}
