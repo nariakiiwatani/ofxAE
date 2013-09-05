@@ -7,6 +7,7 @@ namespace ofxAE {
 class CameraLayer : public Layer {
 	friend class Loader;
 public:
+	CameraLayer();
 	void update();
 	void begin();
 	void end();

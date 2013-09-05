@@ -2,11 +2,15 @@
 
 namespace ofxAE {
 
+CameraLayer::CameraLayer()
+{
+	camera_.setVFlip(true);
+}
 void CameraLayer::update()
 {
 	Layer::update();
-	camera_.setTransformMatrix(*getWorldMatrix());
 	camera_.lookAt(look_at_);
+	camera_.setTransformMatrix(*getWorldMatrix());
 }
 void CameraLayer::begin()
 {
