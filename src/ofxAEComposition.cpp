@@ -32,7 +32,8 @@ void Composition::update()
 			}
 		}
 	}
-	vector<AVLayer*> sorted;
+	fbo_.begin();
+	ofClear(0);
 	multimap<float,AVLayer*> work;
 	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
 		AVLayer *l = *layer;
@@ -47,40 +48,40 @@ void Composition::update()
 				work.insert(pair<float,AVLayer*>(dist.z, l));
 			}
 			else {
-				for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
-					sorted.push_back((*w).second);
+				if(!work.empty()) {
+					if(active_camera) {
+						active_camera->begin();
+					}
+					for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
+						(*w).second->draw();
+					}
+					work.clear();
+					if(active_camera) {
+						active_camera->end();
+					}
 				}
-				work.clear();
-				sorted.push_back(l);
+				l->draw();
 			}
 		}
 	}
-	for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
-		sorted.push_back((*w).second);
-	}
-	work.clear();
-	fbo_.begin();
-	ofClear(0);
-	for(vector<AVLayer*>::iterator layer = sorted.begin(); layer != sorted.end(); ++layer) {
-		(*layer)->draw();
+	if(!work.empty()) {
+		if(active_camera) {
+			active_camera->begin();
+		}
+		for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
+			(*w).second->draw();
+		}
+		work.clear();
+		if(active_camera) {
+			active_camera->end();
+		}
 	}
 	fbo_.end();
 }
 
 void Composition::draw()
 {
-	CameraLayer *active_camera = NULL;
-	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-		if((*camera)->isActive()) {
-			(*camera)->begin();
-			active_camera = *camera;
-			break;
-		}
-	}
 	fbo_.draw(0,0,width_,height_);
-	if(active_camera) {
-		active_camera->end();
-	}
 }
 
 void Composition::setFrame(int frame)
