@@ -4,7 +4,7 @@
 void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	loader_.loadComposition(composition_, "mask_basic.json");
+	loader_.loadComposition(composition_, "nest_basic.json");
 }
 
 //--------------------------------------------------------------
