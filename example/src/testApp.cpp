@@ -4,7 +4,7 @@
 void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	loader_.loadComposition(composition_, "3d_camera_rotation.json");
+	loader_.loadComposition(composition_, "mask_basic.json");
 }
 
 //--------------------------------------------------------------
