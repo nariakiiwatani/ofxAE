@@ -3,6 +3,7 @@
 #include "ofTexture.h"
 #include "ofColor.h"
 #include "ofCamera.h"
+#include "ofxAEComposition.h"
 
 namespace ofxAE {
 	class AVLayer;
@@ -49,7 +50,7 @@ public:
 	void render();
 	void setPropertyFrame(int frame);
 private:
-	Composition *composition_;
+	Composition composition_;
 };
 }
 
