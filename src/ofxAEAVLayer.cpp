@@ -20,8 +20,9 @@ void AVLayer::allocate(int width, int height, bool use_mask)
 	is_use_mask_ = use_mask;
 }
 
-void AVLayer::render()
+void AVLayer::draw()
 {
+	pushMatrix();
 	if(is_use_mask_) {
 		ofx_mask_.beginMask();
 		if(mask_.empty()) {
@@ -42,23 +43,13 @@ void AVLayer::render()
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
-		for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
-			(*helper)->render();
-		}
+		render();
 		ofx_mask_.end();
 		ofx_mask_.draw();
 	}
 	else {
-		for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
-			(*helper)->render();
-		}
+		render();
 	}
-}
-
-void AVLayer::draw()
-{
-	pushMatrix();
-	render();
 	popMatrix();
 }
 

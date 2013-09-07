@@ -2,15 +2,14 @@
 
 #include "TransformNode.h"
 #include "ofxAEProperty.h"
-#include "ofxAELayerHelper.h"
 
 namespace ofxAE {
 class Layer : public TransformNode {
 	friend class Loader;
 public:
 	virtual ~Layer();
-	virtual void update();
-	void setPropertyFrame(int frame);
+	void update();
+	virtual void setPropertyFrame(int frame);
 	void resetPropertyFrame();
 	
 	bool isActive() { return active_; }
@@ -25,11 +24,11 @@ public:
 	void setOrientation(const ofVec3f& orientation);
 
 protected:
+	virtual void prepare(){};
 	string name_;
 	float opacity_;
 	bool active_;
 	vector<Marker*> marker_;
-	vector<LayerHelper_*> helper_;
 	vector<PropertyBase_*> property_;
 };
 }

@@ -10,6 +10,9 @@ namespace ofxAE {
 	class AVLayer;
 	class Mask;
 	class CameraLayer;
+	class CompositionLayer;
+	class SolidLayer;
+	class StillLayer;
 }
 namespace ofxAE {
 class Loader {
@@ -21,7 +24,10 @@ private:
 	void setupMarkerJson(Marker& marker, const Json::Value& json);
 	void setupMaskJson(Mask& mask, const Json::Value& json);
 	void setupAVLayerJson(AVLayer& layer, const Json::Value& json);
-	void setupCameraLayerJson(CameraLayer& camera, const Json::Value& json, Composition& comp);
+	void setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, Composition& comp);
+	void setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json);
+	void setupSolidLayerJson(SolidLayer& layer, const Json::Value& json);
+	void setupStillLayerJson(StillLayer& layer, const Json::Value& json);
 };
 }
 

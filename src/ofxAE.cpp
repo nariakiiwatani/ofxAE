@@ -4,11 +4,13 @@
 #include "ofFileUtils.h"
 #include "ofxAEComposition.h"
 #include "ofxAEAVLayer.h"
-#include "ofxAELayerHelper.h"
 #include "ofxAEMarker.h"
 #include "ofxAEMask.h"
 #include "ofxAEProperty.h"
 #include "ofxAECameraLayer.h"
+#include "ofxAECompositionLayer.h"
+#include "ofxAESolidLayer.h"
+#include "ofxAEStillLayer.h"
 
 namespace ofxAE {
 void Loader::loadComposition(Composition& comp, const string& filepath)
@@ -36,24 +38,31 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			const Json::Value& layer = layers.get(i, Json::Value::null);
 			const string& type_name = layer.get("layerType", "unknown").asString();
 			Layer *l = NULL;
-			if(type_name == "composition"
-			   || type_name == "solid"
-			   || type_name == "still") {
-				AVLayer *av = new AVLayer();
-				setupAVLayerJson(*av, layer);
-				comp.av_.push_back(av);
-				l = av;
+			if(type_name == "composition") {
+				CompositionLayer *ll = new CompositionLayer();
+				setupCompositionLayerJson(*ll, layer);
+				comp.av_.push_back(ll);
+				l = ll;
 			}
-			if(type_name == "camera") {
+			else if(type_name == "solid") {
+				SolidLayer *ll = new SolidLayer();
+				setupSolidLayerJson(*ll, layer);
+				comp.av_.push_back(ll);
+				l = ll;
+			}
+			else if(type_name == "still") {
+				StillLayer *ll = new StillLayer();
+				setupStillLayerJson(*ll, layer);
+				comp.av_.push_back(ll);
+				l = ll;
+			}
+			else if(type_name == "camera") {
 				CameraLayer *camera = new CameraLayer();
 				setupCameraLayerJson(*camera, layer, comp);
 				comp.camera_.push_back(camera);
 				l = camera;
 			}
-			if(l) {
-				setupLayerJson(*l, layer);
-			}
-			else {
+			if(!l) {
 				continue;
 			}
 			all.push_back(l);
@@ -199,7 +208,7 @@ void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 	}
 	layer.resetPropertyFrame();
 }
-void Loader::setupAVLayerJson(AVLayer& av, const Json::Value& json)
+void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 {
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	bool use_mask = properties.isMember("mask");
@@ -226,7 +235,7 @@ void Loader::setupAVLayerJson(AVLayer& av, const Json::Value& json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeVertexArg(j, value));
 						}
-						av.property_.push_back(prop);
+						layer.property_.push_back(prop);
 					}
 				}
 			}
@@ -245,7 +254,7 @@ void Loader::setupAVLayerJson(AVLayer& av, const Json::Value& json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeInTangentArg(j, value));
 						}
-						av.property_.push_back(prop);
+						layer.property_.push_back(prop);
 					}
 				}
 			}
@@ -264,50 +273,25 @@ void Loader::setupAVLayerJson(AVLayer& av, const Json::Value& json)
 							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
 							prop->addKey(key_frame, MaskShapeOutTangentArg(j, value));
 						}
-						av.property_.push_back(prop);
+						layer.property_.push_back(prop);
 					}
 				}
 			}
-			av.mask_.push_back(target);
+			layer.mask_.push_back(target);
 		}
 	}
-	av.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
-	av.is_3d_ = json.get("is3d", false).asBool(); 
-	
-	// Type specified
-	// Solid
-	const Json::Value& solid = json.get("solid", Json::Value::null);
-	if(!solid.isNull()) {
-		SolidLayerHelper *helper = new SolidLayerHelper();
-		helper->setTarget(&av);
-		helper->color_.set(solid[0].asFloat(), solid[1].asFloat(), solid[2].asFloat());
-		av.helper_.push_back(helper);
-	}
-	// Still(Image)
-	const Json::Value& still = json.get("still", Json::Value::null);
-	if(!still.isNull()) {
-		StillLayerHelper *helper = new StillLayerHelper();
-		helper->setTarget(&av);
-		helper->loadImage(still.asString());
-		av.helper_.push_back(helper);
-	}
-	// Composition
-	const Json::Value& composition = json.get("composition", Json::Value::null);
-	if(!composition.isNull()) {
-		CompositionLayerHelper *helper = new CompositionLayerHelper();
-		helper->setTarget(&av);
-		setupCompositionJson(helper->composition_, composition);
-		av.helper_.push_back(helper);
-	}
+	layer.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
+	layer.is_3d_ = json.get("is3d", false).asBool(); 
+	setupLayerJson(layer, json);
 }
 	
-void Loader::setupCameraLayerJson(CameraLayer& camera, const Json::Value& json, Composition& comp)
+void Loader::setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, Composition& comp)
 {
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	// Propaties
 	if(properties.isMember("Zoom")) {
 		CameraLayerFovProp *prop = new CameraLayerFovProp();
-		prop->setTarget(&camera);
+		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("Zoom", Json::Value::null);
 		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
 			const string& name = key.key().asString();
@@ -315,8 +299,34 @@ void Loader::setupCameraLayerJson(CameraLayer& camera, const Json::Value& json, 
 			float value = 2 * atan(comp.getHeight() / (2 * keys[name].asFloat())) * (180 / PI);
 			prop->addKey(key_frame, value);
 		}
-		camera.property_.push_back(prop);
+		layer.property_.push_back(prop);
 	}
+	setupLayerJson(layer, json);
+}
+
+void Loader::setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json)
+{
+	const Json::Value& composition = json.get("composition", Json::Value::null);
+	if(!composition.isNull()) {
+		setupCompositionJson(layer.composition_, composition);
+	}
+	setupAVLayerJson(layer, json);
+}
+void Loader::setupSolidLayerJson(SolidLayer& layer, const Json::Value& json)
+{
+	const Json::Value& solid = json.get("solid", Json::Value::null);
+	if(!solid.isNull()) {
+		layer.setColor(ofFloatColor(solid[0].asFloat(), solid[1].asFloat(), solid[2].asFloat()));
+	}
+	setupAVLayerJson(layer, json);
+}
+void Loader::setupStillLayerJson(StillLayer& layer, const Json::Value& json)
+{
+	const Json::Value& still = json.get("still", Json::Value::null);
+	if(!still.isNull()) {
+		layer.loadImage(still.asString());
+	}
+	setupAVLayerJson(layer, json);
 }
 
 void Loader::setupMarkerJson(Marker& marker, const Json::Value& json)

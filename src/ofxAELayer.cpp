@@ -1,15 +1,11 @@
 #include "ofxAELayer.h"
 #include "ofGraphics.h"
-#include "ofxAELayerHelper.h"
 #include "ofxAEMask.h"
 
 namespace ofxAE {
 Layer::~Layer()
 {
 	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
-		delete *it;
-	}
-	for(vector<LayerHelper_*>::iterator it = helper_.begin(); it != helper_.end(); ++it) {
 		delete *it;
 	}
 	for(vector<PropertyBase_*>::iterator it = property_.begin(); it != property_.end(); ++it) {
@@ -22,9 +18,7 @@ void Layer::update()
 	if(isDirty()) {
 		refreshMatrix();
 	}
-	for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
-		(*helper)->update();
-	}
+	prepare();
 }
 
 void Layer::setOrientation(const ofVec3f& orientation)
@@ -73,9 +67,6 @@ void Layer::setPropertyFrame(int frame)
 {
 	for(vector<PropertyBase_*>::iterator prop = property_.begin(); prop != property_.end(); ++prop) {
 		(*prop)->setFrame(frame);
-	}
-	for(vector<LayerHelper_*>::iterator helper = helper_.begin(); helper != helper_.end(); ++helper) {
-		(*helper)->setPropertyFrame(frame);
 	}
 }
 
