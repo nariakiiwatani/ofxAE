@@ -8,7 +8,6 @@ class CameraLayer : public Layer {
 	friend class Loader;
 public:
 	CameraLayer();
-	void update();
 	void begin();
 	void end();
 	
@@ -16,7 +15,8 @@ public:
 	void setAnchorPoint(const ofVec3f& anchor);
 	ofVec3f worldToCamera(const ofVec3f& world);
 
-protected:
+private:
+	void prepare();
 	ofCamera camera_;
 	ofVec3f look_at_;
 };

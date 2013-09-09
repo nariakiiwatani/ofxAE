@@ -6,9 +6,8 @@ CameraLayer::CameraLayer()
 {
 	camera_.setVFlip(true);
 }
-void CameraLayer::update()
+void CameraLayer::prepare()
 {
-	Layer::update();
 	camera_.lookAt(look_at_);
 	camera_.setTransformMatrix(*getWorldMatrix());
 }
