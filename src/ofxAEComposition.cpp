@@ -87,14 +87,10 @@ void Composition::draw()
 void Composition::setFrame(int frame)
 {
 	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-		if((*camera)->isActive()) {
-			(*camera)->setPropertyFrame(frame);
-		}
+		(*camera)->setPropertyFrame(frame);
 	}
 	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
-		if((*layer)->isActive()) {
-			(*layer)->setPropertyFrame(frame);
-		}
+		(*layer)->setPropertyFrame(frame);
 	}
 }
 }
