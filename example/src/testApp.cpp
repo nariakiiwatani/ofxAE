@@ -4,7 +4,8 @@
 void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	loader_.loadComposition(composition_, "nest_basic.json");
+	ofxAE::Loader loader;
+	loader.loadComposition(composition_, "nest_basic.json");
 }
 
 //--------------------------------------------------------------

@@ -21,6 +21,5 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 private:
-	ofxAE::Loader loader_;
 	ofxAE::Composition composition_;
 };
