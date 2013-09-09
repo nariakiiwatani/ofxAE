@@ -28,6 +28,7 @@ function proc(comp)
 	{
 		var obj = new Object();
 		obj.name = l.name;
+		obj.startFrame = l.startTime*frameRate;
 		if(l.parent) {
 			obj.parent = l.parent.name;
 		}

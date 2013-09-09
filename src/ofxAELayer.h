@@ -28,6 +28,7 @@ protected:
 	string name_;
 	float opacity_;
 	bool active_;
+	int start_frame_;
 	vector<Marker*> marker_;
 	vector<PropertyBase_*> property_;
 };

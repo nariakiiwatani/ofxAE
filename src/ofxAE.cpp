@@ -85,6 +85,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 {
 	layer.name_ = json.get("name", "noname").asString();
+	layer.start_frame_ = json.get("startFrame", 0).asFloat();
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	if(properties.isMember("active")) {
 		LayerActiveProp *prop = new LayerActiveProp();

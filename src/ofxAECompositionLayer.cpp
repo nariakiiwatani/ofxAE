@@ -16,7 +16,7 @@ void CompositionLayer::render()
 void CompositionLayer::setPropertyFrame(int frame)
 {
 	Layer::setPropertyFrame(frame);
-	composition_.setFrame(frame);
+	composition_.setFrame(frame-start_frame_);
 }
 
 }
