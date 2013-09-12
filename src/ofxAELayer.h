@@ -22,6 +22,8 @@ public:
 	void setRotation(const ofVec3f& rotation) { TransformNode::setRotation(rotation); }
 	virtual void setAnchorPoint(const ofVec3f& anchor_point) { TransformNode::setAnchorPoint(anchor_point); }
 	void setOrientation(const ofVec3f& orientation);
+	
+	const string& getName();
 
 protected:
 	virtual void prepare(){};
@@ -32,6 +34,12 @@ protected:
 	vector<Marker*> marker_;
 	vector<PropertyBase_*> property_;
 };
+	
+inline const string& Layer::getName()
+{
+	return name_;
+}
+
 }
 
 /* EOF */

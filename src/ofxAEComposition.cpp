@@ -93,5 +93,25 @@ void Composition::setFrame(int frame)
 		(*layer)->setPropertyFrame(frame);
 	}
 }
+
+AVLayer* Composition::getAVLayer(const string& name)
+{
+	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
+		if((*it)->getName() == name) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+CameraLayer* Composition::getCameraLayer(const string& name)
+{
+	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+		if((*it)->getName() == name) {
+			return *it;
+		}
+	}
+	return NULL;
+}
+
 }
 /* EOF */
