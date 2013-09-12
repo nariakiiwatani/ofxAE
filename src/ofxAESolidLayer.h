@@ -5,7 +5,7 @@
 
 namespace ofxAE {
 
-class SolidLayer : AVLayer
+class SolidLayer : public AVLayer
 {
 	friend class Loader;
 public:

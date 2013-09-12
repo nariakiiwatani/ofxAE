@@ -5,7 +5,7 @@
 
 namespace ofxAE {
 
-class CompositionLayer : AVLayer
+class CompositionLayer : public AVLayer
 {
 	friend class Loader;
 public:
