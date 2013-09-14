@@ -5,7 +5,7 @@ void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "nest_gap_time.json");
+	loader.loadComposition(composition_, "shape_ellipse.json");
 }
 
 //--------------------------------------------------------------

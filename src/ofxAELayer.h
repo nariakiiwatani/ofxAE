@@ -1,9 +1,10 @@
 #pragma once
 
 #include "TransformNode.h"
-#include "ofxAEProperty.h"
 
 namespace ofxAE {
+	class PropertyBase_;
+	class Marker;
 class Layer : public TransformNode {
 	friend class Loader;
 public:
@@ -23,7 +24,7 @@ public:
 	virtual void setAnchorPoint(const ofVec3f& anchor_point) { TransformNode::setAnchorPoint(anchor_point); }
 	void setOrientation(const ofVec3f& orientation);
 	
-	const string& getName();
+	const string& getName() { return name_; }
 
 protected:
 	virtual void prepare(){};
@@ -34,12 +35,6 @@ protected:
 	vector<Marker*> marker_;
 	vector<PropertyBase_*> property_;
 };
-	
-inline const string& Layer::getName()
-{
-	return name_;
-}
-
 }
 
 /* EOF */

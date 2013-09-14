@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofPath.h"
-#include "ofxAEProperty.h"
 
 namespace ofxAE {
 	class AVLayer;

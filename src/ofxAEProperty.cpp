@@ -2,6 +2,7 @@
 #include "ofxAELayer.h"
 #include "ofxAeMask.h"
 #include "ofxAECameraLayer.h"
+#include "ofxAEShapeLayer.h"
 
 namespace ofxAE {
 	
@@ -29,70 +30,20 @@ void Property_<Target,Type>::resetFrame()
 	prev_ = val;
 }
 
-void LayerActiveProp::changedCallback(const bool& val)
-{
-	target_->setActive(val);
-}
-void LayerOpacityProp::changedCallback(const float& val)
-{
-	target_->setOpacity(val);
-}
-void LayerPositionProp::changedCallback(const ofVec3f& val)
-{
-	target_->setPosition(val);
-}
-void LayerScaleProp::changedCallback(const ofVec3f& val)
-{
-	target_->setScale(val);
-}
-void LayerRotationXProp::changedCallback(const float& val)
-{
-	target_->setRotationX(val);
-}
-void LayerRotationYProp::changedCallback(const float& val)
-{
-	target_->setRotationY(val);
-}
-void LayerRotationZProp::changedCallback(const float& val)
-{
-	target_->setRotationZ(val);
-}
-void LayerAnchorPointProp::changedCallback(const ofVec3f& val)
-{
-	target_->setAnchorPoint(val);
-}
-void LayerOrientationProp::changedCallback(const ofVec3f& val)
-{
-	target_->setOrientation(val);
-}
-
 template class Property_<Layer, bool>;
 template class Property_<Layer, float>;
 template class Property_<Layer, ofVec3f>;
+template class Property_<CameraLayer, float>;
+template class Property_<ShapeContentStroke, ofVec3f>;
+template class Property_<ShapeContentStroke, float>;
+template class Property_<ShapeContentEllipse, ofVec2f>;
+template class Property_<ShapeContentGroup, ofVec2f>;
+template class Property_<ShapeContentGroup, float>;
 
-void MaskVertexProp::changedCallback(const MaskShapeVertexArg& val)
-{
-	target_->setVertex(val.index, val.val);
-}
-void MaskInTangentProp::changedCallback(const MaskShapeInTangentArg& val)
-{
-	target_->setInTangent(val.index, val.val);
-}
-void MaskOutTangentProp::changedCallback(const MaskShapeOutTangentArg& val)
-{
-	target_->setOutTangent(val.index, val.val);
-}
 template class Property_<Mask, MaskShapeVertexArg>;
 template class Property_<Mask, MaskShapeInTangentArg>;
 template class Property_<Mask, MaskShapeOutTangentArg>;
 
-
-void CameraLayerFovProp::changedCallback(const float& val)
-{
-	target_->setFov(val);
-}
-
-template class Property_<CameraLayer, float>;
 
 }
 /* EOF */

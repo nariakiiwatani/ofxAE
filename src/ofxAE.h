@@ -13,6 +13,8 @@ namespace ofxAE {
 	class CompositionLayer;
 	class SolidLayer;
 	class StillLayer;
+	class ShapeLayer;
+	class ShapeContentGroup;
 }
 namespace ofxAE {
 class Loader {
@@ -28,6 +30,8 @@ private:
 	void setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json);
 	void setupSolidLayerJson(SolidLayer& layer, const Json::Value& json);
 	void setupStillLayerJson(StillLayer& layer, const Json::Value& json);
+	void setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json);
+	void setupShapeContentsJson(ShapeLayer& layer, const Json::Value& contents, ShapeContentGroup *parent=NULL);
 };
 }
 

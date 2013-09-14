@@ -8,23 +8,6 @@ function getLayerKeys(layer, startTime, duration) {
 	endFrame = function() {
 		return Math.ceil(duration/comp.frameDuration)+1;
 	}();
-	function procKeysArray(targets, valueFunc)
-	{
-		var ret = new Object();
-		var prevValue = null;
-		var target_size = targets.length;
-		for(var f = 0; f < endFrame; ++f) {
-			var val = new Array();
-			for(var t = 0; t < target_size; ++t) {
-				val = val.concat(valueFunc(targets[t], getFrameTime(f)));
-			}
-			if(!ExportUtil.compare(prevValue, val)) {
-				ret[f] = val;
-				prevValue = val;
-			}
-		}
-		return ret;
-	}
 	function procKeys(target, valueFunc)
 	{
 		var ret = new Object();
@@ -38,7 +21,7 @@ function getLayerKeys(layer, startTime, duration) {
 		}
 		return ret;
 	}
-	function procMaskShapeKeys(dst, target)
+	function procShapeKeys(dst, target)
 	{
 		var size = target.value.vertices.length;
 		var props = [
@@ -50,15 +33,83 @@ function getLayerKeys(layer, startTime, duration) {
 			var prop = props[j];
 			dst[prop] = new Array();
 			for(var i = 0; i < size; ++i) {
-				dst[prop].push(new Object());
-				var prevValue = new Array();
-				for(var f = 0; f < endFrame; ++f) {
-					var value = target.valueAtTime(getFrameTime(f), true)[prop][i];
-					if(!ExportUtil.compare(prevValue, value)) {
-						dst[prop][i][f] = value;
-						prevValue = value;
-					}
+				dst[prop].push(procKeys(target, function(p,time){return p.valueAtTime(time,true)[prop][i];}));
+			}
+		}
+	}
+	function procShapeContent(prop) {
+		var ret = new Object();
+		ret.name = prop.name;
+		ret.mname = prop.matchName;
+		function addPropArray(dst, propNames, prop) {
+			for(var i = 0; i < propNames.length; ++i) {
+				var propName = propNames[i];
+				if(prop.property(propName)) {
+					dst[propName.replace(/ /,"")] = procKeys(prop.property(propName), function(prop,time){return prop.valueAtTime(time,true);});
 				}
+			}
+		}
+		if(prop.matchName.indexOf("Shape") >= 0) {
+			ret.inverse = prop.property("ADBE Vector Shape Direction").value > 2;
+			if(prop.matchName.indexOf("Ellipse") >= 0) {
+				ret.type = "ellipse";
+				var propNames = [
+					"Size",
+					"Position"
+				];
+				addPropArray(ret, propNames, prop);
+			}
+		}
+		else if(prop.matchName.indexOf("Graphic") >= 0) {
+			if(prop.matchName.indexOf("G-Stroke") >= 0) {
+			}
+			else if(prop.matchName.indexOf("Stroke") >= 0) {
+				ret.type = "stroke";
+				var propNames = [
+					"Color",
+					"Opacity",
+					"Stroke Width"
+				];
+				addPropArray(ret, propNames, prop);
+			}
+		}
+		else if(prop.matchName.indexOf("Filter") >= 0) {
+		}
+		else if(prop.matchName.indexOf("Materials") >= 0) {
+		}
+		else if(prop.matchName.indexOf("Transform") >= 0) {
+			ret.type = "transform";
+			var propNames = [
+				"Position",
+				"Scale",
+				"Rotation",
+				"Anchor Point",
+				"Opacity",
+				"Skew",
+				"Skew Axis"
+			];
+			addPropArray(ret, propNames, prop);
+		}
+		else if(prop.matchName.indexOf("Group") >= 0) {
+			ret.type = "group";
+			ret.contents = new Array();
+			for(var i = 1; i <= prop.numProperties; ++i) {
+				if(prop.enabled) {
+					addShapeContent(ret.contents, prop.property(i));
+				}
+			}
+		}
+		return ret;
+	}
+	function addShapeContent(dst, prop) {
+		if(prop.enabled) {
+			if(prop.matchName.indexOf("Vectors Group") >= 0) {
+				for(var i = 1; i <= prop.numProperties; ++i) {
+					addShapeContent(dst, prop.property(i));
+				}
+			}
+			else {
+				dst.push(procShapeContent(prop));
 			}
 		}
 	}
@@ -74,7 +125,7 @@ function getLayerKeys(layer, startTime, duration) {
 		var obj = new Object();
 
 		obj.active = procKeys(layer, function(l,time){return l.activeAtTime(time);});
-		var props = [
+		var propNames = [
 			"Position",
 			"Scale",
 			"Opacity",
@@ -85,10 +136,10 @@ function getLayerKeys(layer, startTime, duration) {
 			"Orientation",
 			"Zoom"
 		];
-		for(var i = 0; i < props.length; ++i) {
-			var prop = props[i];
-			if(layer.property(prop)) {
-				obj[prop.replace(/ /,"")] = procKeys(layer.property(prop), function(prop,time){return prop.valueAtTime(time,true);});
+		for(var i = 0; i < propNames.length; ++i) {
+			var propName = propNames[i];
+			if(layer.property(propName)) {
+				obj[propName.replace(/ /,"")] = procKeys(layer.property(propName), function(prop,time){return prop.valueAtTime(time,true);});
 			}
 		}
 		if(layer.mask && layer.mask.numProperties > 0) {
@@ -99,9 +150,14 @@ function getLayerKeys(layer, startTime, duration) {
 				mask.name = m.name;
 				mask.mode = ExportUtil.MASKMODE_TABLE[m.maskMode];
 				mask.inverted = m.inverted;
-				procMaskShapeKeys(mask, m.property("maskShape"));
+				procShapeKeys(mask, m.property("maskShape"));
 				obj.mask.push(mask);
 			}
+		}
+		var prop = layer.property("ADBE Root Vectors Group");
+		if(prop) {
+			obj.contents = new Array();
+			addShapeContent(obj.contents, prop);
 		}
 		return obj;
 	}

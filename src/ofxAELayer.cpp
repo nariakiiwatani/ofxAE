@@ -1,6 +1,8 @@
 #include "ofxAELayer.h"
 #include "ofGraphics.h"
 #include "ofxAEMask.h"
+#include "ofxAEProperty.h"
+#include "ofxAEMarker.h"
 
 namespace ofxAE {
 Layer::~Layer()
