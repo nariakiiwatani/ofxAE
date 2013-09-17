@@ -32,36 +32,41 @@ void Composition::update()
 			}
 		}
 	}
-	fbo_.begin();
-	ofClear(0);
-	multimap<float,AVLayer*> work;
+	vector<AVLayer*> active;
 	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
 		AVLayer *l = *layer;
 		if(l->isActive()) {
 			l->update();
-			if(l->is3D()) {
-				ofVec3f dist = (*layer)->getWorldMatrix()->getTranslation();
+			active.push_back(l);
+		}
+	}
+	fbo_.begin();
+	ofClear(0);
+	multimap<float,AVLayer*> work;
+	for(vector<AVLayer*>::iterator layer = active.begin(); layer != active.end(); ++layer) {
+		AVLayer *l = *layer;
+		if(l->is3D()) {
+			ofVec3f dist = (*layer)->getWorldMatrix()->getTranslation();
+			if(active_camera) {
+				dist = active_camera->worldToCamera(dist);
+				dist.z = -dist.z;
+			}
+			work.insert(pair<float,AVLayer*>(dist.z, l));
+		}
+		else {
+			if(!work.empty()) {
 				if(active_camera) {
-					dist = active_camera->worldToCamera(dist);
-					dist.z = -dist.z;
+					active_camera->begin();
 				}
-				work.insert(pair<float,AVLayer*>(dist.z, l));
-			}
-			else {
-				if(!work.empty()) {
-					if(active_camera) {
-						active_camera->begin();
-					}
-					for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
-						(*w).second->draw();
-					}
-					work.clear();
-					if(active_camera) {
-						active_camera->end();
-					}
+				for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
+					(*w).second->draw();
 				}
-				l->draw();
+				work.clear();
+				if(active_camera) {
+					active_camera->end();
+				}
 			}
+			l->draw();
 		}
 	}
 	if(!work.empty()) {
