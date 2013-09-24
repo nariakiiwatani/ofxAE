@@ -2,6 +2,7 @@
 
 #include "ofxAEAVLayer.h"
 #include "ofPath.h"
+#include "ofxAEPath.h"
 
 namespace ofxAE {
 
@@ -53,6 +54,16 @@ public:
 protected:
 	int command_count_;
 };
+class ShapeContentPath : public ShapeContentShape
+{
+public:
+	ShapeContentPath();
+	void push(ofPath& path);
+	Path& getPath() { return path_; }
+private:
+	Path path_;
+};
+
 class ShapeContentEllipse : public ShapeContentShape
 {
 public:
@@ -63,8 +74,44 @@ private:
 	ofVec2f size_;
 	ofVec2f pos_;
 };
+class ShapeContentRect : public ShapeContentShape
+{
+public:
+	void push(ofPath& path);
+	void setPosition(const ofVec2f& pos) { pos_.set(pos); }
+	void setSize(const ofVec2f& size) { size_.set(size); }
+	void setRoundness(float roundness) { roundness_=roundness; }
+private:
+	ofVec2f size_;
+	ofVec2f pos_;
+	float roundness_;
+};
+class ShapeContentPoly : public ShapeContentShape
+{
+public:
+	void push(ofPath& path);
+	void setIsStar(bool star) { is_star_=star; }
+	void setCornerCount(int count) { corner_count_=count; }
+	void setPosition(const ofVec2f& pos) { pos_.set(pos); }
+	void setRotation(float rotation) { rotation_=rotation; }
+	void setOuterRadius(float radius) { outer_radius_=radius; }
+	void setOuterRoundness(float roundness) { outer_roundness_=roundness; }
+	void setInnerRadius(float radius) { inner_radius_=radius; }
+	void setInnerRoundness(float roundness) { inner_roundness_=roundness; }
+private:
+	bool is_star_;
+	float corner_count_;
+	ofVec2f pos_;
+	float rotation_;
+	float outer_radius_;
+	float outer_roundness_;
+	float inner_radius_;
+	float inner_roundness_;
+};
 class ShapeContentGraphic : public ShapeContent
 {
+protected:
+	ofBlendMode blend_mode_;
 };
 class ShapeContentStroke : public ShapeContentGraphic
 {
@@ -77,6 +124,20 @@ private:
 	ofFloatColor color_;
 	float opacity_;
 	float width_;
-};}
+};
+class ShapeContentFill : public ShapeContentGraphic
+{
+public:
+	void pop(ofPath& path);
+	void setColor(const ofFloatColor& color) { color_.set(color); }
+	void setOpacity(float opacity) { opacity_=opacity; }
+private:
+	ofFloatColor color_;
+	float opacity_;
+};
+
+
+
+}
 
 /* EOF */

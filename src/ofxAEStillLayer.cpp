@@ -12,7 +12,7 @@ void StillLayer::render()
 {
 	ofPushStyle();
 	ofSetColor(ofColor::white, opacity_*255);
-	texture_.draw(0, 0, width_, height_);
+	texture_.draw(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }
 }

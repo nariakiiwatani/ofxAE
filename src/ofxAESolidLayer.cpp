@@ -6,7 +6,7 @@ void SolidLayer::render()
 {
 	ofPushStyle();
 	ofSetColor(color_, opacity_*255);
-	ofRect(0, 0, width_, height_);
+	ofRect(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }
 }

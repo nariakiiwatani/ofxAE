@@ -59,6 +59,22 @@ function getLayerKeys(layer, startTime, duration) {
 				];
 				addPropArray(ret, propNames, prop);
 			}
+			else if(prop.matchName.indexOf("Rect") >= 0) {
+				ret.type = "rect";
+				var propNames = [
+					"Size",
+					"Position",
+					"Roundness"
+				];
+				addPropArray(ret, propNames, prop);
+			}
+			else if(prop.matchName.indexOf("Star") >= 0) {
+			}
+			else {
+				ret.type = "path";
+				ret.path = new Object();
+				procShapeKeys(ret.path, prop.property("ADBE Vector Shape"));
+			}
 		}
 		else if(prop.matchName.indexOf("Graphic") >= 0) {
 			if(prop.matchName.indexOf("G-Stroke") >= 0) {
@@ -69,6 +85,16 @@ function getLayerKeys(layer, startTime, duration) {
 					"Color",
 					"Opacity",
 					"Stroke Width"
+				];
+				addPropArray(ret, propNames, prop);
+			}
+			else if(prop.matchName.indexOf("G-Fill") >= 0) {
+			}
+			else if(prop.matchName.indexOf("Fill") >= 0) {
+				ret.type = "fill";
+				var propNames = [
+					"Color",
+					"Opacity"
 				];
 				addPropArray(ret, propNames, prop);
 			}

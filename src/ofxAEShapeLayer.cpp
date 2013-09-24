@@ -53,14 +53,53 @@ void ShapeContentShape::pop(ofPath& path)
 		command.pop_back();
 	}
 }
+ShapeContentPath::ShapeContentPath()
+{
+	path_.setMode(ofPath::COMMANDS);
+}
+void ShapeContentPath::push(ofPath& path)
+{
+	if(path_.isDirty()) {
+		path_.update();
+	}
+	vector<ofPath::Command>& command = path.getCommands();
+	int command_count_prev = command.size();
+	vector<ofPath::Command>& cmd1 = path.getCommands();
+	vector<ofPath::Command>& cmd2 = path_.getCommands();
+	for(vector<ofPath::Command>::iterator it = cmd2.begin(); it != cmd2.end(); ++it) {
+		cmd1.push_back(*it);
+	}
+	command_count_ = command.size() - command_count_prev;
+}
 
 void ShapeContentEllipse::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
 	path.ellipse(pos_.x, pos_.y, size_.x, size_.y);
+	path.close();
 	command_count_ = command.size() - command_count_prev;
 }
+
+void ShapeContentRect::push(ofPath& path)
+{
+	vector<ofPath::Command>& command = path.getCommands();
+	int command_count_prev = command.size();
+	path.rectRounded(pos_-size_/2.f, size_.x, size_.y, roundness_);
+	command_count_ = command.size() - command_count_prev;
+}
+
+void ShapeContentPoly::push(ofPath& path)
+{
+	vector<ofPath::Command>& command = path.getCommands();
+	int command_count_prev = command.size();
+	
+	
+	
+	
+	command_count_ = command.size() - command_count_prev;
+}
+
 
 void ShapeContentStroke::pop(ofPath& path)
 {
@@ -69,10 +108,22 @@ void ShapeContentStroke::pop(ofPath& path)
 	float opacity = prev.a/255.f*opacity_;
 	path.setStrokeColor(ofColor(color_, opacity*255));
 	path.setStrokeWidth(width_);
+	ofEnableBlendMode(blend_mode_);
 	path.draw();
 	path.setStrokeColor(prev);
 }
 
+void ShapeContentFill::pop(ofPath& path)
+{
+	path.setFilled(true);
+	ofColor prev = path.getFillColor();
+	float opacity = prev.a/255.f*opacity_;
+	path.setFillColor(ofColor(color_, opacity*255));
+	ofEnableBlendMode(blend_mode_);
+	path.draw();
+	path.setFillColor(prev);
+}
+	
 }
 
 /* EOF */

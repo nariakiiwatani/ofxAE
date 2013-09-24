@@ -96,110 +96,65 @@ void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	if(properties.isMember("active")) {
 		LayerActiveProp *prop = new LayerActiveProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("active", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			bool value = keys[name].asBool();
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys);
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("Position")) {
 		LayerPositionProp *prop = new LayerPositionProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("Position", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			ofVec3f value = ofVec3f(keys[name][0].asFloat(),keys[name][1].asFloat(),-keys[name][2].asFloat());
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, ofVec3f(1,1,-1));
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("Scale")) {
 		LayerScaleProp *prop = new LayerScaleProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("Scale", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			ofVec3f value = ofVec3f(keys[name][0].asFloat(),keys[name][1].asFloat(),keys[name][2].asFloat())/100.f;
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, ofVec3f(0.01f,0.01f,0.01f));
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("RotationX")) {
 		LayerRotationXProp *prop = new LayerRotationXProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("RotationX", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			float value = -keys[name].asFloat();
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, -1);
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("RotationY")) {
 		LayerRotationYProp *prop = new LayerRotationYProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("RotationY", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			float value = -keys[name].asFloat();
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, -1);
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("RotationZ")) {
 		LayerRotationZProp *prop = new LayerRotationZProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("RotationZ", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			float value = keys[name].asFloat();
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys);
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("AnchorPoint")) {
 		LayerAnchorPointProp *prop = new LayerAnchorPointProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("AnchorPoint", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			ofVec3f value = ofVec3f(keys[name][0].asFloat(),keys[name][1].asFloat(),-keys[name][2].asFloat());
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, ofVec3f(1,1,-1));
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("Opacity")) {
 		LayerOpacityProp *prop = new LayerOpacityProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("Opacity", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			float value = keys[name].asFloat()/100.f;
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, 0.01f);
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	if(properties.isMember("Orientation")) {
 		LayerOrientationProp *prop = new LayerOrientationProp();
-		prop->setTarget(&layer);
 		const Json::Value& keys = properties.get("Orientation", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			ofVec3f value = ofVec3f(-keys[name][0].asFloat(),-keys[name][1].asFloat(),keys[name][2].asFloat());
-			prop->addKey(key_frame, value);
-		}
+		setupPropertyKeysJson(*prop, keys, ofVec3f(-1,-1,1));
+		prop->setTarget(&layer);
 		layer.property_.push_back(prop);
 	}
 	
@@ -228,63 +183,7 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 			const Json::Value& mask = masks.get(i, Json::Value::null);
 			Mask *target = new Mask();
 			setupMaskJson(*target, mask);
-			{
-				const Json::Value& array = mask.get("vertices", Json::Value::null);
-				if(array.isArray()) {
-					target->setVertexSize(array.size());
-					int array_count = array.size();
-					for(int j = 0; j < array_count; ++j) {
-						MaskVertexProp *prop = new MaskVertexProp();
-						prop->setTarget(target);
-						const Json::Value& keys = array[j];
-						for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-							const string& name = key.key().asString();
-							int key_frame = ofToInt(name);
-							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-							prop->addKey(key_frame, MaskShapeVertexArg(j, value));
-						}
-						layer.property_.push_back(prop);
-					}
-				}
-			}
-			{
-				const Json::Value& array = mask.get("inTangents", Json::Value::null);
-				if(array.isArray()) {
-					target->setInTangentSize(array.size());
-					int array_count = array.size();
-					for(int j = 0; j < array_count; ++j) {
-						MaskInTangentProp *prop = new MaskInTangentProp();
-						prop->setTarget(target);
-						const Json::Value& keys = array[j];
-						for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-							const string& name = key.key().asString();
-							int key_frame = ofToInt(name);
-							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-							prop->addKey(key_frame, MaskShapeInTangentArg(j, value));
-						}
-						layer.property_.push_back(prop);
-					}
-				}
-			}
-			{
-				const Json::Value& array = mask.get("outTangents", Json::Value::null);
-				if(array.isArray()) {
-					target->setOutTangentSize(array.size());
-					int array_count = array.size();
-					for(int j = 0; j < array_count; ++j) {
-						MaskOutTangentProp *prop = new MaskOutTangentProp();
-						prop->setTarget(target);
-						const Json::Value& keys = array[j];
-						for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-							const string& name = key.key().asString();
-							int key_frame = ofToInt(name);
-							ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-							prop->addKey(key_frame, MaskShapeOutTangentArg(j, value));
-						}
-						layer.property_.push_back(prop);
-					}
-				}
-			}
+			setupPathJson(target->getPath(), mask, layer);
 			layer.mask_.push_back(target);
 		}
 	}
@@ -292,7 +191,68 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 	layer.is_3d_ = json.get("is3d", false).asBool(); 
 	setupLayerJson(layer, json);
 }
-	
+
+void Loader::setupPathJson(Path& path, const Json::Value& json, Layer& layer)
+{
+	{
+		const Json::Value& array = json.get("vertices", Json::Value::null);
+		if(array.isArray()) {
+			path.setVertexSize(array.size());
+			int array_count = array.size();
+			for(int j = 0; j < array_count; ++j) {
+				PathVertexProp *prop = new PathVertexProp();
+				const Json::Value& keys = array[j];
+				for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
+					const string& name = key.key().asString();
+					int key_frame = ofToInt(name);
+					ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
+					prop->addKey(key_frame, PathShapeVertexArg(j, value));
+				}
+				prop->setTarget(&path);
+				layer.property_.push_back(prop);
+			}
+		}
+	}
+	{
+		const Json::Value& array = json.get("inTangents", Json::Value::null);
+		if(array.isArray()) {
+			path.setInTangentSize(array.size());
+			int array_count = array.size();
+			for(int j = 0; j < array_count; ++j) {
+				PathInTangentProp *prop = new PathInTangentProp();
+				const Json::Value& keys = array[j];
+				for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
+					const string& name = key.key().asString();
+					int key_frame = ofToInt(name);
+					ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
+					prop->addKey(key_frame, PathShapeInTangentArg(j, value));
+				}
+				prop->setTarget(&path);
+				layer.property_.push_back(prop);
+			}
+		}
+	}
+	{
+		const Json::Value& array = json.get("outTangents", Json::Value::null);
+		if(array.isArray()) {
+			path.setOutTangentSize(array.size());
+			int array_count = array.size();
+			for(int j = 0; j < array_count; ++j) {
+				PathOutTangentProp *prop = new PathOutTangentProp();
+				const Json::Value& keys = array[j];
+				for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
+					const string& name = key.key().asString();
+					int key_frame = ofToInt(name);
+					ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
+					prop->addKey(key_frame, PathShapeOutTangentArg(j, value));
+				}
+				prop->setTarget(&path);
+				layer.property_.push_back(prop);
+			}
+		}
+	}
+}
+
 void Loader::setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, Composition& comp)
 {
 	const Json::Value& properties = json.get("property", Json::Value::null);
@@ -354,180 +314,179 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 			const string& type = content.get("type", "").asString();
 			// group
 			if(type == "group") {
-				ShapeContentGroup *group = new ShapeContentGroup();
+				ShapeContentGroup *target = new ShapeContentGroup();
 				if(content.isMember("contents")) {
-					setupShapeContentsJson(layer, content.get("contents", Json::Value::null), group);
+					setupShapeContentsJson(layer, content.get("contents", Json::Value::null), target);
 				}
 				if(parent) {
-					parent->content_.push_back(group);
+					parent->content_.push_back(target);
 				}
 				else {
-					layer.content_.push_back(group);
+					layer.content_.push_back(target);
 				}
 			}
 			// ellipse
 			else if(type == "ellipse") {
-				ShapeContentEllipse *ellipse = new ShapeContentEllipse();
+				ShapeContentEllipse *target = new ShapeContentEllipse();
 				{
 					ShapeEllipsePositionProp *prop = new ShapeEllipsePositionProp();
 					const Json::Value& keys = content.get("Position", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-						prop->addKey(key_frame, value);
-					}
-					prop->setTarget(ellipse);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeEllipseSizeProp *prop = new ShapeEllipseSizeProp();
 					const Json::Value& keys = content.get("Size", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-						prop->addKey(key_frame, value);
-					}
-					prop->setTarget(ellipse);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
 					layer.property_.push_back(prop);
 				}
 				if(parent) {
-					parent->content_.push_back(ellipse);
+					parent->content_.push_back(target);
 				}
 				else {
-					layer.content_.push_back(ellipse);
+					layer.content_.push_back(target);
+				}
+			}
+			// rect
+			else if(type == "rect") {
+				ShapeContentRect *target = new ShapeContentRect();
+				{
+					ShapeRectPositionProp *prop = new ShapeRectPositionProp();
+					const Json::Value& keys = content.get("Position", Json::Value::null);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
+					layer.property_.push_back(prop);
+				}
+				{
+					ShapeRectSizeProp *prop = new ShapeRectSizeProp();
+					const Json::Value& keys = content.get("Size", Json::Value::null);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
+					layer.property_.push_back(prop);
+				}
+				{
+					ShapeRectRoundnessProp *prop = new ShapeRectRoundnessProp();
+					const Json::Value& keys = content.get("Roundness", Json::Value::null);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
+					layer.property_.push_back(prop);
+				}
+				if(parent) {
+					parent->content_.push_back(target);
+				}
+				else {
+					layer.content_.push_back(target);
+				}
+			}
+			// path
+			else if(type == "path") {
+				ShapeContentPath *target = new ShapeContentPath();
+				const Json::Value& path = content.get("path", Json::Value::null);
+				setupPathJson(target->getPath(), path, layer);
+				if(parent) {
+					parent->content_.push_back(target);
+				}
+				else {
+					layer.content_.push_back(target);
 				}
 			}
 			// stroke
 			else if(type == "stroke") {
-				ShapeContentStroke *stroke = new ShapeContentStroke();
+				ShapeContentStroke *target = new ShapeContentStroke();
 				{
 					ShapeStrokeColorProp *prop = new ShapeStrokeColorProp();
 					const Json::Value& keys = content.get("Color", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec3f value = ofVec3f(keys[name][0].asFloat(),keys[name][1].asFloat(),keys[name][2].asFloat());
-						prop->addKey(key_frame, value);
-					}
-					prop->setTarget(stroke);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeStrokeOpacityProp *prop = new ShapeStrokeOpacityProp();
 					const Json::Value& keys = content.get("Opacity", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat()/100.f;
-						prop->addKey(key_frame, value);
-					}
-					prop->setTarget(stroke);
+					setupPropertyKeysJson(*prop, keys, 0.01f);
+					prop->setTarget(target);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeStrokeWidthProp *prop = new ShapeStrokeWidthProp();
-					const Json::Value& keys = content.get("StrokeWidth", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat();
-						prop->addKey(key_frame, value);
-					}
-					prop->setTarget(stroke);
+					setupPropertyKeysJson(*prop, content.get("StrokeWidth", Json::Value::null));
+					prop->setTarget(target);
 					layer.property_.push_back(prop);
 				}
 				if(parent) {
-					parent->content_.push_back(stroke);
+					parent->content_.push_back(target);
 				}
 				else {
-					layer.content_.push_back(stroke);
+					layer.content_.push_back(target);
+				}
+			}
+			// fill
+			else if(type == "fill") {
+				ShapeContentFill *target = new ShapeContentFill();
+				{
+					ShapeFillColorProp *prop = new ShapeFillColorProp();
+					const Json::Value& keys = content.get("Color", Json::Value::null);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
+					layer.property_.push_back(prop);
+				}
+				{
+					ShapeFillOpacityProp *prop = new ShapeFillOpacityProp();
+					const Json::Value& keys = content.get("Opacity", Json::Value::null);
+					setupPropertyKeysJson(*prop, keys);
+					prop->setTarget(target);
+					layer.property_.push_back(prop);
+				}
+				if(parent) {
+					parent->content_.push_back(target);
+				}
+				else {
+					layer.content_.push_back(target);
 				}
 			}
 			// transform
 			else if(type == "transform") {
 				{
 					ShapeGroupPositionProp *prop = new ShapeGroupPositionProp();
-					const Json::Value& keys = content.get("Position", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("Position", Json::Value::null));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupAnchorPointProp *prop = new ShapeGroupAnchorPointProp();
-					const Json::Value& keys = content.get("AnchorPoint", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec2f value = ofVec2f(keys[name][0].asFloat(),keys[name][1].asFloat());
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("AnchorPoint", Json::Value::null));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupScaleProp *prop = new ShapeGroupScaleProp();
-					const Json::Value& keys = content.get("Scale", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						ofVec2f value = ofVec2f(keys[name][0].asFloat()/100.f,keys[name][1].asFloat()/100.f);
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("Scale", Json::Value::null), ofVec2f(0.01f,0.01f));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupRotationProp *prop = new ShapeGroupRotationProp();
-					const Json::Value& keys = content.get("Rotation", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat();
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("Rotation", Json::Value::null));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupOpacityProp *prop = new ShapeGroupOpacityProp();
-					const Json::Value& keys = content.get("Opacity", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat()/100.f;
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("Opacity", Json::Value::null), 0.01f);
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupSkewProp *prop = new ShapeGroupSkewProp();
-					const Json::Value& keys = content.get("Skew", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat();
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("Skew", Json::Value::null));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
 				{
 					ShapeGroupSkewAxisProp *prop = new ShapeGroupSkewAxisProp();
-					const Json::Value& keys = content.get("SkewAxis", Json::Value::null);
-					for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-						const string& name = key.key().asString();
-						int key_frame = ofToInt(name);
-						float value = keys[name].asFloat();
-						prop->addKey(key_frame, value);
-					}
+					setupPropertyKeysJson(*prop, content.get("SkewAxis", Json::Value::null));
 					prop->setTarget(parent);
 					layer.property_.push_back(prop);
 				}
@@ -539,7 +498,7 @@ void Loader::setupMarkerJson(Marker& marker, const Json::Value& json)
 {
 	marker.name_ = json.get("name", "noname").asString();
 	marker.from_ = json.get("from", 0).asInt();
-	marker.to_ = json.get("from", 0).asInt();
+	marker.to_ = json.get("to", 0).asInt();
 }
 
 void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
@@ -550,7 +509,48 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ mask.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 }
-	
+
+template<class Target>
+void Loader::setupPropertyKeysJson(Property_<Target, bool>& prop, const Json::Value& json)
+{
+	for(Json::Value::iterator key = json.begin(); key != json.end(); ++key) {
+		const string& name = key.key().asString();
+		int key_frame = ofToInt(name);
+		bool value = json[name].asBool();
+		prop.addKey(key_frame, value);
+	}
+}
+template<class Target>
+void Loader::setupPropertyKeysJson(Property_<Target, float>& prop, const Json::Value& json, float scale, float offset)
+{
+	for(Json::Value::iterator key = json.begin(); key != json.end(); ++key) {
+		const string& name = key.key().asString();
+		int key_frame = ofToInt(name);
+		float value = json[name].asFloat()*scale+offset;
+		prop.addKey(key_frame, value);
+	}
+}
+template<class Target>
+void Loader::setupPropertyKeysJson(Property_<Target, ofVec2f>& prop, const Json::Value& json, const ofVec2f& scale, const ofVec2f& offset)
+{
+	for(Json::Value::iterator key = json.begin(); key != json.end(); ++key) {
+		const string& name = key.key().asString();
+		int key_frame = ofToInt(name);
+		ofVec2f value = ofVec2f(json[name][0].asFloat(), json[name][1].asFloat())*scale+offset;
+		prop.addKey(key_frame, value);
+	}
+}
+template<class Target>
+void Loader::setupPropertyKeysJson(Property_<Target, ofVec3f>& prop, const Json::Value& json, const ofVec3f& scale, const ofVec3f& offset)
+{
+	for(Json::Value::iterator key = json.begin(); key != json.end(); ++key) {
+		const string& name = key.key().asString();
+		int key_frame = ofToInt(name);
+		ofVec3f value = ofVec3f(json[name][0].asFloat(), json[name][1].asFloat(), json[name][2].asFloat())*scale+offset;
+		prop.addKey(key_frame, value);
+	}
+}
+
 }
 
 /* EOF */

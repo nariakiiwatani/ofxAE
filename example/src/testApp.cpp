@@ -5,7 +5,7 @@ void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "shape_ellipse.json");
+	loader.loadComposition(composition_, "shape_basic.json");
 }
 
 //--------------------------------------------------------------

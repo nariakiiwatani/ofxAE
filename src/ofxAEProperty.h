@@ -5,7 +5,7 @@
 #include "ofxAELayer.h"
 #include "ofxAECameraLayer.h"
 #include "ofxAEShapeLayer.h"
-#include "ofxAEMask.h"
+#include "ofxAEPath.h"
 
 namespace ofxAE {
 	class Mask;
@@ -55,8 +55,19 @@ private: void changedCallback(const Type& val){target_->func(val);}}
 	PropDeclare(CameraLayerFovProp,float,CameraLayer,setFov);
 	PropDeclare(ShapeEllipsePositionProp,ofVec2f,ShapeContentEllipse,setPosition);
 	PropDeclare(ShapeEllipseSizeProp,ofVec2f,ShapeContentEllipse,setSize);
+	PropDeclare(ShapeRectPositionProp,ofVec2f,ShapeContentRect,setPosition);
+	PropDeclare(ShapeRectSizeProp,ofVec2f,ShapeContentRect,setSize);
+	PropDeclare(ShapeRectRoundnessProp,float,ShapeContentRect,setRoundness);
+	PropDeclare(ShapePolyCornerCountProp,float,ShapeContentPoly,setCornerCount);
+	PropDeclare(ShapePolyPositionProp,ofVec2f,ShapeContentPoly,setPosition);
+	PropDeclare(ShapePolyRotationProp,float,ShapeContentPoly,setRotation);
+	PropDeclare(ShapePolyOuterRadiusProp,float,ShapeContentPoly,setOuterRadius);
+	PropDeclare(ShapePolyOuterRoundnessProp,float,ShapeContentPoly,setOuterRoundness);
+	PropDeclare(ShapePolyInnerRadiusProp,float,ShapeContentPoly,setInnerRadius);
+	PropDeclare(ShapePolyInnerRoundnessProp,float,ShapeContentPoly,setInnerRoundness);
 	PropDeclare(ShapeStrokeOpacityProp,float,ShapeContentStroke,setOpacity);
 	PropDeclare(ShapeStrokeWidthProp,float,ShapeContentStroke,setWidth);
+	PropDeclare(ShapeFillOpacityProp,float,ShapeContentFill,setOpacity);
 	PropDeclare(ShapeGroupPositionProp,ofVec2f,ShapeContentGroup,setPosition);
 	PropDeclare(ShapeGroupAnchorPointProp,ofVec2f,ShapeContentGroup,setAnchorPoint);
 	PropDeclare(ShapeGroupScaleProp,ofVec2f,ShapeContentGroup,setScale);
@@ -65,6 +76,7 @@ private: void changedCallback(const Type& val){target_->func(val);}}
 	PropDeclare(ShapeGroupSkewProp,float,ShapeContentGroup,setSkew);
 	PropDeclare(ShapeGroupSkewAxisProp,float,ShapeContentGroup,setSkewAxis);
 #undef PropDeclare
+
 class ShapeStrokeColorProp : public Property_<ShapeContentStroke,ofVec3f>
 {
 private:
@@ -72,30 +84,37 @@ private:
 		target_->setColor(ofFloatColor(color.x,color.y,color.z));
 	}
 };
+class ShapeFillColorProp : public Property_<ShapeContentFill,ofVec3f>
+{
+private:
+	void changedCallback(const ofVec3f& color) {
+		target_->setColor(ofFloatColor(color.x,color.y,color.z));
+	}
+};
 
-#define MaskShapeDefine(name) \
+#define PathShapeDefine(name) \
 	struct name{int index;ofVec2f val;name(){};name(int i, const ofVec2f& v) {index=i;val=v;}\
 		bool operator!=(const name& op) const {return !(index==op.index&&val==op.val);};}
-	MaskShapeDefine(MaskShapeVertexArg);
-	MaskShapeDefine(MaskShapeInTangentArg);
-	MaskShapeDefine(MaskShapeOutTangentArg);
-#undef MaskShapeDefine
+	PathShapeDefine(PathShapeVertexArg);
+	PathShapeDefine(PathShapeInTangentArg);
+	PathShapeDefine(PathShapeOutTangentArg);
+#undef PathShapeDefine
 
-class MaskVertexProp : public Property_<Mask, MaskShapeVertexArg> {
+class PathVertexProp : public Property_<Path, PathShapeVertexArg> {
 private:
-	void changedCallback(const MaskShapeVertexArg& val) {
+	void changedCallback(const PathShapeVertexArg& val) {
 		target_->setVertex(val.index, val.val);
 	}
 };
-class MaskInTangentProp : public Property_<Mask, MaskShapeInTangentArg> {
+class PathInTangentProp : public Property_<Path, PathShapeInTangentArg> {
 private:
-	void changedCallback(const MaskShapeInTangentArg& val) {
+	void changedCallback(const PathShapeInTangentArg& val) {
 		target_->setInTangent(val.index, val.val);
 	}
 };
-class MaskOutTangentProp : public Property_<Mask, MaskShapeOutTangentArg> {
+class PathOutTangentProp : public Property_<Path, PathShapeOutTangentArg> {
 private:
-	void changedCallback(const MaskShapeOutTangentArg& val) {
+	void changedCallback(const PathShapeOutTangentArg& val) {
 		target_->setOutTangent(val.index, val.val);
 	}
 };

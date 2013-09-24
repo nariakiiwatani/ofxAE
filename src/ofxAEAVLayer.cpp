@@ -11,8 +11,7 @@ AVLayer::~AVLayer()
 }
 void AVLayer::allocate(int width, int height, bool use_mask)
 {
-	width_ = width;
-	height_ = height;
+	size_.set(width, height);
 
 	if(use_mask) {
 		ofx_mask_.setup(width, height);
@@ -34,9 +33,7 @@ void AVLayer::draw()
 				ofClear(ofColor::white);
 			}
 			while(it != mask_.end()) {
-				if((*it)->isDirty()) {
-					(*it)->update(this);
-				}
+				(*it)->update(this);
 				(*it)->draw();
 				++it;
 			}
