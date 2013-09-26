@@ -33,7 +33,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
 		vector<Layer*> all;
-		map<string, Layer*> children;
+		map<Layer*, string> children;
 		int layer_count = layers.size();
 		for(int i = layer_count; i--;) {	// reverse iterate for draw priority
 			const Json::Value& layer = layers.get(i, Json::Value::null);
@@ -74,14 +74,14 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			}
 			all.push_back(l);
 			if(layer.isMember("parent")) {
-				children.insert(pair<string,Layer*>(layer.get("parent", Json::Value::null).asString(), l));
+				children.insert(pair<Layer*,string>(l, layer.get("parent", Json::Value::null).asString()));
 			}
 		}
 		// search parent
-		for(map<string,Layer*>::iterator child = children.begin(); child != children.end(); ++child) {
+		for(map<Layer*, string>::iterator child = children.begin(); child != children.end(); ++child) {
 			for(vector<Layer*>::iterator one = all.begin(); one != all.end(); ++one) {
-				if((*child).first == (*one)->name_) {
-					(*child).second->setParent(*one);
+				if((*child).second == (*one)->name_) {
+					(*child).first->setParent(*one);
 					break;
 				}
 			}
