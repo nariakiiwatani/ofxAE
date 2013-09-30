@@ -5,26 +5,17 @@
 namespace ofxAE {
 Mask::Mask()
 {
-	path_.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
-	path_.setColor(ofColor::white);
+	ofPath& path = path_.get();
+	path.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
+	path.setColor(ofColor::white);
 }
-	
-void Mask::update(AVLayer *layer)
-{
-	if(path_.isDirty()) {
-		if(is_inverted_) {
-			path_.updateInverted(layer->getSize());
-		}
-		else {
-			path_.update();
-		}
-	}
-}
+
 void Mask::draw()
 {
+	ofPath& path = path_.get();
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
-	path_.draw();
+	path.draw();
 	ofPopStyle();
 }
 

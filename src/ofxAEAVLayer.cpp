@@ -21,7 +21,7 @@ void AVLayer::allocate(int width, int height, bool use_mask)
 
 void AVLayer::draw()
 {
-	pushMatrix();
+	getNode().pushMatrix();
 	if(is_use_mask_) {
 		ofx_mask_.beginMask();
 		if(mask_.empty()) {
@@ -33,7 +33,6 @@ void AVLayer::draw()
 				ofClear(ofColor::white);
 			}
 			while(it != mask_.end()) {
-				(*it)->update(this);
 				(*it)->draw();
 				++it;
 			}
@@ -42,13 +41,19 @@ void AVLayer::draw()
 		ofx_mask_.begin();
 		render();
 		ofx_mask_.end();
-		ofx_mask_.draw();
+		ofx_mask_.drawMasker();
 	}
 	else {
 		render();
 	}
-	popMatrix();
+	getNode().popMatrix();
 }
 
+void AVLayer::addMask(Mask *mask)
+{
+	mask->setSize(size_);
+	mask_.push_back(mask);
+	properties_.push_back(&mask->getPath());
+}
 }
 /* EOF */

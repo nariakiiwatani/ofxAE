@@ -1,27 +1,24 @@
 #pragma once
 
-#include "ofxAEPath.h"
+#include "ofxAEProperty.h"
 
 namespace ofxAE {
-	class AVLayer;
-}
-namespace ofxAE {
-class Mask {
+class Mask
+{
 	friend class Loader;
 public:
 	Mask();
-	void update(AVLayer *layer);
 	void draw();
+	void prepare();
 	
 	bool isSubtract();
-	
-	Path& getPath() { return path_; }
-
+	void setInverted(bool inverted) { path_.setInverted(inverted); }
+	void setSize(const ofVec2f& size) { path_.setSize(size); }
+	PathProperty& getPath() { return path_; }
 private:
 	string name_;
 	ofBlendMode blend_mode_;
-	bool is_inverted_;
-	Path path_;
+	PathProperty path_;
 };
 
 }

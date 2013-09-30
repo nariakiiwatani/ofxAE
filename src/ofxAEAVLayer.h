@@ -18,6 +18,7 @@ public:
 	float getHeight() { return size_.y; }
 	const ofVec2f& getSize() { return size_; }
 	bool is3D() { return is_3d_; }
+	void addMask(Mask *mask);
 
 protected:
 	virtual void render(){};

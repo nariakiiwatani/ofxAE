@@ -8,6 +8,38 @@ function getLayerKeys(layer, startTime, duration) {
 	endFrame = function() {
 		return Math.ceil(duration/comp.frameDuration)+1;
 	}();
+	function procPropertyKeys(target, propName, valueFunc)
+	{
+		var ret = new Object();
+		var prevValue = null;
+		for(var f = 0; f < endFrame; ++f) {
+			var val;
+			if(propName instanceof Array) {
+				val = new Array();
+				for(var i = 0; i < propName.length; ++i) {
+					if(target.property(propName[i])) {
+						val.push(valueFunc(target.property(propName[i]), getFrameTime(f)));
+					}
+					else {
+						return null;
+					}
+				}
+			}
+			else {
+				if(target.property(propName)) {
+					val = valueFunc(target.property(propName), getFrameTime(f));
+				}
+				else {
+					return null;
+				}
+			}
+			if(!ExportUtil.compare(prevValue, val)) {
+				ret[f] = val;
+				prevValue = val;
+			}
+		}
+		return ret;
+	}
 	function procKeys(target, valueFunc)
 	{
 		var ret = new Object();
@@ -44,9 +76,7 @@ function getLayerKeys(layer, startTime, duration) {
 		function addPropArray(dst, propNames, prop) {
 			for(var i = 0; i < propNames.length; ++i) {
 				var propName = propNames[i];
-				if(prop.property(propName)) {
-					dst[propName.replace(/ /,"")] = procKeys(prop.property(propName), function(prop,time){return prop.valueAtTime(time,true);});
-				}
+				dst[propName.replace(/ /,"")] = procKeys(prop.property(propName), function(prop,time){return prop.valueAtTime(time,true);});
 			}
 		}
 		if(prop.matchName.indexOf("Shape") >= 0) {
@@ -151,21 +181,22 @@ function getLayerKeys(layer, startTime, duration) {
 		var obj = new Object();
 
 		obj.active = procKeys(layer, function(l,time){return l.activeAtTime(time);});
-		var propNames = [
-			"Position",
-			"Scale",
-			"Opacity",
-			"Rotation X",
-			"Rotation Y",
-			"Rotation Z",
-			"Anchor Point",
-			"Orientation",
-			"Zoom"
-		];
-		for(var i = 0; i < propNames.length; ++i) {
-			var propName = propNames[i];
-			if(layer.property(propName)) {
-				obj[propName.replace(/ /,"")] = procKeys(layer.property(propName), function(prop,time){return prop.valueAtTime(time,true);});
+		var propNames = {
+			Position:"Position",
+			Scale:"Scale",
+			Opacity:"Opacity",
+			Rotation:["Rotation X", "Rotation Y", "Rotation Z"],
+			AnchorPoint:"Anchor Point",
+			Orientation:"Orientation",
+			Zoom:"Zoom"
+		};
+		for(var name in propNames) {
+			var val = procPropertyKeys(layer, propNames[name], function(prop,time){return prop.valueAtTime(time,true);});
+			if(!!val) {
+				if(name == "AnchorPoint" && ExportUtil.getLayerType(layer) == ExportUtil.LayerType.CAMERA) {
+					name = "LookAt";
+				}
+				obj[name] = val;
 			}
 		}
 		if(layer.mask && layer.mask.numProperties > 0) {

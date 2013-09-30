@@ -46,7 +46,7 @@ void Composition::update()
 	for(vector<AVLayer*>::iterator layer = active.begin(); layer != active.end(); ++layer) {
 		AVLayer *l = *layer;
 		if(l->is3D()) {
-			ofVec3f dist = (*layer)->getWorldMatrix()->getTranslation();
+			ofVec3f dist = (*layer)->getNode().getWorldMatrix()->getTranslation();
 			if(active_camera) {
 				dist = active_camera->worldToCamera(dist);
 				dist.z = -dist.z;

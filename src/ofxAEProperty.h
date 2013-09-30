@@ -1,122 +1,95 @@
 #pragma once
 
-#include "ofEvents.h"
 #include <map>
-#include "ofxAELayer.h"
-#include "ofxAECameraLayer.h"
-#include "ofxAEShapeLayer.h"
-#include "ofxAEPath.h"
+#include "TransformNode.h"
+#include "ofPath.h"
 
 namespace ofxAE {
-	class Mask;
-	class ShapeContentEllipse;
-	class ShapeContentStroke;
-}
-
-namespace ofxAE {
-
-class PropertyBase_ {
-public:
-	virtual ~PropertyBase_(){}
-	virtual void resetFrame()=0;
-	virtual void setFrame(int frame)=0;
-};
 	
-template<class Target, typename Type>
-class Property_ : public PropertyBase_ {
+class PropertyBase
+{
+public:
+	PropertyBase():is_dirty_(true){}
+	virtual bool setFrame(int frame)=0;
+	virtual void update(){}
+	bool isDirty() { return is_dirty_; }
+	void dirty() { is_dirty_ = true; }
+protected:
+	bool is_dirty_;
+};
+template<typename Type>
+class Property : public PropertyBase
+{
+public:
+	operator const Type&() { return current_; }
+	Type& get() { return current_; }
+	const Type& operator =(const Type& val) { current_ = val; return val; }
+	void addKey(int frame, const Type& val);
+	bool setFrame(int frame);
+private:
+	Type current_;
+	std::map<int, Type> key_;
+};
+class PropertyGroup : public PropertyBase
+{
+public:
+	bool setFrame(int frame);
+	void update();
+protected:
+	virtual void prepare(){}
+	vector<PropertyBase*> properties_;
+};
+
+class TransformProperty : public PropertyGroup
+{
 	friend class Loader;
 public:
-	void setTarget(Target *target) { target_=target; }
-	void addKey(int frame, const Type& val);
+	TransformProperty();
+	operator const TransformNode&() { return current_; }
+	TransformNode& get() { return current_; }
+	operator TransformNode&() { return current_; }
+	void setTranslation(const ofVec3f& translation);
+	void setRotation(const ofVec3f& rotation);
+	void setOrientation(const ofVec3f& orientation);
+	void setScale(const ofVec3f& scale);
+	void setAnchorPoint(const ofVec3f& anchor_point);
+private:
+	TransformNode current_;
+	Property<ofVec3f> translation_;
+	Property<ofVec3f> rotation_;
+	Property<ofVec3f> orientation_;
+	Property<ofVec3f> scale_;
+	Property<ofVec3f> anchor_point_;
+private:
+	void prepare();
+};
+
+class PathProperty : public PropertyGroup
+{
+	friend class Loader;
+public:
+	operator const ofPath&() { return current_; }
+	ofPath& get() { return current_; }
+	operator ofPath&() { return current_; }
 	
-	void setFrame(int frame);
-	void resetFrame();
-protected:
-	Target *target_;
-	virtual void changedCallback(const Type& val)=0;
-	virtual void resetCallback(const Type& val){changedCallback(val);}
+	void setInverted(bool inverted) { is_inverted_ = inverted; }
+	void setSize(const ofVec2f& size) { size_ = size; }
+	
+	void setVertex(int index, const ofVec2f& val);
+	void setInTangent(int index, const ofVec2f& val);
+	void setOutTangent(int index, const ofVec2f& val);
+	void setVertexSize(int size);
+	void setInTangentSize(int size);
+	void setOutTangentSize(int size);
 private:
-	map<int,Type> key_;
-	Type prev_;
-};
-
-#define PropDeclare(Name,Type,Target,func) \
-class Name : public Property_<Target, Type> { \
-private: void changedCallback(const Type& val){target_->func(val);}}
-	PropDeclare(LayerActiveProp,bool,Layer,setActive);
-	PropDeclare(LayerOpacityProp,float,Layer,setOpacity);
-	PropDeclare(LayerPositionProp,ofVec3f,Layer,setPosition);
-	PropDeclare(LayerScaleProp,ofVec3f,Layer,setScale);
-	PropDeclare(LayerRotationXProp,float,Layer,setRotationX);
-	PropDeclare(LayerRotationYProp,float,Layer,setRotationY);
-	PropDeclare(LayerRotationZProp,float,Layer,setRotationZ);
-	PropDeclare(LayerAnchorPointProp,ofVec3f,Layer,setAnchorPoint);
-	PropDeclare(LayerOrientationProp,ofVec3f,Layer,setOrientation);
-	PropDeclare(CameraLayerFovProp,float,CameraLayer,setFov);
-	PropDeclare(ShapeEllipsePositionProp,ofVec2f,ShapeContentEllipse,setPosition);
-	PropDeclare(ShapeEllipseSizeProp,ofVec2f,ShapeContentEllipse,setSize);
-	PropDeclare(ShapeRectPositionProp,ofVec2f,ShapeContentRect,setPosition);
-	PropDeclare(ShapeRectSizeProp,ofVec2f,ShapeContentRect,setSize);
-	PropDeclare(ShapeRectRoundnessProp,float,ShapeContentRect,setRoundness);
-	PropDeclare(ShapePolyCornerCountProp,float,ShapeContentPoly,setCornerCount);
-	PropDeclare(ShapePolyPositionProp,ofVec2f,ShapeContentPoly,setPosition);
-	PropDeclare(ShapePolyRotationProp,float,ShapeContentPoly,setRotation);
-	PropDeclare(ShapePolyOuterRadiusProp,float,ShapeContentPoly,setOuterRadius);
-	PropDeclare(ShapePolyOuterRoundnessProp,float,ShapeContentPoly,setOuterRoundness);
-	PropDeclare(ShapePolyInnerRadiusProp,float,ShapeContentPoly,setInnerRadius);
-	PropDeclare(ShapePolyInnerRoundnessProp,float,ShapeContentPoly,setInnerRoundness);
-	PropDeclare(ShapeStrokeOpacityProp,float,ShapeContentStroke,setOpacity);
-	PropDeclare(ShapeStrokeWidthProp,float,ShapeContentStroke,setWidth);
-	PropDeclare(ShapeFillOpacityProp,float,ShapeContentFill,setOpacity);
-	PropDeclare(ShapeGroupPositionProp,ofVec2f,ShapeContentGroup,setPosition);
-	PropDeclare(ShapeGroupAnchorPointProp,ofVec2f,ShapeContentGroup,setAnchorPoint);
-	PropDeclare(ShapeGroupScaleProp,ofVec2f,ShapeContentGroup,setScale);
-	PropDeclare(ShapeGroupRotationProp,float,ShapeContentGroup,setRotation);
-	PropDeclare(ShapeGroupOpacityProp,float,ShapeContentGroup,setOpacity);
-	PropDeclare(ShapeGroupSkewProp,float,ShapeContentGroup,setSkew);
-	PropDeclare(ShapeGroupSkewAxisProp,float,ShapeContentGroup,setSkewAxis);
-#undef PropDeclare
-
-class ShapeStrokeColorProp : public Property_<ShapeContentStroke,ofVec3f>
-{
+	ofPath current_;
+	bool is_inverted_;
+	ofVec2f size_;
+	vector<Property<ofVec2f> > vertices_;
+	vector<Property<ofVec2f> > in_tangents_;
+	vector<Property<ofVec2f> > out_tangents_;
 private:
-	void changedCallback(const ofVec3f& color) {
-		target_->setColor(ofFloatColor(color.x,color.y,color.z));
-	}
-};
-class ShapeFillColorProp : public Property_<ShapeContentFill,ofVec3f>
-{
-private:
-	void changedCallback(const ofVec3f& color) {
-		target_->setColor(ofFloatColor(color.x,color.y,color.z));
-	}
-};
-
-#define PathShapeDefine(name) \
-	struct name{int index;ofVec2f val;name(){};name(int i, const ofVec2f& v) {index=i;val=v;}\
-		bool operator!=(const name& op) const {return !(index==op.index&&val==op.val);};}
-	PathShapeDefine(PathShapeVertexArg);
-	PathShapeDefine(PathShapeInTangentArg);
-	PathShapeDefine(PathShapeOutTangentArg);
-#undef PathShapeDefine
-
-class PathVertexProp : public Property_<Path, PathShapeVertexArg> {
-private:
-	void changedCallback(const PathShapeVertexArg& val) {
-		target_->setVertex(val.index, val.val);
-	}
-};
-class PathInTangentProp : public Property_<Path, PathShapeInTangentArg> {
-private:
-	void changedCallback(const PathShapeInTangentArg& val) {
-		target_->setInTangent(val.index, val.val);
-	}
-};
-class PathOutTangentProp : public Property_<Path, PathShapeOutTangentArg> {
-private:
-	void changedCallback(const PathShapeOutTangentArg& val) {
-		target_->setOutTangent(val.index, val.val);
-	}
+	void prepare();
 };
 
 }

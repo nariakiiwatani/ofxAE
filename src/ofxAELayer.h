@@ -1,39 +1,38 @@
 #pragma once
 
 #include "TransformNode.h"
+#include "ofxAEProperty.h"
 
 namespace ofxAE {
-	class PropertyBase_;
 	class Marker;
-class Layer : public TransformNode {
+class Layer {
 	friend class Loader;
 public:
+	Layer();
 	virtual ~Layer();
 	void update();
 	virtual void setPropertyFrame(int frame);
-	void resetPropertyFrame();
+	void setParent(Layer *parent);
 	
 	bool isActive() { return active_; }
 	float getOpacity() { return opacity_; }
+	TransformNode& getNode() { return transform_; }
 
 	void setActive(bool active) { active_=active; }
 	void setOpacity(float opacity) { opacity_=opacity; }
-	void setPosition(const ofVec3f& position) { setTranslation(position); }
-	void setScale(const ofVec3f& scale) { TransformNode::setScale(scale); }
-	void setRotation(const ofVec3f& rotation) { TransformNode::setRotation(rotation); }
-	virtual void setAnchorPoint(const ofVec3f& anchor_point) { TransformNode::setAnchorPoint(anchor_point); }
-	void setOrientation(const ofVec3f& orientation);
 	
 	const string& getName() { return name_; }
 
 protected:
 	virtual void prepare(){};
+protected:
 	string name_;
-	float opacity_;
-	bool active_;
+	Property<float> opacity_;
+	Property<bool> active_;
+	TransformProperty transform_;
 	int start_frame_;
 	vector<Marker*> marker_;
-	vector<PropertyBase_*> property_;
+	vector<PropertyBase*> properties_;
 };
 }
 

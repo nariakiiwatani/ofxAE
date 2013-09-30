@@ -2,6 +2,7 @@
 
 #include "ofxAELayer.h"
 #include "ofCamera.h"
+#include "ofxAEProperty.h"
 
 namespace ofxAE {
 class CameraLayer : public Layer {
@@ -11,14 +12,13 @@ public:
 	void begin();
 	void end();
 	
-	void setFov(float fov);
-	void setAnchorPoint(const ofVec3f& anchor);
 	ofVec3f worldToCamera(const ofVec3f& world);
 
 private:
 	void prepare();
 	ofCamera camera_;
-	ofVec3f look_at_;
+	Property<float> fov_;
+	Property<ofVec3f> look_at_;
 };
 }
 

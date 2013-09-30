@@ -33,15 +33,14 @@ private:
 	void setupStillLayerJson(StillLayer& layer, const Json::Value& json);
 	void setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json);
 	void setupShapeContentsJson(ShapeLayer& layer, const Json::Value& contents, ShapeContentGroup *parent=NULL);
-	template<class Target>
-	void setupPropertyKeysJson(Property_<Target,bool>& prop, const Json::Value& json);
-	template<class Target>
-	void setupPropertyKeysJson(Property_<Target,float>& prop, const Json::Value& json, float scale=1, float offset=0);
-	template<class Target>
-	void setupPropertyKeysJson(Property_<Target,ofVec2f>& prop, const Json::Value& json, const ofVec2f& scale=ofVec2f(1,1), const ofVec2f& offset=ofVec2f(0,0));
-	template<class Target>
-	void setupPropertyKeysJson(Property_<Target,ofVec3f>& prop, const Json::Value& json, const ofVec3f& scale=ofVec3f(1,1,1), const ofVec3f& offset=ofVec3f(0,0,0));
-	void setupPathJson(Path& path, const Json::Value& json, Layer& layer);
+
+	void setupPropertyKeysJson(Property<bool>& prop, const Json::Value& json);
+	void setupPropertyKeysJson(Property<float>& prop, const Json::Value& json, float scale=1, float offset=0);
+	void setupPropertyKeysJson(Property<ofVec2f>& prop, const Json::Value& json, const ofVec2f& scale=ofVec2f(1,1), const ofVec2f& offset=ofVec2f(0,0));
+	void setupPropertyKeysJson(Property<ofVec3f>& prop, const Json::Value& json, const ofVec3f& scale=ofVec3f(1,1,1), const ofVec3f& offset=ofVec3f(0,0,0));
+	void setupPropertyKeysJson(Property<ofFloatColor>& prop, const Json::Value& json, const ofFloatColor& scale=ofFloatColor(1,1,1,1), const ofFloatColor& offset=ofFloatColor(0,0,0,0));
+	void setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json);
+	void setupPropertyKeysJson(PathProperty& prop, const Json::Value& json);
 };
 }
 

@@ -14,7 +14,7 @@ void testApp::update(){
 	
 	composition_.setFrame(frame);
 	composition_.update();
-	if(++frame>=30*10) {
+	if(++frame>=30) {
 		frame = 0;
 	}
 }
