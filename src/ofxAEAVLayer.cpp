@@ -41,7 +41,7 @@ void AVLayer::draw()
 		ofx_mask_.begin();
 		render();
 		ofx_mask_.end();
-		ofx_mask_.drawMasker();
+		ofx_mask_.draw();
 	}
 	else {
 		render();
