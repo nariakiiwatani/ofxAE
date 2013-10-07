@@ -12,7 +12,7 @@ public:
 	PropertyBase():is_dirty_(true){}
 	virtual bool setFrame(int frame)=0;
 	virtual void update(){}
-	bool isDirty() { return is_dirty_; }
+	virtual bool isDirty() { return is_dirty_; }
 	void dirty() { is_dirty_ = true; }
 protected:
 	bool is_dirty_;
@@ -53,6 +53,7 @@ public:
 	void setOrientation(const ofVec3f& orientation);
 	void setScale(const ofVec3f& scale);
 	void setAnchorPoint(const ofVec3f& anchor_point);
+	bool isDirty();
 private:
 	TransformNode current_;
 	Property<ofVec3f> translation_;

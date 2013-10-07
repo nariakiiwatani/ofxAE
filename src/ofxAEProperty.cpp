@@ -105,6 +105,10 @@ void TransformProperty::prepare()
 	current_.refreshMatrix();
 }
 
+bool TransformProperty::isDirty()
+{
+	return is_dirty_ || current_.isDirty();
+}
 void TransformProperty::setTranslation(const ofVec3f& translation)
 {
 	translation_ = translation;
