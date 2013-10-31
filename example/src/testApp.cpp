@@ -5,7 +5,7 @@ void testApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "shape_basic.json");
+	loader.loadComposition(composition_, "marker_basic.json");
 }
 
 //--------------------------------------------------------------
@@ -21,7 +21,12 @@ void testApp::draw(){
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-
+	if('1' <= key && key <= '9') {
+		composition_.setActiveMarker(key-'1');
+	}
+	else if(key == '0') {
+		composition_.clearActiveMarker();
+	}
 }
 
 //--------------------------------------------------------------

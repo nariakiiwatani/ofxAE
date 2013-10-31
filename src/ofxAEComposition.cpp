@@ -27,7 +27,8 @@ void Composition::allocate(int width, int height)
 }
 void Composition::setLength(int length)
 {
-	frame_.setLength(length);
+	frame_.setRange(0, length);
+	length_default_ = length;
 }
 
 void Composition::update()
@@ -38,7 +39,43 @@ void Composition::update()
 		prepare();
 	}
 }
-	
+
+void Composition::setActiveMarker(int index, float speed)
+{
+	if(0 <= index && index < marker_.size()) {
+		setActiveMarker(marker_[index], speed);
+	}
+}
+void Composition::setActiveMarker(const string& name, float speed)
+{
+	for(vector<Marker*>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
+		if((*marker)->getName() == name) {
+			setActiveMarker(*marker, speed);
+			return;
+		}
+	}
+}
+void Composition::setActiveMarker(const Marker *marker, float speed)
+{
+	int from = marker->getFrom();
+	int length = marker->getLength();
+	frame_.setSpeed(speed);
+	frame_.setRange(from, length);
+	frame_.setLoopState(marker->getLoopState());
+	if(speed >= 0) {
+		frame_.setFrame(from, true);
+	}
+	else {
+		frame_.setFrame(from+length-1, true);
+	}
+}
+void Composition::clearActiveMarker()
+{
+	frame_.setSpeed(1);
+	frame_.setRange(0, length_default_);
+	frame_.setLoopState(FrameCounter::ONEWAY);
+}
+
 void Composition::prepare()
 {
 	CameraLayer *active_camera = NULL;

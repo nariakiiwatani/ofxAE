@@ -17,9 +17,10 @@ function proc(comp)
 		var ret = new Array();
 		for(var i = 1; i <= markers.numKeys; ++i) {
 			var obj = new Object();
-			obj.name = markers.keyValue(i).comment;
+//			obj.comment = markers.keyValue(i).comment;
+			obj.comment = markers.keyValue(i).comment.replace(/[\r\n]+/g, '\\r\\n');
 			obj.from = Math.round((markers.keyTime(i)-startTime)*frameRate);
-			obj.to = Math.round((markers.keyValue(i).duration)*frameRate)+obj.from;
+			obj.length = Math.round((markers.keyValue(i).duration)*frameRate);
 			ret.push(obj);
 		}
 		return ret;

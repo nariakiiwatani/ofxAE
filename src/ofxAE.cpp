@@ -285,9 +285,9 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 }
 void Loader::setupMarkerJson(Marker& marker, const Json::Value& json)
 {
-	marker.name_ = json.get("name", "noname").asString();
+	marker.setupByComment(json.get("comment", "").asString());
 	marker.from_ = json.get("from", 0).asInt();
-	marker.to_ = json.get("to", 0).asInt();
+	marker.length_ = json.get("length", 0).asInt();
 }
 
 void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
