@@ -1,0 +1,73 @@
+function getCompMarker(comp) {
+
+function getCompAll(proj) {
+	var ret = [];
+	for(var i = 1; i <= proj.numItems; ++i) {
+		if(proj.item(i) instanceof CompItem) {
+			ret.push(proj.item(i));
+		}
+	}
+	return ret;
+}
+function getCompSelected(proj) {
+	var ret = [];
+	for(var i = 0; i < proj.selection.length; ++i) {
+		if(proj.selection[i] instanceof CompItem) {
+			ret.push(proj.selection[i]);
+		}
+	}
+	return ret;
+}
+function getArrayDiff(a, b) {
+	var ret = [];
+	for(var _a in a) {
+		var found = false;
+		for(var _b in b) {
+			if(a[_a] === b[_b]) {
+				found = true;
+				break;
+			}
+		}
+		if(!found) {
+			ret.push(a[_a]);
+		}
+	}
+	var tmp = a;
+	a = b;
+	b = tmp;
+	for(var _a in a) {
+		var found = false;
+		for(var _b in b) {
+			if(a[_a] === b[_b]) {
+				found = true;
+				break;
+			}
+		}
+		if(!found) {
+			ret.push(a[_a]);
+		}
+	}
+	return ret;
+}
+var ret = {};
+var allComps = getCompAll(app.project);
+var comps = getCompSelected(app.project);
+var selection = [];
+for(var i = 0; i < comps.length; ++i) {
+	selection.push(comps[i].selected);
+	comps[i].selected = false;
+}
+comp.selected = true;
+app.project.showWindow(false);
+app.project.showWindow(true);
+app.executeCommand(2796);
+var added = getArrayDiff(getCompAll(app.project), allComps)[0];
+ret = added.layer(1).marker;
+added.remove();
+comp.selected = false;
+for(var i = 0; i < comps.length; ++i) {
+	comps[i].selected = selection[i];
+}
+return ret;
+}
+

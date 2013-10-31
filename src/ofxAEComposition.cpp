@@ -2,6 +2,7 @@
 #include "ofxAEAVLayer.h"
 #include "ofGraphics.h"
 #include "ofxAECameraLayer.h"
+#include "ofxAEMarker.h"
 
 namespace ofxAE {
 Composition::~Composition()
@@ -10,6 +11,9 @@ Composition::~Composition()
 		delete *it;
 	}
 	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+		delete *it;
+	}
+	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
 		delete *it;
 	}
 }

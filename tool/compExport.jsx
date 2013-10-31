@@ -1,5 +1,6 @@
 ﻿#include "./exportUtil.jsxinc"
 #include "./exportKeys.jsxinc"
+#include "./getCompMarker.jsxinc"
 (function() {
 
 function proc(comp)
@@ -11,7 +12,7 @@ function proc(comp)
 	var startTime = 0;//comp.workAreaStart;
 	var duration = comp.duration;//comp.workAreaDuration;
 
-	function procMarkers(layer, markers)
+	function procMarkers(markers)
 	{
 		var ret = new Array();
 		for(var i = 1; i <= markers.numKeys; ++i) {
@@ -58,7 +59,7 @@ function proc(comp)
 		obj.property = getLayerKeys(l, startTime, duration);
 		// maker
 		if(l.marker && l.marker.numKeys > 0) {
-			obj.marker = procMarkers(l, l.marker);
+			obj.marker = procMarkers(l.marker);
 		}
 
 		return obj;
@@ -68,6 +69,11 @@ function proc(comp)
 	json.name = name;
 	json.width = width;
 	json.height = height;
+	json.length = comp.duration*frameRate;
+	var markers = getCompMarker(comp);
+	if(markers && markers.numKeys > 0) {
+		json.marker = procMarkers(markers);
+	}
 	json.layer = new Array();
 	var layers = comp.layers;
 	var names = new Array();

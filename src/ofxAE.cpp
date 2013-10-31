@@ -29,6 +29,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 	// Basics
 	comp.name_ = json.get("name", "noname").asString();
 	comp.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
+	comp.length_ = json.get("length", 0).asInt();
 	// Layers
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
@@ -85,6 +86,17 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 					break;
 				}
 			}
+		}
+	}
+	// Markers
+	const Json::Value& markers = json.get("marker", Json::Value::null);
+	if(markers.isArray()) {
+		int marker_count = markers.size();
+		for(int i = 0; i < marker_count; ++i) {
+			const Json::Value& marker = markers.get(i, Json::Value::null);
+			Marker *m = new Marker();
+			setupMarkerJson(*m, marker);
+			comp.marker_.push_back(m);
 		}
 	}
 	comp.setFrame(0);

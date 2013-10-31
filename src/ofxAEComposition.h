@@ -6,6 +6,7 @@
 namespace ofxAE {
 	class AVLayer;
 	class CameraLayer;
+	class Marker;
 }
 
 namespace ofxAE {
@@ -39,6 +40,7 @@ private:
 	float height_;
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
+	vector<Marker*> marker_;
 };
 	
 	
