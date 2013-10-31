@@ -10,13 +10,7 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-	static int frame = 0;
-	
-	composition_.setFrame(frame);
 	composition_.update();
-	if(++frame>=30) {
-		frame = 0;
-	}
 }
 
 //--------------------------------------------------------------

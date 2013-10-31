@@ -10,11 +10,60 @@ namespace ofxAE {
 }
 
 namespace ofxAE {
+class CompositionFrameCounter {
+public:
+	CompositionFrameCounter():frame_(0),speed_(1),loop_(ONEWAY){}
+	int update() {
+		frame_ += speed_;
+		if(speed_ < 0 && frame_ < 0) {
+			switch(loop_) {
+				case NONE:
+					return -1;
+				case ONEWAY:
+					frame_ += length_;
+					break;
+				case PINGPONG:
+					frame_ = -frame_;
+					speed_ = -speed_;
+					break;
+			}
+		}
+		if(speed_ > 0 && frame_ >= length_) {
+			switch(loop_) {
+				case NONE:
+					return -1;
+				case ONEWAY:
+					frame_ -= length_;
+					break;
+				case PINGPONG:
+					frame_ = 2*length_-frame_;
+					speed_ = -speed_;
+					break;
+			}
+		}
+		return frame_;
+	}
+	enum LoopState {
+		NONE,
+		ONEWAY,
+		PINGPONG,
+	};
+	void setLoopState(LoopState state) { loop_ = state; }
+	void setLength(int length) { length_ = length; }
+	void setSpeed(float speed) { speed_ = speed; }
+	void setFrame(int frame) { frame_ = frame; }
+private:
+	float frame_;
+	int length_;
+	LoopState loop_;
+	float speed_;
+};
 class Composition {
 	friend class Loader;
 public:
 	~Composition();
 	void allocate(int width, int height);
+	void setLength(int length);
 	void update();
 	void draw();
 	void setFrame(int frame);
@@ -41,6 +90,11 @@ private:
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<Marker*> marker_;
+	
+	CompositionFrameCounter frame_;
+private:
+	void setPropertyFrame(int frame);
+	void prepare();
 };
 	
 	

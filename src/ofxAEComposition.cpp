@@ -5,6 +5,7 @@
 #include "ofxAEMarker.h"
 
 namespace ofxAE {
+
 Composition::~Composition()
 {
 	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
@@ -24,8 +25,21 @@ void Composition::allocate(int width, int height)
 	width_ = width;
 	height_ = height;
 }
+void Composition::setLength(int length)
+{
+	frame_.setLength(length);
+}
 
 void Composition::update()
+{
+	int frame = frame_.update();
+	if(frame >= 0) {
+		setPropertyFrame(frame);
+		prepare();
+	}
+}
+	
+void Composition::prepare()
 {
 	CameraLayer *active_camera = NULL;
 	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
@@ -94,6 +108,13 @@ void Composition::draw()
 }
 
 void Composition::setFrame(int frame)
+{
+	setPropertyFrame(frame);
+	prepare();
+	frame_.setFrame(frame);
+}
+	
+void Composition::setPropertyFrame(int frame)
 {
 	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
 		(*camera)->setPropertyFrame(frame);

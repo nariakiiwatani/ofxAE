@@ -9,8 +9,8 @@ function proc(comp)
 	var width = comp.width;
 	var height = comp.height;
 	var frameRate = comp.frameRate;
-	var startTime = 0;//comp.workAreaStart;
-	var duration = comp.duration;//comp.workAreaDuration;
+	var startTime = comp.workAreaStart;
+	var duration = comp.workAreaDuration;
 
 	function procMarkers(markers)
 	{
@@ -69,7 +69,7 @@ function proc(comp)
 	json.name = name;
 	json.width = width;
 	json.height = height;
-	json.length = comp.duration*frameRate;
+	json.length = duration*frameRate;
 	var markers = getCompMarker(comp);
 	if(markers && markers.numKeys > 0) {
 		json.marker = procMarkers(markers);

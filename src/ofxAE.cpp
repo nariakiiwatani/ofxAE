@@ -29,7 +29,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 	// Basics
 	comp.name_ = json.get("name", "noname").asString();
 	comp.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
-	comp.length_ = json.get("length", 0).asInt();
+	comp.setLength(json.get("length", 0).asInt());
 	// Layers
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
