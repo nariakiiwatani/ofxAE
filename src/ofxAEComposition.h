@@ -37,7 +37,7 @@ public:
 	
 	void setActiveMarker(int index, float speed=1);
 	void setActiveMarker(const string& name, float speed=1);
-	void setActiveMarker(const Marker *marker, float speed=1);
+	void setActiveMarker(Marker *marker, float speed=1);
 	void clearActiveMarker();
 	
 private:
@@ -48,6 +48,7 @@ private:
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<Marker*> marker_;
+	Marker *active_marker_;
 	
 	FrameCounter frame_;
 	int length_default_;

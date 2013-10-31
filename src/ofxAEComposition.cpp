@@ -34,6 +34,9 @@ void Composition::setLength(int length)
 void Composition::update()
 {
 	int frame = frame_.update();
+	if(frame_.isEnd()) {
+		clearActiveMarker();
+	}
 	if(frame >= 0) {
 		setPropertyFrame(frame);
 		prepare();
@@ -55,25 +58,36 @@ void Composition::setActiveMarker(const string& name, float speed)
 		}
 	}
 }
-void Composition::setActiveMarker(const Marker *marker, float speed)
+void Composition::setActiveMarker(Marker *marker, float speed)
 {
 	int from = marker->getFrom();
 	int length = marker->getLength();
 	frame_.setSpeed(speed);
 	frame_.setRange(from, length);
-	frame_.setLoopState(marker->getLoopState());
+	frame_.setLoopState(FrameCounter::NONE);
+	const string& loop = marker->getParam("loop");
+	if(loop != "") {
+		if(loop == "oneway") {
+			frame_.setLoopState(FrameCounter::ONEWAY);
+		}
+		else if(loop == "pingpong") {
+			frame_.setLoopState(FrameCounter::PINGPONG);
+		}
+	}
 	if(speed >= 0) {
 		frame_.setFrame(from, true);
 	}
 	else {
 		frame_.setFrame(from+length-1, true);
 	}
+	active_marker_ = marker;
 }
 void Composition::clearActiveMarker()
 {
 	frame_.setSpeed(1);
 	frame_.setRange(0, length_default_);
 	frame_.setLoopState(FrameCounter::ONEWAY);
+	active_marker_ = NULL;
 }
 
 void Composition::prepare()

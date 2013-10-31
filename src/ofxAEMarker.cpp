@@ -1,23 +1,25 @@
 #include "ofxAEMarker.h"
 
 namespace ofxAE {
-static string NEW_LINE = "\\r\\n";
-static string getParam(const string& src, const string& key, size_t pos)
+static const string NEW_LINE = "\\r\\n";
+static const string EMPTY = "";
+static void extractParam(map<string,string>& dst, const string& src, size_t pos)
 {
-	size_t len = key.length();
-	size_t found = src.find(key, pos);
-	if(found != string::npos) {
-		pos = found+len;
-		size_t end_pos = src.find(NEW_LINE, pos);
-		if(end_pos == string::npos) {
-			return src.substr(pos);
-		}
-		else {
-			return src.substr(pos, end_pos-pos);
+	while(pos != string::npos) {
+		size_t delim = src.find_first_of('=', pos);
+		if(delim != string::npos) {
+			string key = src.substr(pos, delim-pos);
+			delim += 1;
+			pos = src.find(NEW_LINE, delim);
+			if(pos == string::npos) {
+				dst.insert(pair<string,string>(key, src.substr(delim)));
+			}
+			else {
+				dst.insert(pair<string,string>(key, src.substr(delim,pos-delim)));
+				pos += NEW_LINE.length();
+			}
 		}
 	}
-	return "";
-
 }
 void Marker::setupByComment(const string& comment)
 {
@@ -28,16 +30,15 @@ void Marker::setupByComment(const string& comment)
 		return;
 	}
 	name_ = comment.substr(0, pos);
-	pos += NEW_LINE.length();
-	string loop = getParam(comment, "loop=", pos);
-	if(loop != "") {
-		if(loop == "oneway") {
-			loop_ = FrameCounter::ONEWAY;
-		}
-		else if(loop == "pingpong") {
-			loop_ = FrameCounter::PINGPONG;
-		}
+	extractParam(param_, comment, pos+NEW_LINE.length());
+}
+
+const string& Marker::getParam(const string& key)
+{
+	if(param_.find(key) != param_.end()) {
+		return param_[key];
 	}
+	return EMPTY;
 }
 }
 

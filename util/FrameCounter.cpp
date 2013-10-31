@@ -5,6 +5,7 @@ FrameCounter::FrameCounter()
 ,speed_(1)
 ,loop_(ONEWAY)
 ,first_(true)
+,is_end_(false)
 {}
 int FrameCounter::update() {
 	if(first_) {
@@ -15,6 +16,7 @@ int FrameCounter::update() {
 	if(speed_ < 0 && frame_ < from_) {
 		switch(loop_) {
 			case NONE:
+				is_end_ = true;
 				break;
 			case ONEWAY:
 				frame_ += length_;
@@ -28,6 +30,7 @@ int FrameCounter::update() {
 	if(speed_ > 0 && frame_ >= from_+length_) {
 		switch(loop_) {
 			case NONE:
+				is_end_ = true;
 				break;
 			case ONEWAY:
 				frame_ -= length_;
