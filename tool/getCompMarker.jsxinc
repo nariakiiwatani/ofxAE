@@ -1,5 +1,16 @@
+/*
+AfterEffectsでコンポジションマーカーの情報を取得するスクリプト
+2013.10.31 by nariakiiwatani
+License - http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license
+
+コンポジションを選択した状態で「ファイル」->「複数アイテムから新規コンポジション」を使うと
+コンポジションマーカーがレイヤーマーカーとしてセットされた状態のコンポジションレイヤーが配置されるのでこれを利用する。
+*/
+
+// マーカーの情報を取得したいコンポジションを渡す
 function getCompMarker(comp) {
 
+// プロジェクトに含まれるコンポジションのリストを取得
 function getCompAll(proj) {
 	var ret = [];
 	for(var i = 1; i <= proj.numItems; ++i) {
@@ -9,15 +20,7 @@ function getCompAll(proj) {
 	}
 	return ret;
 }
-function getCompSelected(proj) {
-	var ret = [];
-	for(var i = 0; i < proj.selection.length; ++i) {
-		if(proj.selection[i] instanceof CompItem) {
-			ret.push(proj.selection[i]);
-		}
-	}
-	return ret;
-}
+// 配列の差分を取得
 function getArrayDiff(a, b) {
 	var ret = [];
 	for(var _a in a) {
@@ -49,25 +52,33 @@ function getArrayDiff(a, b) {
 	}
 	return ret;
 }
-var ret = {};
-var allComps = getCompAll(app.project);
-var comps = getCompSelected(app.project);
+
+// プロジェクトウィンドウの選択情報を操作するので、操作前の状態を保存しておく
+var selected = app.project.selection;
 var selection = [];
-for(var i = 0; i < comps.length; ++i) {
-	selection.push(comps[i].selected);
-	comps[i].selected = false;
+for(var i = 0; i < selected.length; ++i) {
+	selection.push(selected[i].selected);
+	selected[i].selected = false;
 }
-comp.selected = true;
+
+// ここから処理の本体
+comp.selected = true;	// 書き出し対象のコンポジションを選択状態にする
+// 「複数アイテムから新規コンポジション」はプロジェクトウィンドウにフォーカスしていないと使えないので強制的にアクティブにする
 app.project.showWindow(false);
 app.project.showWindow(true);
-app.executeCommand(2796);
-var added = getArrayDiff(getCompAll(app.project), allComps)[0];
-ret = added.layer(1).marker;
-added.remove();
-comp.selected = false;
-for(var i = 0; i < comps.length; ++i) {
-	comps[i].selected = selection[i];
+
+var allComps = getCompAll(app.project);	// コマンド実行前のコンポジションのリスト
+app.executeCommand(2796);	// 「複数アイテムから新規コンポジション」を実行
+var added = getArrayDiff(getCompAll(app.project), allComps)[0];	// コマンド実行によって追加されたコンポジションを探す
+var marker = added.layer(1).marker;	// これが欲しかったマーカー！
+
+// ここから後片付け
+added.remove();	// 増やしたコンポジションを削除
+comp.selected = false;	// 選択状態を解除
+for(var i = 0; i < selected.length; ++i) {	// スクリプト実行前の選択状態に戻す
+	selected[i].selected = selection[i];
 }
-return ret;
+// マーカー情報を返す
+return marker;
 }
 

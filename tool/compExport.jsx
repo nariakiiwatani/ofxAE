@@ -103,13 +103,15 @@ function proc(comp)
 
 var comps = app.project.selection;
 for(var i = 0; i < comps.length; ++i) {
-	var exp = proc(comps[i]);
-	var file = File.saveDialog(comps[i].name+":save file.","*.json");
-	if(!file) return $.writeln("failed");
-	var flag = file.open("w","txt","");
-	if (!flag) return $.writeln("failed");
-	file.write(ExportUtil.toSource(exp));
-	file.close();
+	if(comps[i] instanceof CompItem) {
+		var exp = proc(comps[i]);
+		var file = File.saveDialog(comps[i].name+":save file.","*.json");
+		if(!file) return $.writeln("failed");
+		var flag = file.open("w","txt","");
+		if (!flag) return $.writeln("failed");
+		file.write(ExportUtil.toSource(exp));
+		file.close();
+	}
 }
 
 }());
