@@ -160,25 +160,28 @@ void Loader::setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, C
 void Loader::setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json)
 {
 	setupAVLayerJson(layer, json);
-	const Json::Value& composition = json.get("composition", Json::Value::null);
-	if(!composition.isNull()) {
-		setupCompositionJson(layer.composition_, composition);
+	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
+	const Json::Value& source = json.get("source", Json::Value::null);
+	if(!source.isNull()) {
+		loadComposition(layer.composition_, (source_dir.isNull()?"":source_dir.asString())+source.asString());
+//		setupCompositionJson(layer.composition_, source);
 	}
 }
 void Loader::setupSolidLayerJson(SolidLayer& layer, const Json::Value& json)
 {
 	setupAVLayerJson(layer, json);
-	const Json::Value& solid = json.get("solid", Json::Value::null);
-	if(!solid.isNull()) {
-		layer.setColor(ofFloatColor(solid[0].asFloat(), solid[1].asFloat(), solid[2].asFloat()));
+	const Json::Value& color = json.get("color", Json::Value::null);
+	if(!color.isNull()) {
+		layer.setColor(ofFloatColor(color[0].asFloat(), color[1].asFloat(), color[2].asFloat()));
 	}
 }
 void Loader::setupStillLayerJson(StillLayer& layer, const Json::Value& json)
 {
 	setupAVLayerJson(layer, json);
-	const Json::Value& still = json.get("still", Json::Value::null);
-	if(!still.isNull()) {
-		layer.loadImage(still.asString());
+	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
+	const Json::Value& source = json.get("source", Json::Value::null);
+	if(!source.isNull()) {
+		layer.loadImage((source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
 void Loader::setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json)

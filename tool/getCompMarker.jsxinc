@@ -1,7 +1,7 @@
 /*
 AfterEffectsでコンポジションマーカーの情報を取得するスクリプト
 2013.10.31 by nariakiiwatani
-License - http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license
+MIT License - http://sourceforge.jp/projects/opensource/wiki/licenses%2FMIT_license
 
 コンポジションを選択した状態で「ファイル」->「複数アイテムから新規コンポジション」を使うと
 コンポジションマーカーがレイヤーマーカーとしてセットされた状態のコンポジションレイヤーが配置されるのでこれを利用する。
@@ -55,9 +55,7 @@ function getArrayDiff(a, b) {
 
 // プロジェクトウィンドウの選択情報を操作するので、操作前の状態を保存しておく
 var selected = app.project.selection;
-var selection = [];
 for(var i = 0; i < selected.length; ++i) {
-	selection.push(selected[i].selected);
 	selected[i].selected = false;
 }
 
@@ -76,7 +74,7 @@ var marker = added.layer(1).marker;	// これが欲しかったマーカー！
 added.remove();	// 増やしたコンポジションを削除
 comp.selected = false;	// 選択状態を解除
 for(var i = 0; i < selected.length; ++i) {	// スクリプト実行前の選択状態に戻す
-	selected[i].selected = selection[i];
+	selected[i].selected = true;
 }
 // マーカー情報を返す
 return marker;

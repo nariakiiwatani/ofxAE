@@ -1,0 +1,20 @@
+function getItemFolder(item) {
+	var ret = '';
+	while(item.parentFolder && item.parentFolder !== app.project.rootFolder) {
+		ret = item.parentFolder.name+'/'+ret;
+		item = item.parentFolder;
+	}
+	return ret;
+};
+
+function copyItem(item, dir) {
+	if(!item.file) return;
+
+	var file = new File(item.file);
+	var dir = new Folder(dir+'/'+getItemFolder(item));
+	if(!dir.exists){
+		dir.create();
+	}
+	file.copy(dir.toString()+'/'+file.toString().replace(/.*\//,""));
+};
+

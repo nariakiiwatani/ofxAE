@@ -1,7 +1,11 @@
 ﻿#include "./exportUtil.jsxinc"
 #include "./exportKeys.jsxinc"
 #include "./getCompMarker.jsxinc"
+#include "./itemUtil.jsxinc"
 (function() {
+
+var FOLDER = Folder.selectDialog('choose a folder to export files into');
+if(!FOLDER) $.writeln("canceled");
 
 function proc(comp)
 {
@@ -40,19 +44,22 @@ function proc(comp)
 			obj.is3d = l.threeDLayer;
 		}
 		obj.layerType = ExportUtil.getLayerType(l);
+		if(l.source) {
+			obj.sourceDirectory = getItemFolder(l.source);
+		}
 		// type specific
 		switch(obj.layerType) {
 			case ExportUtil.LayerType.COMPOSITION:
-				obj.composition = proc(l.source);
+				obj.source = l.source.name+'.json';
 				break;
 			case ExportUtil.LayerType.STILL:
-				obj.still = l.source.file.toString().replace(/.*\//,"");
+				obj.source = l.source.file.toString().replace(/.*\//,"");
+				copyItem(l.source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SOLID:
-				obj.solid = l.source.mainSource.color;
+				obj.color = l.source.mainSource.color;
 				break;
 			case ExportUtil.LayerType.CAMERA:
-				obj.camera = new Object();
 				break;
 		}
 
@@ -101,17 +108,39 @@ function proc(comp)
 	return json;
 }
 
-var comps = app.project.selection;
-for(var i = 0; i < comps.length; ++i) {
-	if(comps[i] instanceof CompItem) {
-		var exp = proc(comps[i]);
-		var file = File.saveDialog(comps[i].name+":save file.","*.json");
-		if(!file) return $.writeln("failed");
-		var flag = file.open("w","txt","");
-		if (!flag) return $.writeln("failed");
-		file.write(ExportUtil.toSource(exp));
-		file.close();
+function getCompArrayToProc(proj) {
+	function isSelected(comp, checkParent) {
+		return comp.selected || (checkParent && function(comp) {
+			for(var i = 0; i < comp.usedIn.length; ++i) {
+				if(isSelected(comp.usedIn[i], true)) {
+					return true;
+				}
+				return false;
+			}
+		}(comp));
 	}
+	var ret = [];
+	for(var i = 1; i <= proj.numItems; ++i) {
+		if(proj.item(i) instanceof CompItem && isSelected(proj.item(i), true)) {
+			ret.push(proj.item(i));
+		}
+	}
+	return ret;
+}
+
+var comps = getCompArrayToProc(app.project);
+for(var i = 0; i < comps.length; ++i) {
+	var exp = proc(comps[i]);
+	var dir = new Folder(FOLDER.toString()+'/'+getItemFolder(comps[i]));
+	if(!dir.exists){
+		dir.create();
+	}
+	var file = new File(dir.toString()+'/'+comps[i].name+'.json');
+	if(!file) return $.writeln("failed");
+	var flag = file.open("w","txt","");
+	if (!flag) return $.writeln("failed");
+	file.write(ExportUtil.toSource(exp));
+	file.close();
 }
 
 }());
