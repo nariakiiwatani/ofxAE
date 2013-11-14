@@ -6,6 +6,7 @@ void testApp::setup(){
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
 	loader.loadComposition(composition_, "marker_loop.json");
+	composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
 //--------------------------------------------------------------

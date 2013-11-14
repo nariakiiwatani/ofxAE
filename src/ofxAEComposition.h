@@ -17,12 +17,16 @@ public:
 	~Composition();
 	void allocate(int width, int height);
 	void setLength(int length);
+	void setLoopState(FrameCounter::LoopState loop);
+	void setSpeed(float speed);
 	void update();
 	void draw();
 	void setFrame(int frame);
 	void resetFrame(int frame);
+	bool isEnd() { return frame_.isEnd(); }
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
+	int getLength() { return frame_default_.getLength(); }
 	
 	void addAVLayer(AVLayer *layer);
 	int getNumAVLayer();
@@ -49,10 +53,9 @@ private:
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<Marker*> marker_;
-	Marker *active_marker_;
 	
 	FrameCounter frame_;
-	int length_default_;
+	FrameCounter frame_default_;
 private:
 	void setPropertyFrame(int frame);
 	void prepare();

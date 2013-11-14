@@ -19,8 +19,10 @@ bool Property<Type>::setFrame(int frame)
 		current_ = it->second;
 		return true;
 	}
-	current_ = (--key_.upper_bound(frame))->second;
-	return false;
+	Type& next = (--key_.upper_bound(frame))->second;
+	bool ret = (current_ != next);
+	current_ = next;
+	return ret;
 }
 
 template class Property<float>;

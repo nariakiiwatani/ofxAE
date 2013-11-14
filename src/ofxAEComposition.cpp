@@ -28,15 +28,22 @@ void Composition::allocate(int width, int height)
 void Composition::setLength(int length)
 {
 	frame_.setRange(0, length);
-	length_default_ = length;
+	frame_default_.setRange(0, length);
+}
+void Composition::setLoopState(FrameCounter::LoopState loop)
+{
+	frame_.setLoopState(loop);
+	frame_default_.setLoopState(loop);
+}
+void Composition::setSpeed(float speed)
+{
+	frame_.setSpeed(speed);
+	frame_default_.setSpeed(speed);
 }
 
 void Composition::update()
 {
 	int frame = frame_.update();
-	if(frame_.isEnd()) {
-		clearActiveMarker();
-	}
 	if(frame >= 0) {
 		setPropertyFrame(frame);
 		prepare();
@@ -61,33 +68,24 @@ void Composition::setActiveMarker(const string& name, float speed)
 void Composition::setActiveMarker(Marker *marker, float speed)
 {
 	int from = marker->getFrom();
-	int length = marker->getLength();
+	int length = max(marker->getLength(), 1);
 	frame_.setSpeed(speed);
 	frame_.setRange(from, length);
-	frame_.setLoopState(FrameCounter::NONE);
+	frame_.setLoopState(FrameCounter::LOOP_NONE);
 	const string& loop = marker->getParam("loop");
 	if(loop != "") {
 		if(loop == "oneway") {
-			frame_.setLoopState(FrameCounter::ONEWAY);
+			frame_.setLoopState(FrameCounter::LOOP_ONEWAY);
 		}
 		else if(loop == "pingpong") {
-			frame_.setLoopState(FrameCounter::PINGPONG);
+			frame_.setLoopState(FrameCounter::LOOP_PINGPONG);
 		}
 	}
-	if(speed >= 0) {
-		frame_.resetFrame(from);
-	}
-	else {
-		frame_.resetFrame(from+length-1);
-	}
-	active_marker_ = marker;
+	resetFrame(0);
 }
 void Composition::clearActiveMarker()
 {
-	frame_.setSpeed(1);
-	frame_.setRange(0, length_default_);
-	frame_.setLoopState(FrameCounter::ONEWAY);
-	active_marker_ = NULL;
+	frame_ = frame_default_;
 }
 
 void Composition::prepare()
@@ -160,15 +158,12 @@ void Composition::draw()
 
 void Composition::setFrame(int frame)
 {
-	setPropertyFrame(frame);
-	prepare();
 	frame_.setFrame(frame);
+	update();
 }
 
 void Composition::resetFrame(int frame)
 {
-	setPropertyFrame(frame);
-	prepare();
 	frame_.resetFrame(frame);
 }
 
