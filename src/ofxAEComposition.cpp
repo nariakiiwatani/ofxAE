@@ -75,10 +75,10 @@ void Composition::setActiveMarker(Marker *marker, float speed)
 		}
 	}
 	if(speed >= 0) {
-		frame_.setFrame(from, true);
+		frame_.resetFrame(from);
 	}
 	else {
-		frame_.setFrame(from+length-1, true);
+		frame_.resetFrame(from+length-1);
 	}
 	active_marker_ = marker;
 }
@@ -164,7 +164,14 @@ void Composition::setFrame(int frame)
 	prepare();
 	frame_.setFrame(frame);
 }
-	
+
+void Composition::resetFrame(int frame)
+{
+	setPropertyFrame(frame);
+	prepare();
+	frame_.resetFrame(frame);
+}
+
 void Composition::setPropertyFrame(int frame)
 {
 	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {

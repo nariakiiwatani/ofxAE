@@ -20,6 +20,7 @@ public:
 	void update();
 	void draw();
 	void setFrame(int frame);
+	void resetFrame(int frame);
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
 	

@@ -44,4 +44,9 @@ int FrameCounter::update() {
 	return frame_;
 }
 
+bool FrameCounter::isEnd()
+{
+	is_end_ = ((speed_ < 0 && frame_ < from_) || (speed_ > 0 && frame_ >= from_+length_));
+}
+
 /* EOF */

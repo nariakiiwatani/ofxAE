@@ -12,8 +12,11 @@ public:
 	void setLoopState(LoopState state) { loop_ = state; }
 	void setRange(int from, int length) { from_ = from; length_ = length; }
 	void setSpeed(float speed) { speed_ = speed; }
-	void setFrame(int frame, bool will_update=false) { frame_ = frame; first_ = will_update; is_end_ = false; }
-	bool isEnd() { return is_end_; }
+	void setFrame(int frame) { frame_ = frame; }
+	void resetFrame(int frame) { frame_ = frame; first_ = true; }
+	
+	bool isEnd();
+	int getLength() { return length_; }
 private:
 	float frame_;
 	int from_, length_;
