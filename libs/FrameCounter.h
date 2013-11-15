@@ -23,13 +23,14 @@ public:
 
 private:
 	float frame_;
+	int frame_internal_;
 	int from_, length_;
 	LoopState loop_;
 	float speed_;
 	bool first_;
 
 private:
-	int calcFrame(int input);
+	int calcInternalFrame(int input);
 };
 
 /* EOF */

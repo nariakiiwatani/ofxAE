@@ -13,14 +13,23 @@ int FrameCounter::update() {
 		return frame_;
 	}
 	frame_ += abs(speed_);
-	return calcFrame(frame_);
+	frame_internal_ = calcInternalFrame(frame_);
+	int ret = frame_internal_;
+	if(isForward() || isStable()) {
+		ret += from_;
+	}
+	else /*if(isBackward())*/ {
+		ret = from_+length_-1 - ret;
+	}
+	return ret;
 }
 
-int FrameCounter::calcFrame(int input)
+int FrameCounter::calcInternalFrame(int input)
 {
 	int frame = input;
 	switch(loop_) {
 		case LOOP_NONE:
+			frame = ofClamp(frame, 0, length_-1);
 			break;
 		case LOOP_ONEWAY:
 			frame %= length_;
@@ -32,18 +41,12 @@ int FrameCounter::calcFrame(int input)
 			}
 			break;
 	}
-	if(isForward() || isStable()) {
-		frame += from_;
-	}
-	else /*if(isBackward())*/ {
-		frame = from_+length_-1 - frame;
-	}
 	return frame;
 }
 
 bool FrameCounter::isEnd()
 {
-	return loop_==LOOP_NONE && ((speed_ < 0 && frame_ < from_) || (speed_ > 0 && frame_ >= from_+length_));
+	return loop_==LOOP_NONE && (frame_internal_ == length_-1);
 }
 
 /* EOF */
