@@ -20,6 +20,7 @@ namespace ofxAE {
 namespace ofxAE {
 class Loader {
 public:
+	Loader(const string& base_path="");
 	void loadComposition(Composition& comp, const string& filepath);
 private:
 	void setupCompositionJson(Composition& comp, const Json::Value& json);
@@ -41,6 +42,8 @@ private:
 	void setupPropertyKeysJson(Property<ofFloatColor>& prop, const Json::Value& json, const ofFloatColor& scale=ofFloatColor(1,1,1,1), const ofFloatColor& offset=ofFloatColor(0,0,0,0));
 	void setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json);
 	void setupPropertyKeysJson(PathProperty& prop, const Json::Value& json);
+private:
+	string base_path_;
 };
 }
 

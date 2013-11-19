@@ -12,14 +12,19 @@
 #include "ofxAESolidLayer.h"
 #include "ofxAEStillLayer.h"
 #include "ofxAEShapeLayer.h"
+#include "ofFileUtils.h"
 
 namespace ofxAE {
+Loader::Loader(const string& base_path)
+{
+	base_path_ = ofFilePath::addTrailingSlash(base_path);
+}
 void Loader::loadComposition(Composition& comp, const string& filepath)
 {
 	string ext = ofFilePath::getFileExt(filepath);
 	if(ext == "json") {
 		ofxJSONElement json;
-		if(json.open(filepath)) {
+		if(json.open(base_path_+filepath)) {
 			setupCompositionJson(comp, json);
 		}
 	}
@@ -181,7 +186,7 @@ void Loader::setupStillLayerJson(StillLayer& layer, const Json::Value& json)
 	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
-		layer.loadImage((source_dir.isNull()?"":source_dir.asString())+source.asString());
+		layer.loadImage(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
 void Loader::setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json)
