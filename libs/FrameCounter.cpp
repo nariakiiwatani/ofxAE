@@ -10,10 +10,16 @@ FrameCounter::FrameCounter()
 int FrameCounter::update() {
 	if(first_) {
 		first_ = false;
-		return frame_;
 	}
-	frame_ += abs(speed_);
+	else {
+		frame_ += abs(speed_);
+	}
 	frame_internal_ = calcInternalFrame(frame_);
+	return getCurrent();
+}
+
+int FrameCounter::getCurrent()
+{
 	int ret = frame_internal_;
 	if(isForward() || isStable()) {
 		ret += from_;

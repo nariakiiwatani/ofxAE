@@ -9,6 +9,7 @@ public:
 	};
 	FrameCounter();
 	int update();
+	int getCurrent();
 	void setLoopState(LoopState state) { loop_ = state; }
 	void setRange(int from, int length) { from_ = from; length_ = length; }
 	void setSpeed(float speed) { speed_ = speed; }

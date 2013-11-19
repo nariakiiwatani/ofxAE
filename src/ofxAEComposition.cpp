@@ -88,6 +88,71 @@ void Composition::clearActiveMarker()
 	frame_ = frame_default_;
 }
 
+bool Composition::isDuringMarker(int index)
+{
+	Marker *marker = getMarker(index);
+	return marker?isDuringMarker(marker):false;
+}
+bool Composition::isDuringMarker(const string& name)
+{
+	Marker *marker = getMarker(name);
+	return marker?isDuringMarker(marker):false;
+}
+bool Composition::isDuringMarker(Marker *marker)
+{
+	int frame = frame_.getCurrent();
+	int from = marker->getFrom();
+	int to = from + marker->getLength()-1;
+	return from <= frame && frame <= to;
+}
+
+bool Composition::isMarkerStartFrame(int index)
+{
+	Marker *marker = getMarker(index);
+	return marker?isMarkerStartFrame(marker):false;
+}
+bool Composition::isMarkerStartFrame(const string& name)
+{
+	Marker *marker = getMarker(name);
+	return marker?isMarkerStartFrame(marker):false;
+}
+bool Composition::isMarkerStartFrame(Marker *marker)
+{
+	return frame_.getCurrent() == marker->getFrom();
+}
+
+bool Composition::isMarkerEndFrame(int index)
+{
+	Marker *marker = getMarker(index);
+	return marker?isMarkerEndFrame(marker):false;
+}
+bool Composition::isMarkerEndFrame(const string& name)
+{
+	Marker *marker = getMarker(name);
+	return marker?isMarkerEndFrame(marker):false;
+}
+bool Composition::isMarkerEndFrame(Marker *marker)
+{
+	return frame_.getCurrent() == (marker->getFrom()+marker->getLength()-1);
+}
+
+Marker* Composition::getMarker(int index)
+{
+	if(0 <= index && index < marker_.size()) {
+		return marker_[index];
+	}
+	return NULL;
+}
+Marker* Composition::getMarker(const string& name)
+{
+	for(vector<Marker*>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
+		if((*marker)->getName() == name) {
+			return *marker;
+		}
+	}
+	return NULL;
+}
+
 void Composition::prepare()
 {
 	CameraLayer *active_camera = NULL;

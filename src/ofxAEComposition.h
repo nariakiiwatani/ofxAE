@@ -27,6 +27,7 @@ public:
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
 	int getLength() { return frame_default_.getLength(); }
+	int getFrame() { return frame_.getCurrent(); }
 	
 	void addAVLayer(AVLayer *layer);
 	int getNumAVLayer();
@@ -44,6 +45,21 @@ public:
 	void setActiveMarker(const string& name, float speed=1);
 	void setActiveMarker(Marker *marker, float speed=1);
 	void clearActiveMarker();
+	
+	bool isDuringMarker(int index);
+	bool isDuringMarker(const string& name);
+	bool isDuringMarker(Marker *marker);
+	
+	bool isMarkerStartFrame(int index);
+	bool isMarkerStartFrame(const string& name);
+	bool isMarkerStartFrame(Marker *marker);
+	
+	bool isMarkerEndFrame(int index);
+	bool isMarkerEndFrame(const string& name);
+	bool isMarkerEndFrame(Marker *marker);
+	
+	Marker* getMarker(int index);
+	Marker* getMarker(const string& name);
 	
 private:
 	ofFbo fbo_;
