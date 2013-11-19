@@ -9,13 +9,16 @@ namespace ofxAE {
 class PropertyBase
 {
 public:
-	PropertyBase():is_dirty_(true){}
+	PropertyBase():is_dirty_(true),is_enable_(true){}
 	virtual bool setFrame(int frame)=0;
 	virtual void update(){ is_dirty_ = false; }
 	virtual bool isDirty() { return is_dirty_; }
 	void dirty() { is_dirty_ = true; }
+	void setEnable(bool enable) { is_enable_=enable; }
+	bool isEnable() { return is_enable_; }
 protected:
 	bool is_dirty_;
+	bool is_enable_;
 };
 template<typename Type>
 class Property : public PropertyBase

@@ -39,7 +39,9 @@ void Layer::update()
 void Layer::setPropertyFrame(int frame)
 {
 	for(vector<PropertyBase*>::iterator prop = properties_.begin(); prop != properties_.end(); ++prop) {
-		(*prop)->setFrame(frame);
+		if((*prop)->isEnable()) {
+			(*prop)->setFrame(frame);
+		}
 	}
 }
 }

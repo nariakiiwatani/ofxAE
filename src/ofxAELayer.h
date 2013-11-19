@@ -27,6 +27,8 @@ public:
 	void setAnchorPoint(const ofVec3f& anchor_point) { transform_.setAnchorPoint(anchor_point); }
 	
 	const string& getName() { return name_; }
+	
+	void setFreeze(bool freeze) { transform_.setEnable(!freeze); }
 
 protected:
 	virtual void prepare(){};
