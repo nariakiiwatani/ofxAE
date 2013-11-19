@@ -14,6 +14,8 @@ Layer::~Layer()
 	
 Layer::Layer()
 {
+	active_ = true;
+	opacity_ = 1;
 	properties_.push_back(&active_);
 	properties_.push_back(&opacity_);
 	properties_.push_back(&transform_);

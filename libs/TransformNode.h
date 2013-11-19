@@ -80,6 +80,8 @@ public:
 	void addAnchorPointX(float x);
 	void addAnchorPointY(float y);
 	void addAnchorPointZ(float z);
+	
+	const ofVec3f& getAnchorPoint() { return anchor_point_; }
 
 	void refreshMatrix();
 	

@@ -11,7 +11,7 @@ class PropertyBase
 public:
 	PropertyBase():is_dirty_(true){}
 	virtual bool setFrame(int frame)=0;
-	virtual void update(){}
+	virtual void update(){ is_dirty_ = false; }
 	virtual bool isDirty() { return is_dirty_; }
 	void dirty() { is_dirty_ = true; }
 protected:

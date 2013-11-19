@@ -55,6 +55,7 @@ void PropertyGroup::update()
 
 TransformProperty::TransformProperty()
 {
+	scale_ = ofVec3f(1,1,1);
 	properties_.push_back(&translation_);
 	properties_.push_back(&rotation_);
 	properties_.push_back(&orientation_);

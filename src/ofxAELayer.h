@@ -20,6 +20,11 @@ public:
 
 	void setActive(bool active) { active_=active; }
 	void setOpacity(float opacity) { opacity_=opacity; }
+	void setTranslation(const ofVec3f& translation) { transform_.setTranslation(translation); }
+	void setRotation(const ofVec3f& rotation) { transform_.setRotation(rotation); }
+	void setOrientation(const ofVec3f& orientation) { transform_.setOrientation(orientation); }
+	void setScale(const ofVec3f& scale) { transform_.setScale(scale); }
+	void setAnchorPoint(const ofVec3f& anchor_point) { transform_.setAnchorPoint(anchor_point); }
 	
 	const string& getName() { return name_; }
 
