@@ -16,9 +16,10 @@ Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタ�
 
 ### OFで再生
 testApp.h  
-	ofxAE::Composition composition_;
 
+	ofxAE::Composition composition_;
 testApp.cpp  
+
 	void testApp::setup(){
 		ofxAE::Loader loader("exported_folder");
 		loader.loadComposition(composition_, "foo.json");	// "bin/data/exported_folder/foo.json"
