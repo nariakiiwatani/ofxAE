@@ -21,6 +21,7 @@ namespace ofxAE {
 class Loader {
 public:
 	Loader(const string& base_path="");
+	void setBasePath(const string& base_path);
 	void loadComposition(Composition& comp, const string& filepath);
 private:
 	void setupCompositionJson(Composition& comp, const Json::Value& json);

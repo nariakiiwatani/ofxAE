@@ -17,6 +17,10 @@
 namespace ofxAE {
 Loader::Loader(const string& base_path)
 {
+	setBasePath(base_path);
+}
+void Loader::setBasePath(const string &base_path)
+{
 	base_path_ = ofFilePath::addTrailingSlash(base_path);
 }
 void Loader::loadComposition(Composition& comp, const string& filepath)
