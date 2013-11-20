@@ -12,30 +12,22 @@ Currently so buggy, So I need community help. :)
 ## Usage...
 ### Export composition data from AfterEffects
 1. Select composition(s) in project pane.
-2. execute tool/compExport.jsx (File-->Script-->Execute) and save .json file in OF data folder.
+2. execute tool/compExport.jsx (File-->Script-->Execute) and choose a folder to export data.
 
 ### Load and play on OF
 testApp.h  
-
-	ofxAE::Loader loader_;
 	ofxAE::Composition composition_;
-	int frame_;
-testApp.cpp  
 
+testApp.cpp  
 	void testApp::setup(){
-		ofSetFrameRate(30);
-		ofEnableAlphaBlending();
-		loader_.loadComposition(composition_, "foo.json");
+		ofxAE::Loader loader("exported_folder");
+		loader.loadComposition(composition_, "foo.json");	// "bin/data/exported_folder/foo.json"
+		composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
 	}
 
 	//--------------------------------------------------------------
 	void testApp::update(){
-		composition_.setFrame(frame);
 		composition_.update();
-		// loop 30 frames
-		if(++frame>=30) {
-			frame = 0;
-		}
 	}
 
 	//--------------------------------------------------------------

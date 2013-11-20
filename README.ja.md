@@ -12,30 +12,22 @@ Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタ�
 ## 使用法
 ### AEから書き出し
 1. プロジェクトペインで書き出したいコンポジションを選択
-2. 「ファイル」-->スクリプト-->実行」でtool/compExport.jsxを選択し、OFのデータフォルダに保存
+2. 「ファイル」-->スクリプト-->実行」でtool/compExport.jsxを選択し、データを保存するフォルダを選択
 
 ### OFで再生
 testApp.h  
-
-	ofxAE::Loader loader_;
 	ofxAE::Composition composition_;
-	int frame_;
-testApp.cpp  
 
+testApp.cpp  
 	void testApp::setup(){
-		ofSetFrameRate(30);
-		ofEnableAlphaBlending();
-		loader_.loadComposition(composition_, "hoge.json");
+		ofxAE::Loader loader("exported_folder");
+		loader.loadComposition(composition_, "foo.json");	// "bin/data/exported_folder/foo.json"
+		composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
 	}
 
 	//--------------------------------------------------------------
 	void testApp::update(){
-		composition_.setFrame(frame);
 		composition_.update();
-		// loop 30 frames
-		if(++frame>=30) {
-			frame = 0;
-		}
 	}
 
 	//--------------------------------------------------------------
