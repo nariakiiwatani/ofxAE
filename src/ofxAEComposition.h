@@ -58,6 +58,10 @@ public:
 	bool isMarkerEndFrame(const string& name);
 	bool isMarkerEndFrame(Marker *marker);
 	
+	bool isMarkerActive(int index);
+	bool isMarkerActive(const string& name);
+	bool isMarkerActive(Marker *marker);
+	
 	Marker* getMarker(int index);
 	Marker* getMarker(const string& name);
 	
@@ -69,6 +73,7 @@ private:
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<Marker*> marker_;
+	Marker *active_marker_;
 	
 	FrameCounter frame_;
 	FrameCounter frame_default_;

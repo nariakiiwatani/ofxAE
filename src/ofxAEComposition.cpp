@@ -81,11 +81,13 @@ void Composition::setActiveMarker(Marker *marker, float speed)
 			frame_.setLoopState(FrameCounter::LOOP_PINGPONG);
 		}
 	}
+	active_marker_ = marker;
 	resetFrame(0);
 }
 void Composition::clearActiveMarker()
 {
 	frame_ = frame_default_;
+	active_marker_ = NULL;
 }
 
 bool Composition::isDuringMarker(int index)
@@ -134,6 +136,21 @@ bool Composition::isMarkerEndFrame(const string& name)
 bool Composition::isMarkerEndFrame(Marker *marker)
 {
 	return frame_.getCurrent() == (marker->getFrom()+marker->getLength()-1);
+}
+
+bool Composition::isMarkerActive(int index)
+{
+	Marker *marker = getMarker(index);
+	return marker?isMarkerActive(marker):false;
+}
+bool Composition::isMarkerActive(const string& name)
+{
+	Marker *marker = getMarker(name);
+	return marker?isMarkerActive(marker):false;
+}
+bool Composition::isMarkerActive(Marker *marker)
+{
+	return active_marker_ == marker;
 }
 
 Marker* Composition::getMarker(int index)
