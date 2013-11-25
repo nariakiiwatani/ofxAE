@@ -50,6 +50,26 @@ int FrameCounter::calcInternalFrame(int input)
 	return frame;
 }
 
+void FrameCounter::setSpeed(float speed)
+{
+	if(speed_*speed < 0) {
+		switch(loop_) {
+			case LOOP_NONE:
+				frame_ = length_-frame_;
+				break;
+			case LOOP_ONEWAY: {
+				int looped = (frame_/length_) * length_;
+				frame_ = length_-(frame_-looped)+looped;
+			}	break;
+			case LOOP_PINGPONG:
+				int looped = (frame_/(length_-1)*2) * (length_-1)*2;
+				frame_ = length_-(frame_-looped)+looped;
+				break;
+		}
+	}
+	speed_ = speed;
+}
+
 bool FrameCounter::isEnd()
 {
 	return loop_==LOOP_NONE && (frame_internal_ == length_-1);

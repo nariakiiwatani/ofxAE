@@ -12,7 +12,7 @@ public:
 	int getCurrent();
 	void setLoopState(LoopState state) { loop_ = state; }
 	void setRange(int from, int length) { from_ = from; length_ = length; }
-	void setSpeed(float speed) { speed_ = speed; }
+	void setSpeed(float speed);
 	void setFrame(int frame) { frame_ = frame; }
 	void resetFrame(int frame) { frame_ = frame; first_ = true; }
 	
