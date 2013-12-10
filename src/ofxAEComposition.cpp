@@ -40,6 +40,11 @@ void Composition::setSpeed(float speed)
 	frame_.setSpeed(speed);
 	frame_default_.setSpeed(speed);
 }
+void Composition::setBackward(bool backward)
+{
+	frame_.setBackward(backward);
+	frame_default_.setBackward(backward);
+}
 
 void Composition::update()
 {

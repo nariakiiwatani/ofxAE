@@ -5,14 +5,22 @@ FrameCounter::FrameCounter()
 :frame_(0)
 ,speed_(1)
 ,loop_(LOOP_NONE)
+,is_backward_(false)
 ,first_(true)
 {}
+
+void FrameCounter::setFrame(int frame)
+{
+	frame_ = frame;
+	frame_internal_ = calcInternalFrame(frame);
+	first_ = false;
+}
 int FrameCounter::update() {
 	if(first_) {
 		first_ = false;
 	}
 	else {
-		frame_ += abs(speed_);
+		frame_ += speed_;
 	}
 	frame_internal_ = calcInternalFrame(frame_);
 	return getCurrent();
@@ -21,7 +29,7 @@ int FrameCounter::update() {
 int FrameCounter::getCurrent()
 {
 	int ret = frame_internal_;
-	if(isForward() || isStable()) {
+	if(isForward()) {
 		ret += from_;
 	}
 	else /*if(isBackward())*/ {
@@ -30,6 +38,16 @@ int FrameCounter::getCurrent()
 	return ret;
 }
 
+static int calcLoopedFrame(int frame, int length)
+{
+	if(frame < 0) {
+		frame += (1-frame/length)*(length);
+	}
+	else {
+		frame %= length;
+	}
+	return frame;
+}
 int FrameCounter::calcInternalFrame(int input)
 {
 	int frame = input;
@@ -38,10 +56,10 @@ int FrameCounter::calcInternalFrame(int input)
 			frame = ofClamp(frame, 0, length_-1);
 			break;
 		case LOOP_ONEWAY:
-			frame %= length_;
+			frame = calcLoopedFrame(frame, length_);
 			break;
 		case LOOP_PINGPONG:
-			frame %= (length_-1)*2;
+			frame = calcLoopedFrame(frame, (length_-1)*2);
 			if(frame > length_-1) {
 				frame = 2*(length_-1)-frame;
 			}
@@ -50,9 +68,9 @@ int FrameCounter::calcInternalFrame(int input)
 	return frame;
 }
 
-void FrameCounter::setSpeed(float speed)
+void FrameCounter::setBackward(bool backward)
 {
-	if(speed_*speed < 0) {
+	if(is_backward_ != backward) {
 		switch(loop_) {
 			case LOOP_NONE:
 				frame_ = length_-frame_;
@@ -67,7 +85,7 @@ void FrameCounter::setSpeed(float speed)
 				break;
 		}
 	}
-	speed_ = speed;
+	is_backward_ = backward;
 }
 
 bool FrameCounter::isEnd()

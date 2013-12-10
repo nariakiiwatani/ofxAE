@@ -19,6 +19,7 @@ public:
 	void setLength(int length);
 	void setLoopState(FrameCounter::LoopState loop);
 	void setSpeed(float speed);
+	void setBackward(bool backward);
 	void update();
 	void draw();
 	void setFrame(int frame);
