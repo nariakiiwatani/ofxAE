@@ -23,7 +23,6 @@ static void extractParam(map<string,string>& dst, const string& src, size_t pos)
 }
 void Marker::setupByComment(const string& comment)
 {
-	loop_ = FrameCounter::LOOP_NONE;
 	size_t pos = comment.find(NEW_LINE);
 	if(pos == string::npos) {
 		name_ = comment;
