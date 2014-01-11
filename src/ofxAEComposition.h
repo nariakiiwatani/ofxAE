@@ -45,7 +45,7 @@ public:
 	void setActiveMarker(int index, float speed=1);
 	void setActiveMarker(const string& name, float speed=1);
 	void setActiveMarker(Marker *marker, float speed=1);
-	void clearActiveMarker();
+	void clearActiveMarker(bool reset_frame=false);
 	
 	bool isDuringMarker(int index);
 	bool isDuringMarker(const string& name);

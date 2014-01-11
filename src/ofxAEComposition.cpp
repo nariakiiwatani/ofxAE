@@ -89,11 +89,16 @@ void Composition::setActiveMarker(Marker *marker, float speed)
 	active_marker_ = marker;
 	resetFrame(0);
 }
-void Composition::clearActiveMarker()
+void Composition::clearActiveMarker(bool reset_frame)
 {
-	int current_frame = frame_.getCurrent();
-	frame_ = frame_default_;
-	frame_.setFrame(current_frame);
+	if(reset_frame) {
+		frame_ = frame_default_;
+	}
+	else {
+		int current_frame = frame_.getCurrent();
+		frame_ = frame_default_;
+		frame_.setFrame(current_frame);
+	}
 	active_marker_ = NULL;
 }
 
