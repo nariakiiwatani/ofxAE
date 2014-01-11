@@ -19,6 +19,9 @@ static void extractParam(map<string,string>& dst, const string& src, size_t pos)
 				pos += NEW_LINE.length();
 			}
 		}
+		else {
+			return;
+		}
 	}
 }
 void Marker::setupByComment(const string& comment)
