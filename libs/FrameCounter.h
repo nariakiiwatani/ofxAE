@@ -22,6 +22,7 @@ public:
 	bool isBackward() { return is_backward_; }
 	bool isStable() { return speed_ == 0; }
 	int getLength() { return length_; }
+	int getFrom() { return from_; }
 
 private:
 	float frame_;

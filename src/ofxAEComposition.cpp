@@ -160,6 +160,47 @@ bool Composition::isMarkerActive(Marker *marker)
 	return active_marker_ == marker;
 }
 
+void Composition::jumpToMarkerStartFrame(int index)
+{
+	Marker *marker = getMarker(index);
+	if(marker) {
+		jumpToMarkerStartFrame(marker);
+	}
+}
+void Composition::jumpToMarkerStartFrame(const string& name)
+{
+	Marker *marker = getMarker(name);
+	if(marker) {
+		jumpToMarkerStartFrame(marker);
+	}
+}
+void Composition::jumpToMarkerStartFrame(Marker *marker)
+{
+	int jump_to = marker->getFrom() - frame_.getFrom();
+	frame_.resetFrame(jump_to);
+}
+
+void Composition::jumpToMarkerEndFrame(int index)
+{
+	Marker *marker = getMarker(index);
+	if(marker) {
+		jumpToMarkerEndFrame(marker);
+	}
+}
+void Composition::jumpToMarkerEndFrame(const string& name)
+{
+	Marker *marker = getMarker(name);
+	if(marker) {
+		jumpToMarkerEndFrame(marker);
+	}
+}
+void Composition::jumpToMarkerEndFrame(Marker *marker)
+{
+	int jump_to = marker->getFrom()+marker->getLength() - frame_.getFrom();
+	frame_.resetFrame(jump_to);
+}
+
+
 Marker* Composition::getMarker(int index)
 {
 	if(0 <= index && index < marker_.size()) {

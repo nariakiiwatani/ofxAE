@@ -63,6 +63,14 @@ public:
 	bool isMarkerActive(const string& name);
 	bool isMarkerActive(Marker *marker);
 	
+	void jumpToMarkerStartFrame(int index);
+	void jumpToMarkerStartFrame(const string& name);
+	void jumpToMarkerStartFrame(Marker *marker);
+	
+	void jumpToMarkerEndFrame(int index);
+	void jumpToMarkerEndFrame(const string& name);
+	void jumpToMarkerEndFrame(Marker *marker);
+	
 	Marker* getMarker(int index);
 	Marker* getMarker(const string& name);
 	
