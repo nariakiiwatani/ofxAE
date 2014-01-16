@@ -136,7 +136,8 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	bool use_mask = properties.isMember("mask");
 	layer.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
-	layer.is_3d_ = json.get("is3d", false).asBool(); 
+	layer.is_3d_ = json.get("is3d", false).asBool();
+	layer.is_collapse_ = json.get("isCollapse", false).asBool();
 	setupLayerJson(layer, json);
 	if(use_mask) {
 		const Json::Value& masks = properties.get("mask", Json::Value::null);
