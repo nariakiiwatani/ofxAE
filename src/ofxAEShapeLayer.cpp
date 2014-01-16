@@ -168,6 +168,7 @@ ShapeContentStroke::ShapeContentStroke()
 
 void ShapeContentStroke::pop(ofPath& path)
 {
+	ofPushStyle();
 	path.setFilled(false);
 	ofColor prev = path.getStrokeColor();
 	float opacity = prev.a/255.f*opacity_;
@@ -176,6 +177,7 @@ void ShapeContentStroke::pop(ofPath& path)
 	ofEnableBlendMode(blend_mode_);
 	path.draw();
 	path.setStrokeColor(prev);
+	ofPopStyle();
 }
 
 ShapeContentFill::ShapeContentFill()
@@ -185,6 +187,7 @@ ShapeContentFill::ShapeContentFill()
 }
 void ShapeContentFill::pop(ofPath& path)
 {
+	ofPushStyle();
 	path.setFilled(true);
 	ofColor prev = path.getFillColor();
 	float opacity = prev.a/255.f*opacity_;
@@ -192,6 +195,7 @@ void ShapeContentFill::pop(ofPath& path)
 	ofEnableBlendMode(blend_mode_);
 	path.draw();
 	path.setFillColor(prev);
+	ofPopStyle();
 }
 	
 }
