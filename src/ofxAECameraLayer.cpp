@@ -14,20 +14,6 @@ void CameraLayer::prepare()
 	camera_.lookAt(look_at_);
 	camera_.setTransformMatrix(*(getNode().getWorldMatrix()));
 }
-void CameraLayer::begin()
-{
-	camera_.begin();
-}
-
-void CameraLayer::end()
-{
-	camera_.end();
-}
-
-ofVec3f CameraLayer::worldToCamera(const ofVec3f& world)
-{
-	return camera_.worldToCamera(world);
-}
 
 }
  /**/

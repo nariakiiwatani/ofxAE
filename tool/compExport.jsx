@@ -42,6 +42,9 @@ function proc(comp)
 			obj.width = l.width;
 			obj.height = l.height;
 			obj.is3d = l.threeDLayer;
+			if(l.canSetCollapseTransformation) {
+				obj.isCollapse = l.collapseTransformation;
+			}
 		}
 		obj.layerType = ExportUtil.getLayerType(l);
 		if(l.source) {

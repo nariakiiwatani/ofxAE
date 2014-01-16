@@ -18,11 +18,13 @@ public:
 	float getHeight() { return size_.y; }
 	const ofVec2f& getSize() { return size_; }
 	bool is3D() { return is_3d_; }
+	bool isCollapse() { return is_collapse_; }
 	void addMask(Mask *mask);
 
 protected:
 	virtual void render(){};
 	bool is_3d_;
+	bool is_collapse_;
 	ofVec2f size_;
 	bool is_use_mask_;
 	vector<Mask*> mask_;

@@ -9,7 +9,7 @@ namespace ofxAE {
 	class CameraLayer;
 	class Marker;
 }
-
+class ofCamera;
 namespace ofxAE {
 class Composition {
 	friend class Loader;
@@ -22,6 +22,7 @@ public:
 	void setBackward(bool backward);
 	void update();
 	void draw();
+	void drawCollapse(ofCamera *camera);
 	void setFrame(int frame);
 	void resetFrame(int frame);
 	bool isEnd() { return frame_.isEnd(); }
@@ -81,6 +82,7 @@ private:
 	float height_;
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
+	vector<AVLayer*> active_layers_;
 	vector<Marker*> marker_;
 	Marker *active_marker_;
 	

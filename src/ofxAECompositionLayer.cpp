@@ -10,7 +10,12 @@ void CompositionLayer::render()
 {
 	ofPushStyle();
 	ofSetColor(ofColor::white, getOpacity()*255);
-	composition_.draw();
+	if(isCollapse()) {
+		composition_.drawCollapse(NULL);
+	}
+	else {
+		composition_.draw();
+	}
 	ofPopStyle();
 }
 void CompositionLayer::setPropertyFrame(int frame)

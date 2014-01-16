@@ -9,10 +9,7 @@ class CameraLayer : public Layer {
 	friend class Loader;
 public:
 	CameraLayer();
-	void begin();
-	void end();
-	
-	ofVec3f worldToCamera(const ofVec3f& world);
+	ofCamera* getCamera() { return &camera_; }
 
 private:
 	void prepare();
