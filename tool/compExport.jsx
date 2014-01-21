@@ -34,9 +34,10 @@ function proc(comp)
 	{
 		var obj = new Object();
 		obj.name = l.name;
+		obj.index = l.index;
 		obj.startFrame = l.startTime*frameRate;
 		if(l.parent) {
-			obj.parent = l.parent.name;
+			obj.parent = l.parent.index;
 		}
 		if(ExportUtil.isAVLayer(l)) {
 			obj.width = l.width;
@@ -87,24 +88,8 @@ function proc(comp)
 	}
 	json.layer = new Array();
 	var layers = comp.layers;
-	var names = new Array();
 	for(var i = 1; i <= layers.length; ++i) {
 		if(layers[i].enabled) {
-			while(true) {
-				var already = false;
-				for(var j = 0; j < names.length; ++j) {
-					if(names[j] === layers[i].name) {
-						already = true;
-						layers[i].name += "_";
-						break;
-					}
-				}
-				if(already) {
-					continue;
-				}
-				break;
-			}
-			names.push(layers[i].name);
 			json.layer.push(procLayer(layers[i]));
 		}
 	}
