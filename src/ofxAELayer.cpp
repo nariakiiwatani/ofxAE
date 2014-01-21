@@ -16,6 +16,7 @@ Layer::Layer()
 {
 	active_ = true;
 	opacity_ = 1;
+	parent_ = NULL;
 	properties_.push_back(&active_);
 	properties_.push_back(&opacity_);
 	properties_.push_back(&transform_);
@@ -23,11 +24,15 @@ Layer::Layer()
 	
 void Layer::setParent(Layer *layer)
 {
+	parent_ = layer;
 	getNode().setParent(&layer->getNode());
 }
 
 void Layer::update()
 {
+	if(parent_) {
+		parent_->update();
+	}
 	for(vector<PropertyBase*>::iterator prop = properties_.begin(); prop != properties_.end(); ++prop) {
 		if((*prop)->isDirty()) {
 			(*prop)->update();
