@@ -11,6 +11,7 @@
 #include "ofxAECompositionLayer.h"
 #include "ofxAESolidLayer.h"
 #include "ofxAEStillLayer.h"
+#include "ofxAESequenceLayer.h"
 #include "ofxAEShapeLayer.h"
 #include "ofFileUtils.h"
 
@@ -64,6 +65,12 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			else if(type_name == "solid") {
 				SolidLayer *ll = new SolidLayer();
 				setupSolidLayerJson(*ll, layer);
+				comp.av_.push_back(ll);
+				l = ll;
+			}
+			else if(type_name == "sequence") {
+				SequenceLayer *ll = new SequenceLayer();
+				setupSequenceLayerJson(*ll, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
@@ -197,6 +204,15 @@ void Loader::setupStillLayerJson(StillLayer& layer, const Json::Value& json)
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
 		layer.loadImage(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
+	}
+}
+void Loader::setupSequenceLayerJson(SequenceLayer& layer, const Json::Value& json)
+{
+	setupAVLayerJson(layer, json);
+	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
+	const Json::Value& source = json.get("source", Json::Value::null);
+	if(!source.isNull()) {
+		layer.setSequenceString(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
 void Loader::setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json)
