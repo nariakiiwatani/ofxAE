@@ -206,8 +206,12 @@ function getLayerKeys(layer, startTime, duration) {
 				var mask = new Object();
 				mask.name = m.name;
 				mask.mode = ExportUtil.MASKMODE_TABLE[m.maskMode];
+				if(mask.mode === undefined) {
+					mask.mode = m.maskMode;
+				}
 				mask.inverted = m.inverted;
 				procShapeKeys(mask, m.property("maskShape"));
+				mask.opacity = procPropertyKeys(m, "ADBE Mask Opacity", function(prop,time){return prop.valueAtTime(time,true);})
 				obj.mask.push(mask);
 			}
 		}

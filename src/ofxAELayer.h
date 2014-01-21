@@ -34,6 +34,7 @@ protected:
 	virtual void prepare(){};
 protected:
 	string name_;
+	Layer *parent_;
 	Property<float> opacity_;
 	Property<bool> active_;
 	TransformProperty transform_;

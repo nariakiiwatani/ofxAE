@@ -4,8 +4,10 @@ MASKMODE_TABLE : {
 	6013: "add",
 	6014: "subtract",
 
+	6212: "none",
 	6213: "add",
 	6214: "subtract",
+//	6215: "cross",
 },
 
 LayerType : {

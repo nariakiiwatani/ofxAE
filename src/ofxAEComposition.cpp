@@ -258,6 +258,9 @@ void Composition::drawCollapse(ofCamera *camera)
 	multimap<float,AVLayer*> work;
 	for(vector<AVLayer*>::iterator layer = active_layers_.begin(); layer != active_layers_.end(); ++layer) {
 		AVLayer *l = *layer;
+		if(l->getOpacity() == 0) {
+			continue;
+		}
 		if(l->is3D()) {
 			ofVec3f dist = (*layer)->getNode().getWorldMatrix()->getTranslation();
 			if(camera) {

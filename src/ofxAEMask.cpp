@@ -15,6 +15,7 @@ void Mask::draw()
 	ofPath& path = path_.get();
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
+	path.setColor(ofColor(ofColor::white, opacity_*255));
 	path.draw();
 	ofPopStyle();
 }

@@ -28,8 +28,14 @@ void Loader::loadComposition(Composition& comp, const string& filepath)
 	string ext = ofFilePath::getFileExt(filepath);
 	if(ext == "json") {
 		ofxJSONElement json;
-		if(json.open(base_path_+filepath)) {
+		if(file_cache_.find(base_path_+filepath) == file_cache_.end()) {
+			file_cache_.insert(pair<string,string>(base_path_+filepath,ofBufferFromFile(base_path_+filepath).getText()));
+		}
+		if(json.parse(file_cache_[base_path_+filepath])) {
 			setupCompositionJson(comp, json);
+		}
+		else {
+			ofLog(OF_LOG_WARNING, "can't open json file");
 		}
 	}
 }
@@ -42,8 +48,8 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 	// Layers
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
-		vector<Layer*> all;
-		map<Layer*, string> children;
+		map<Layer*, int> all;
+		map<Layer*, int> children;
 		int layer_count = layers.size();
 		for(int i = layer_count; i--;) {	// reverse iterate for draw priority
 			const Json::Value& layer = layers.get(i, Json::Value::null);
@@ -82,17 +88,16 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			if(!l) {
 				continue;
 			}
-			all.push_back(l);
+			all.insert(pair<Layer*,int>(l, layer.get("index", 0).asInt()));
 			if(layer.isMember("parent")) {
-				children.insert(pair<Layer*,string>(l, layer.get("parent", Json::Value::null).asString()));
+				children.insert(pair<Layer*,int>(l, layer.get("parent", 0).asInt()));
 			}
 		}
 		// search parent
-		for(map<Layer*, string>::iterator child = children.begin(); child != children.end(); ++child) {
-			for(vector<Layer*>::iterator one = all.begin(); one != all.end(); ++one) {
-				if((*child).second == (*one)->name_) {
-					(*child).first->setParent(*one);
-					break;
+		for(map<Layer*, int>::iterator child = children.begin(); child != children.end(); ++child) {
+			for(map<Layer*, int>::iterator one = all.begin(); one != all.end(); ++one) {
+				if((*child).second == (*one).second) {
+					(*child).first->setParent((*one).first);
 				}
 			}
 		}
@@ -307,10 +312,12 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
 {
 	mask.name_ = json.get("name", "noname").asString();
 	mask.setInverted(json.get("inverted", false).asBool());
-	const string& blend_mode = json.get("mode", "add").asString();
+	const string& blend_mode = json.get("mode", "none").asString();
+	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_DISABLED; }
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ mask.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
-	setupPropertyKeysJson(mask.getPath(), json);
+	setupPropertyKeysJson(mask.path_, json);
+	setupPropertyKeysJson(mask.opacity_, json.get("opacity", Json::Value::null), 0.01f);
 }
 
 void Loader::setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json)

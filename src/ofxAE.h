@@ -45,6 +45,7 @@ private:
 	void setupPropertyKeysJson(PathProperty& prop, const Json::Value& json);
 private:
 	string base_path_;
+	map<string,string> file_cache_;
 };
 }
 
