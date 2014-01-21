@@ -15,10 +15,12 @@ public:
 	void setInverted(bool inverted) { path_.setInverted(inverted); }
 	void setSize(const ofVec2f& size) { path_.setSize(size); }
 	PathProperty& getPath() { return path_; }
+	Property<float>& getOpacity() { return opacity_; }
 private:
 	string name_;
 	ofBlendMode blend_mode_;
 	PathProperty path_;
+	Property<float> opacity_;
 };
 
 }

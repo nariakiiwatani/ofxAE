@@ -54,6 +54,7 @@ void AVLayer::addMask(Mask *mask)
 	mask->setSize(size_);
 	mask_.push_back(mask);
 	properties_.push_back(&mask->getPath());
+	properties_.push_back(&mask->getOpacity());
 }
 }
 /* EOF */

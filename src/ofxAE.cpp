@@ -307,10 +307,12 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
 {
 	mask.name_ = json.get("name", "noname").asString();
 	mask.setInverted(json.get("inverted", false).asBool());
-	const string& blend_mode = json.get("mode", "add").asString();
+	const string& blend_mode = json.get("mode", "none").asString();
+	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_DISABLED; }
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ mask.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
-	setupPropertyKeysJson(mask.getPath(), json);
+	setupPropertyKeysJson(mask.path_, json);
+	setupPropertyKeysJson(mask.opacity_, json.get("opacity", Json::Value::null), 0.01f);
 }
 
 void Loader::setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json)
