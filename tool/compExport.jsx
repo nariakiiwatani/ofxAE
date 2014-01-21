@@ -57,8 +57,25 @@ function proc(comp)
 				obj.source = l.source.name+'.json';
 				break;
 			case ExportUtil.LayerType.STILL:
-				obj.source = l.source.file.toString().replace(/.*\//,"");
-				copyItem(l.source, FOLDER.toString());
+				if(l.source.file.toString().match(/\.(ai|psd)$/)) {
+					if(l.source.name.match(/\//)) {
+						var sp = l.source.name.split('/');
+						obj.sourceDirectory += sp[1]+'/';
+						obj.source = (sp[0] + '.png').replace(/ /g,'-');
+					}
+					else {
+						obj.sourceDirectory += l.source.name+'/';
+						obj.source = l.source.name.replace(/\.(ai|psd)$/,"") + '.png';
+					}
+				}
+				else {
+					obj.source = l.source.file.toString().replace(/.*\//,"");
+					copyItem(l.source, FOLDER.toString());
+				}
+				break;
+			case ExportUtil.LayerType.SEQUENCE:
+				obj.source = l.source.name;
+				copySequenceItem(l.source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SOLID:
 				obj.color = l.source.mainSource.color;

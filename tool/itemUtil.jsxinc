@@ -18,3 +18,22 @@ function copyItem(item, dir) {
 	file.copy(dir.toString()+'/'+file.toString().replace(/.*\//,""));
 };
 
+function copySequenceItem(item, dir) {
+	if(item.name.toString().match(/(.*)\[([0-9]+)-([0-9]+)](.+)/)) {
+		var before = RegExp.$1;
+		var start = RegExp.$2;
+		var end = RegExp.$3;
+		var after = RegExp.$4;
+		var len = start.length;
+		var dir = new Folder(dir+'/'+getItemFolder(item));
+		if(!dir.exists){
+			dir.create();
+		}
+		before = item.file.toString().replace(/[^\/]*$/, "") + before;
+		for(var i = Number(start); i <= Number(end); ++i) {
+			var numstr = (Array(len+1).join('0')+i).slice(-len);
+			var file = new File(before+numstr+after);
+			file.copy(dir.toString()+'/'+file.toString().replace(/.*\//,""));
+		}
+	}
+}

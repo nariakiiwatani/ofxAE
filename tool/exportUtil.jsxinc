@@ -14,6 +14,8 @@ LayerType : {
 	UNKNOWN:"unknown",
 	COMPOSITION:"composition",
 	STILL:"still",
+	SEQUENCE:"sequence",
+	MOVIE:"movie",
 	SOLID:"solid",
 	PLACEHOLDER:"placeholder",
 	TEXT:"text",
@@ -32,6 +34,14 @@ getLayerType : function(layer)
 		else if(s.mainSource instanceof FileSource) {
 			if(s.mainSource.isStill) {
 				return this.LayerType.STILL;
+			}
+			else  {
+				if(s.mainSource.conformFrameRate === s.mainSource.nativeFrameRate) {
+					return this.LayerType.SEQUENCE;
+				}
+				else {
+					return this.LayerType.MOVIE;
+				}
 			}
 		}
 		else if(s.mainSource instanceof SolidSource) {
@@ -64,6 +74,7 @@ isAVLayer : function(layer)
 	switch(this.getLayerType(layer)) {
 		case "composition":
 		case "still":
+		case "sequence":
 		case "solid":
 		case "text":
 		case "shape":
