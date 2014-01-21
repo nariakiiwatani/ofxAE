@@ -25,6 +25,8 @@ public:
 	void drawCollapse(ofCamera *camera);
 	void setFrame(int frame);
 	void resetFrame(int frame);
+	void setFrameByRatio(float ratio);
+	void resetFrameByRatio(float ratio);
 	bool isEnd() { return frame_.isEnd(); }
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
