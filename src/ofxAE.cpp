@@ -28,8 +28,14 @@ void Loader::loadComposition(Composition& comp, const string& filepath)
 	string ext = ofFilePath::getFileExt(filepath);
 	if(ext == "json") {
 		ofxJSONElement json;
-		if(json.open(base_path_+filepath)) {
+		if(file_cache_.find(base_path_+filepath) == file_cache_.end()) {
+			file_cache_.insert(pair<string,string>(base_path_+filepath,ofBufferFromFile(base_path_+filepath).getText()));
+		}
+		if(json.parse(file_cache_[base_path_+filepath])) {
 			setupCompositionJson(comp, json);
+		}
+		else {
+			ofLog(OF_LOG_WARNING, "can't open json file");
 		}
 	}
 }
