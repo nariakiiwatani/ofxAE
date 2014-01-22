@@ -15,7 +15,10 @@ function copyItem(item, dir) {
 	if(!dir.exists){
 		dir.create();
 	}
-	file.copy(dir.toString()+'/'+file.toString().replace(/.*\//,""));
+	var newFileName = dir.toString()+'/'+file.toString().replace(/.*\//,"");
+	if(file.toString() !== newFileName) {
+		file.copy(newFileName);
+	}
 };
 
 function copySequenceItem(item, dir) {
@@ -33,7 +36,10 @@ function copySequenceItem(item, dir) {
 		for(var i = Number(start); i <= Number(end); ++i) {
 			var numstr = (Array(len+1).join('0')+i).slice(-len);
 			var file = new File(before+numstr+after);
-			file.copy(dir.toString()+'/'+file.toString().replace(/.*\//,""));
+			var newFileName = dir.toString()+'/'+file.toString().replace(/.*\//,"");
+			if(file.toString() !== newFileName) {
+				file.copy(newFileName);
+			}
 		}
 	}
 }
