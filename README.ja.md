@@ -15,24 +15,24 @@ Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタ�
 2. 「ファイル」-->スクリプト-->実行」でtool/compExport.jsxを選択し、データを保存するフォルダを選択
 
 ### OFで再生
-testApp.h  
+ofApp.h  
 
 	ofxAE::Composition composition_;
-testApp.cpp  
+ofApp.cpp  
 
-	void testApp::setup(){
+	void ofApp::setup(){
 		ofxAE::Loader loader("exported_folder");
 		loader.loadComposition(composition_, "foo.json");	// "bin/data/exported_folder/foo.json"
 		composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
 	}
 
 	//--------------------------------------------------------------
-	void testApp::update(){
+	void ofApp::update(){
 		composition_.update();
 	}
 
 	//--------------------------------------------------------------
-	void testApp::draw(){
+	void ofApp::draw(){
 		ofBackground(0);
 		composition_.draw();
 	}
