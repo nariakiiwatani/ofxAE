@@ -56,7 +56,7 @@ function proc(comp)
 			case ExportUtil.LayerType.COMPOSITION:
 				obj.source = l.source.name+'.json';
 				break;
-			case ExportUtil.LayerType.STILL:
+			case ExportUtil.LayerType.IMAGE:
 				if(l.source.file.toString().match(/\.(ai|psd)$/)) {
 					if(l.source.name.match(/\//)) {
 						var sp = l.source.name.split('/');

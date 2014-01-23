@@ -1,3 +1,2 @@
 .DS_Store
-*xcodeproj*
-example/bin/*.app
+example/bin/*Debug.app

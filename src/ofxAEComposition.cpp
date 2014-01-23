@@ -4,7 +4,7 @@
 #include "ofxAECameraLayer.h"
 #include "ofxAEMarker.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 Composition::~Composition()
 {
@@ -349,5 +349,5 @@ CameraLayer* Composition::getCameraLayer(const string& name)
 	return NULL;
 }
 
-}
+OFX_AE_NAMESPACE_END
 /* EOF */

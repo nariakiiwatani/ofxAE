@@ -1,9 +1,10 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAEAVLayer.h"
 #include "ofxAEComposition.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 class CompositionLayer : public AVLayer
 {
@@ -16,6 +17,6 @@ private:
 	void render();
 	Composition composition_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

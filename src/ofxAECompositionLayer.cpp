@@ -1,7 +1,8 @@
 #include "ofxAECompositionLayer.h"
 #include "ofGraphics.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 void CompositionLayer::prepare()
 {
 	composition_.update();
@@ -24,5 +25,5 @@ void CompositionLayer::setPropertyFrame(int frame)
 	composition_.setFrame(frame-start_frame_);
 }
 
-}
+OFX_AE_NAMESPACE_END
 /* EOF */

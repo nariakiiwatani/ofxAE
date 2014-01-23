@@ -1,7 +1,8 @@
 #include "ofxAEShapeLayer.h"
 #include "ofGraphics.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 ShapeLayer::ShapeLayer()
 {
 	path_.setMode(ofPath::COMMANDS);
@@ -197,7 +198,6 @@ void ShapeContentFill::pop(ofPath& path)
 	path.setFillColor(prev);
 	ofPopStyle();
 }
-	
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

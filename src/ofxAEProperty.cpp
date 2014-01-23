@@ -1,7 +1,8 @@
 #include "ofxAEProperty.h"
 #include "ofColor.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 template<typename Type>
 void Property<Type>::addKey(int frame, const Type& val)
 {
@@ -233,5 +234,5 @@ void PathProperty::setOutTangentSize(int size)
 	}
 }
 
-}
+OFX_AE_NAMESPACE_END
 /* EOF */

@@ -13,7 +13,7 @@ MASKMODE_TABLE : {
 LayerType : {
 	UNKNOWN:"unknown",
 	COMPOSITION:"composition",
-	STILL:"still",
+	IMAGE:"image",
 	SEQUENCE:"sequence",
 	MOVIE:"movie",
 	SOLID:"solid",
@@ -33,7 +33,7 @@ getLayerType : function(layer)
 		}
 		else if(s.mainSource instanceof FileSource) {
 			if(s.mainSource.isStill) {
-				return this.LayerType.STILL;
+				return this.LayerType.IMAGE;
 			}
 			else  {
 				if(s.mainSource.conformFrameRate === s.mainSource.nativeFrameRate) {
@@ -73,7 +73,7 @@ isAVLayer : function(layer)
 {
 	switch(this.getLayerType(layer)) {
 		case "composition":
-		case "still":
+		case "image":
 		case "sequence":
 		case "solid":
 		case "text":

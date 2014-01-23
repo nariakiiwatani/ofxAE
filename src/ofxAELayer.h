@@ -1,10 +1,13 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "TransformNode.h"
 #include "ofxAEProperty.h"
 
-namespace ofxAE {
-	class Marker;
+OFX_AE_NAMESPACE_BEGIN
+
+class Marker;
+
 class Layer {
 	friend class Loader;
 public:
@@ -42,6 +45,6 @@ protected:
 	vector<Marker*> marker_;
 	vector<PropertyBase*> properties_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

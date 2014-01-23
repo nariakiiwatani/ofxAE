@@ -1,7 +1,8 @@
 #include "ofxAESolidLayer.h"
 #include "ofGraphics.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 void SolidLayer::render()
 {
 	ofPushStyle();
@@ -9,5 +10,6 @@ void SolidLayer::render()
 	ofRect(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }
-}
+
+OFX_AE_NAMESPACE_END
 /* EOF */

@@ -2,7 +2,8 @@
 #include "ofGraphics.h"
 #include "ofxAEMask.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 AVLayer::~AVLayer()
 {
 	for(vector<Mask*>::iterator it = mask_.begin(); it != mask_.end(); ++it) {
@@ -56,5 +57,6 @@ void AVLayer::addMask(Mask *mask)
 	properties_.push_back(&mask->getPath());
 	properties_.push_back(&mask->getOpacity());
 }
-}
+
+OFX_AE_NAMESPACE_END
 /* EOF */

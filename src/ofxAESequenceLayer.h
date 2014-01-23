@@ -1,9 +1,10 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAEAVLayer.h"
 #include "regex.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 class SequenceLayer : public AVLayer
 {
@@ -22,6 +23,6 @@ private:
 	string before_, after_;
 	ofTexture texture_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

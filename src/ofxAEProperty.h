@@ -1,11 +1,12 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include <map>
 #include "TransformNode.h"
 #include "ofPath.h"
 
-namespace ofxAE {
-	
+OFX_AE_NAMESPACE_BEGIN
+
 class PropertyBase
 {
 public:
@@ -96,6 +97,5 @@ private:
 	void prepare();
 };
 
-}
-
+OFX_AE_NAMESPACE_END
 /* EOF */

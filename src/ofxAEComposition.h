@@ -1,16 +1,18 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofConstants.h"
 #include "ofFbo.h"
 #include "FrameCounter.h"
 
-namespace ofxAE {
-	class AVLayer;
-	class CameraLayer;
-	class Marker;
-}
 class ofCamera;
-namespace ofxAE {
+
+OFX_AE_NAMESPACE_BEGIN
+
+class AVLayer;
+class CameraLayer;
+class Marker;
+
 class Composition {
 	friend class Loader;
 public:
@@ -140,6 +142,6 @@ inline CameraLayer* Composition::getCameraLayer(int index)
 #endif
 	return camera_[index];
 }
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

@@ -1,13 +1,14 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAELayer.h"
 #include "ofxMask.h"
 
-namespace ofxAE {
-	class Mask;
-	class Marker;
-}
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
+class Mask;
+class Marker;
+
 class AVLayer : public Layer {
 	friend class Loader;
 public:
@@ -30,6 +31,6 @@ protected:
 	vector<Mask*> mask_;
 	ofxMask ofx_mask_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

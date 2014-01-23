@@ -1,6 +1,6 @@
 #include "ofxAECameraLayer.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 CameraLayer::CameraLayer()
 {
@@ -15,6 +15,5 @@ void CameraLayer::prepare()
 	camera_.setTransformMatrix(*(getNode().getWorldMatrix()));
 }
 
-}
- /**/
+OFX_AE_NAMESPACE_END
 /* EOF */

@@ -4,7 +4,8 @@
 #include "ofxAEProperty.h"
 #include "ofxAEMarker.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 Layer::~Layer()
 {
 	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
@@ -49,5 +50,6 @@ void Layer::setPropertyFrame(int frame)
 		}
 	}
 }
-}
+
+OFX_AE_NAMESPACE_END
 /* EOF */

@@ -1,10 +1,11 @@
 #pragma once
 
-#include "FrameCounter.h"
+#include "ofxAEDef.h"
 #include "ofConstants.h"
 #include <map>
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 class Marker {
 	friend class Loader;
 public:
@@ -19,6 +20,6 @@ private:
 	int length_;
 	std::map<string, string> param_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

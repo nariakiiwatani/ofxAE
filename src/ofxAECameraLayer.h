@@ -1,10 +1,12 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAELayer.h"
 #include "ofCamera.h"
 #include "ofxAEProperty.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 class CameraLayer : public Layer {
 	friend class Loader;
 public:
@@ -17,6 +19,6 @@ private:
 	Property<float> fov_;
 	Property<ofVec3f> look_at_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

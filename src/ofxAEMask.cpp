@@ -1,8 +1,8 @@
 #include "ofxAEMask.h"
-#include "ofxAEAVLayer.h"
 #include "ofGraphics.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 Mask::Mask()
 {
 	ofPath& path = path_.get();
@@ -24,6 +24,6 @@ bool Mask::isSubtract()
 {
 	return blend_mode_==OF_BLENDMODE_SUBTRACT;
 }
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

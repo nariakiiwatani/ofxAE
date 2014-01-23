@@ -1,8 +1,10 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAEProperty.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 class Mask
 {
 	friend class Loader;
@@ -23,6 +25,5 @@ private:
 	Property<float> opacity_;
 };
 
-}
-
+OFX_AE_NAMESPACE_END
 /* EOF */

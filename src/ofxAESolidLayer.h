@@ -1,9 +1,10 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAEAVLayer.h"
 #include "ofColor.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 class SolidLayer : public AVLayer
 {
@@ -14,6 +15,6 @@ private:
 	void render();
 	ofFloatColor color_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

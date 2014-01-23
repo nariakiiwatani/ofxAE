@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ofxAEDef.h"
 #include "ofxAEAVLayer.h"
 #include "ofPath.h"
 #include "ofxAEProperty.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
 
 class ShapeContent;
 class ShapeLayer : public AVLayer
@@ -158,6 +159,6 @@ private:
 	Property<ofFloatColor> color_;
 	Property<float> opacity_;
 };
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

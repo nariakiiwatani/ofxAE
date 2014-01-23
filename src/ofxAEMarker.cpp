@@ -1,6 +1,7 @@
 #include "ofxAEMarker.h"
 
-namespace ofxAE {
+OFX_AE_NAMESPACE_BEGIN
+
 static const string NEW_LINE = "\\r\\n";
 static const string EMPTY = "";
 static void extractParam(map<string,string>& dst, const string& src, size_t pos)
@@ -42,6 +43,6 @@ const string& Marker::getParam(const string& key)
 	}
 	return EMPTY;
 }
-}
 
+OFX_AE_NAMESPACE_END
 /* EOF */

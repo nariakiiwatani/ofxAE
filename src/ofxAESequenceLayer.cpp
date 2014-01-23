@@ -1,18 +1,10 @@
-//
-//  ofxAESequenceLayer.cpp
-//  OhinaSwitch
-//
-//  Created by Iwatani Nariaki on 2014/01/19.
-//
-//
-
 #include "ofxAESequenceLayer.h"
 #include "regex.h"
 #include "ofImage.h"
 #include "ofGraphics.h"
 
-namespace ofxAE
-{
+OFX_AE_NAMESPACE_BEGIN
+
 SequenceLayer::SequenceLayer()
 {
 	regcomp( &regex_, "(.*)\\[([0-9]+)-([0-9]+)](.+)", REG_EXTENDED );
@@ -62,5 +54,6 @@ void SequenceLayer::render()
 	texture_.draw(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }
-}
+
+OFX_AE_NAMESPACE_END
 /* EOF */
