@@ -3,10 +3,10 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-void SolidLayer::render()
+void SolidLayer::render(float alpha)
 {
 	ofPushStyle();
-	ofSetColor(color_, opacity_*255);
+	ofSetColor(color_, opacity_*alpha*255);
 	ofRect(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }

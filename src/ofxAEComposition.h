@@ -23,8 +23,8 @@ public:
 	void setSpeed(float speed);
 	void setBackward(bool backward);
 	void update();
-	void draw();
-	void drawCollapse(ofCamera *camera);
+	void draw(float alpha=1);
+	void drawCollapse(ofCamera *camera, float alpha=1);
 	void setFrame(int frame);
 	void resetFrame(int frame);
 	void setFrameByRatio(float ratio);
@@ -96,52 +96,6 @@ private:
 	void setPropertyFrame(int frame);
 	void prepare();
 };
-	
-	
-inline void Composition::addAVLayer(AVLayer *layer)
-{
-	av_.push_back(layer);
-}
-inline int Composition::getNumAVLayer()
-{
-	return av_.size();
-}
-inline vector<AVLayer*>& Composition::getAVLayers()
-{
-	return av_;
-}
-inline AVLayer* Composition::getAVLayer(int index)
-{
-#ifdef _DEBUG
-	if(index < 0 || index <= av_.size()) {
-		return NULL;
-	}
-#endif
-	return av_[index];
-}
-
-
-inline void Composition::addCameraLayer(CameraLayer *layer)
-{
-	camera_.push_back(layer);
-}
-inline int Composition::getNumCameraLayer()
-{
-	return camera_.size();
-}
-inline vector<CameraLayer*>& Composition::getCameraLayers()
-{
-	return camera_;
-}
-inline CameraLayer* Composition::getCameraLayer(int index)
-{
-#ifdef _DEBUG
-	if(index < 0 || index <= camera_.size()) {
-		return NULL;
-	}
-#endif
-	return camera_[index];
-}
 
 OFX_AE_NAMESPACE_END
 /* EOF */

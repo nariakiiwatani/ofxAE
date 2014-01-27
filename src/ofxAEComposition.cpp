@@ -235,7 +235,7 @@ void Composition::prepare()
 	}
 }
 
-void Composition::draw()
+void Composition::draw(float alpha)
 {
 	ofCamera *active_camera = NULL;
 	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
@@ -248,12 +248,12 @@ void Composition::draw()
 	}
 	fbo_.begin();
 	ofClear(0);
-	drawCollapse(active_camera);
+	drawCollapse(active_camera, alpha);
 	fbo_.end();
 	fbo_.draw(0,0,width_,height_);
 }
 
-void Composition::drawCollapse(ofCamera *camera)
+void Composition::drawCollapse(ofCamera *camera, float alpha)
 {
 	multimap<float,AVLayer*> work;
 	for(vector<AVLayer*>::iterator layer = active_layers_.begin(); layer != active_layers_.end(); ++layer) {
@@ -275,14 +275,14 @@ void Composition::drawCollapse(ofCamera *camera)
 					camera->begin();
 				}
 				for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
-					(*w).second->draw();
+					(*w).second->draw(alpha);
 				}
 				work.clear();
 				if(camera) {
 					camera->end();
 				}
 			}
-			l->draw();
+			l->draw(alpha);
 		}
 	}
 	if(!work.empty()) {
@@ -290,7 +290,7 @@ void Composition::drawCollapse(ofCamera *camera)
 			camera->begin();
 		}
 		for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
-			(*w).second->draw();
+			(*w).second->draw(alpha);
 		}
 		work.clear();
 		if(camera) {
@@ -330,6 +330,23 @@ void Composition::setPropertyFrame(int frame)
 	}
 }
 
+void Composition::addAVLayer(AVLayer *layer)
+{
+	av_.push_back(layer);
+}
+int Composition::getNumAVLayer()
+{
+	return av_.size();
+}
+vector<AVLayer*>& Composition::getAVLayers()
+{
+	return av_;
+}
+AVLayer* Composition::getAVLayer(int index)
+{
+	return av_[index];
+}
+
 AVLayer* Composition::getAVLayer(const string& name)
 {
 	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
@@ -339,6 +356,25 @@ AVLayer* Composition::getAVLayer(const string& name)
 	}
 	return NULL;
 }
+
+
+void Composition::addCameraLayer(CameraLayer *layer)
+{
+	camera_.push_back(layer);
+}
+int Composition::getNumCameraLayer()
+{
+	return camera_.size();
+}
+vector<CameraLayer*>& Composition::getCameraLayers()
+{
+	return camera_;
+}
+CameraLayer* Composition::getCameraLayer(int index)
+{
+	return camera_[index];
+}
+
 CameraLayer* Composition::getCameraLayer(const string& name)
 {
 	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {

@@ -14,8 +14,10 @@ void ShapeLayer::prepare()
 		(*it)->push(path_);
 	}
 }
-void ShapeLayer::render()
+void ShapeLayer::render(float alpha)
 {
+	path_.setStrokeColor(ofColor(ofColor::white, opacity_*alpha*255));
+	path_.setFillColor(ofColor(ofColor::white, opacity_*alpha*255));
 	for(vector<ShapeContent*>::reverse_iterator it = content_.rbegin(); it != content_.rend(); ++it) {
 		(*it)->pop(path_);
 	}

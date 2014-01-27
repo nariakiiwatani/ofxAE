@@ -15,7 +15,7 @@ public:
 	ShapeLayer();
 private:
 	void prepare();
-	void render();
+	void render(float alpha=1);
 	void addContent(ShapeContent *content);
 private:
 	ofPath path_;

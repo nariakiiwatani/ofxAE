@@ -15,7 +15,7 @@ public:
 	void setSequenceString(const string& str);
 private:
 	void setPropertyFrame(int frame);
-	void render();
+	void render(float alpha=1);
 private:
 	regex_t regex_;
 	int digit_;

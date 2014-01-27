@@ -14,7 +14,7 @@ class AVLayer : public Layer {
 public:
 	virtual ~AVLayer();
 	void allocate(int width, int height, bool use_mask);
-	void draw();
+	void draw(float alpha=1);
 	float getWidth() { return size_.x; }
 	float getHeight() { return size_.y; }
 	const ofVec2f& getSize() { return size_; }
@@ -23,7 +23,7 @@ public:
 	void addMask(Mask *mask);
 
 protected:
-	virtual void render(){};
+	virtual void render(float alpha=1){};
 	bool is_3d_;
 	bool is_collapse_;
 	ofVec2f size_;

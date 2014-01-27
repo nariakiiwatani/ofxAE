@@ -5,7 +5,10 @@
 (function() {
 
 var FOLDER = Folder.selectDialog('choose a folder to export files into');
-if(!FOLDER) $.writeln("canceled");
+if(!FOLDER) {
+	$.writeln("canceled");
+	return;
+}
 
 function proc(comp)
 {
@@ -35,7 +38,7 @@ function proc(comp)
 		var obj = new Object();
 		obj.name = l.name;
 		obj.index = l.index;
-		obj.startFrame = l.startTime*frameRate;
+		obj.startFrame = (l.startTime-startTime)*frameRate;
 		if(l.parent) {
 			obj.parent = l.parent.index;
 		}

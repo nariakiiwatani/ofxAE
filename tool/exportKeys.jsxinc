@@ -1,7 +1,7 @@
 ﻿#include "./exportUtil.jsxinc"
 function getLayerKeys(layer, startTime, duration) {
 	var comp = layer.containingComp;
-
+	
 	function getFrameTime(f) {
 		return startTime + f*comp.frameDuration;
 	}

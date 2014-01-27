@@ -14,7 +14,7 @@ public:
 	Composition& getComposition() { return composition_; }
 private:
 	void prepare();
-	void render();
+	void render(float alpha=1);
 	Composition composition_;
 };
 

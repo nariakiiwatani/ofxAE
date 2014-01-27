@@ -43,14 +43,17 @@ void SequenceLayer::setSequenceString(const string& str)
 }
 void SequenceLayer::setPropertyFrame(int frame)
 {
-	ofLoadImage(texture_, before_+ofToString(min(start_+frame, end_), digit_, '0')+after_);
+	int image_frame = frame - start_frame_;
+	if(0 <= image_frame && image_frame <= end_-start_) {
+		ofLoadImage(texture_, before_+ofToString(min(start_+image_frame, end_), digit_, '0')+after_);
+	}
 	AVLayer::setPropertyFrame(frame);
 }
 
-void SequenceLayer::render()
+void SequenceLayer::render(float alpha)
 {
 	ofPushStyle();
-	ofSetColor(ofColor::white, opacity_*255);
+	ofSetColor(ofColor::white, opacity_*alpha*255);
 	texture_.draw(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }

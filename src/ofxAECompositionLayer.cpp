@@ -7,17 +7,14 @@ void CompositionLayer::prepare()
 {
 	composition_.update();
 }
-void CompositionLayer::render()
+void CompositionLayer::render(float alpha)
 {
-	ofPushStyle();
-	ofSetColor(ofColor::white, getOpacity()*255);
 	if(isCollapse()) {
-		composition_.drawCollapse(NULL);
+		composition_.drawCollapse(NULL, opacity_*alpha);
 	}
 	else {
-		composition_.draw();
+		composition_.draw(opacity_*alpha);
 	}
-	ofPopStyle();
 }
 void CompositionLayer::setPropertyFrame(int frame)
 {

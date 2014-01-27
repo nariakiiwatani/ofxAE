@@ -9,10 +9,10 @@ void ImageLayer::loadImage(const string& filepath)
 	ofLoadImage(texture_, filepath);
 }
 	
-void ImageLayer::render()
+void ImageLayer::render(float alpha)
 {
 	ofPushStyle();
-	ofSetColor(ofColor::white, opacity_*255);
+	ofSetColor(ofColor::white, opacity_*alpha*255);
 	texture_.draw(0, 0, size_.x, size_.y);
 	ofPopStyle();
 }

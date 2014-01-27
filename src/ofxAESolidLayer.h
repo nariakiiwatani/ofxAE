@@ -12,7 +12,7 @@ class SolidLayer : public AVLayer
 public:
 	void setColor(const ofFloatColor& color) { color_=color; }
 private:
-	void render();
+	void render(float alpha=1);
 	ofFloatColor color_;
 };
 

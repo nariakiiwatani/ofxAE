@@ -20,7 +20,7 @@ void AVLayer::allocate(int width, int height, bool use_mask)
 	is_use_mask_ = use_mask;
 }
 
-void AVLayer::draw()
+void AVLayer::draw(float alpha)
 {
 	getNode().pushMatrix();
 	if(is_use_mask_) {
@@ -40,12 +40,12 @@ void AVLayer::draw()
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
-		render();
+		render(alpha);
 		ofx_mask_.end();
 		ofx_mask_.draw();
 	}
 	else {
-		render();
+		render(alpha);
 	}
 	getNode().popMatrix();
 }

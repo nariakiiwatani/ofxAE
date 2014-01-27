@@ -12,7 +12,7 @@ class ImageLayer : public AVLayer
 public:
 	void loadImage(const string& filepath);
 private:
-	void render();
+	void render(float alpha=1);
 	ofTexture texture_;
 };
 
