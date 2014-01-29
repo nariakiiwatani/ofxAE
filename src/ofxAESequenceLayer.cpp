@@ -53,6 +53,7 @@ void SequenceLayer::setPropertyFrame(int frame)
 void SequenceLayer::render(float alpha)
 {
 	ofPushStyle();
+	ofEnableBlendMode(blend_mode_);
 	ofSetColor(ofColor::white, opacity_*alpha*255);
 	texture_.draw(0, 0, size_.x, size_.y);
 	ofPopStyle();

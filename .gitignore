@@ -54,6 +54,7 @@ local.properties
 *~.nib
 # Thumbnails
 ._*
+*Debug.app/
 
 #Windows
 # Windows image file caches

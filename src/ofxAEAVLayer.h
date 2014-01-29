@@ -26,6 +26,7 @@ protected:
 	virtual void render(float alpha=1){};
 	bool is_3d_;
 	bool is_collapse_;
+	ofBlendMode blend_mode_;
 	ofVec2f size_;
 	bool is_use_mask_;
 	vector<Mask*> mask_;

@@ -16,11 +16,14 @@ void ShapeLayer::prepare()
 }
 void ShapeLayer::render(float alpha)
 {
+	ofPushStyle();
+	ofEnableBlendMode(blend_mode_);
 	path_.setStrokeColor(ofColor(ofColor::white, opacity_*alpha*255));
 	path_.setFillColor(ofColor(ofColor::white, opacity_*alpha*255));
 	for(vector<ShapeContent*>::reverse_iterator it = content_.rbegin(); it != content_.rend(); ++it) {
 		(*it)->pop(path_);
 	}
+	ofPopStyle();
 }
 
 void ShapeLayer::addContent(ShapeContent *content)

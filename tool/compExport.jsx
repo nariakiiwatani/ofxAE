@@ -49,6 +49,7 @@ function proc(comp)
 			if(l.canSetCollapseTransformation) {
 				obj.isCollapse = l.collapseTransformation;
 			}
+			obj.blendingMode = ExportUtil.getDrawMode(l.blendingMode);
 		}
 		obj.layerType = ExportUtil.getLayerType(l);
 		if(l.source) {

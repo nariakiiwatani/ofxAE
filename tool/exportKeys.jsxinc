@@ -205,7 +205,7 @@ function getLayerKeys(layer, startTime, duration) {
 				var m = layer.mask(i);
 				var mask = new Object();
 				mask.name = m.name;
-				mask.mode = ExportUtil.MASKMODE_TABLE[m.maskMode];
+				mask.mode = ExportUtil.getDrawMode(m.maskMode);
 				if(mask.mode === undefined) {
 					mask.mode = m.maskMode;
 				}

@@ -150,6 +150,10 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 	layer.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
 	layer.is_3d_ = json.get("is3d", false).asBool();
 	layer.is_collapse_ = json.get("isCollapse", false).asBool();
+	const string& blend_mode = json.get("blendingMode", "none").asString();
+	if(blend_mode == "none")		{ layer.blend_mode_ = OF_BLENDMODE_DISABLED; }
+	if(blend_mode == "add")			{ layer.blend_mode_ = OF_BLENDMODE_ADD; }
+	if(blend_mode == "subtract")	{ layer.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 	setupLayerJson(layer, json);
 	if(use_mask) {
 		const Json::Value& masks = properties.get("mask", Json::Value::null);
