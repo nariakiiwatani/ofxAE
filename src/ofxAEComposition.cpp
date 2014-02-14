@@ -45,6 +45,14 @@ void Composition::setBackward(bool backward)
 	frame_.setBackward(backward);
 	frame_default_.setBackward(backward);
 }
+bool Composition::isForward()
+{
+	return frame_.isForward();
+}
+bool Composition::isBackward()
+{
+	return frame_.isBackward();
+}
 
 void Composition::update()
 {

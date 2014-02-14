@@ -16,6 +16,7 @@ public:
 	void update();
 	virtual void setPropertyFrame(int frame);
 	void setParent(Layer *parent);
+	Layer* getParent() { return parent_; }
 	
 	bool isActive() { return active_; }
 	float getOpacity() { return opacity_; }

@@ -26,7 +26,9 @@ Layer::Layer()
 void Layer::setParent(Layer *layer)
 {
 	parent_ = layer;
-	getNode().setParent(&layer->getNode());
+	if(layer) {
+		getNode().setParent(&layer->getNode());
+	}
 }
 
 void Layer::update()

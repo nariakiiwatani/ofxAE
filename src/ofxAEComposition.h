@@ -22,6 +22,8 @@ public:
 	void setLoopState(FrameCounter::LoopState loop);
 	void setSpeed(float speed);
 	void setBackward(bool backward);
+	bool isForward();
+	bool isBackward();
 	void update();
 	void draw(float alpha=1);
 	void drawCollapse(ofCamera *camera, float alpha=1);
@@ -67,6 +69,7 @@ public:
 	bool isMarkerActive(int index);
 	bool isMarkerActive(const string& name);
 	bool isMarkerActive(Marker *marker);
+	bool isSetActiveMarker() { return active_marker_!=NULL; }
 	
 	void jumpToMarkerStartFrame(int index);
 	void jumpToMarkerStartFrame(const string& name);

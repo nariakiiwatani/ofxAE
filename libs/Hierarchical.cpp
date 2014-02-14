@@ -13,7 +13,7 @@ void Hierarchical::setParent(Hierarchical* p)
 					c->sibling_ = sibling_;
 					break;
 				}
-				c = child_->sibling_;
+				c = c->sibling_;
 			}
 		}
 		sibling_ = NULL;

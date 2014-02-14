@@ -73,7 +73,7 @@ void FrameCounter::setBackward(bool backward)
 	if(is_backward_ != backward) {
 		switch(loop_) {
 			case LOOP_NONE:
-				frame_ = length_-frame_;
+				frame_ = length_-1-frame_;
 				break;
 			case LOOP_ONEWAY: {
 				int looped = (frame_/length_) * length_;
