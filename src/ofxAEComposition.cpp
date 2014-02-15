@@ -320,12 +320,12 @@ void Composition::resetFrame(int frame)
 	
 void Composition::setFrameByRatio(float ratio)
 {
-	setFrame(ofMap(ratio, 0, 1, 0, getLength()-1));
+	setFrame(ofMap(ratio, 0, 1, 0, frame_.getLength()-1));
 }
 	
 void Composition::resetFrameByRatio(float ratio)
 {
-	resetFrame(ofMap(ratio, 0, 1, 0, getLength()-1));
+	resetFrame(ofMap(ratio, 0, 1, 0, frame_.getLength()-1));
 }
 
 void Composition::setPropertyFrame(int frame)
