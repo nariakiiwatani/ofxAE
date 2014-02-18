@@ -6,6 +6,7 @@
 OFX_AE_NAMESPACE_BEGIN
 
 SequenceLayer::SequenceLayer()
+:prev_frame_(-1)
 {
 	regcomp( &regex_, "(.*)\\[([0-9]+)-([0-9]+)](.+)", REG_EXTENDED );
 }
@@ -44,8 +45,9 @@ void SequenceLayer::setSequenceString(const string& str)
 void SequenceLayer::setPropertyFrame(int frame)
 {
 	int image_frame = frame - start_frame_;
-	if(0 <= image_frame && image_frame <= end_-start_) {
+	if(prev_frame_ != image_frame && 0 <= image_frame && image_frame <= end_-start_) {
 		ofLoadImage(texture_, before_+ofToString(min(start_+image_frame, end_), digit_, '0')+after_);
+		prev_frame_ = image_frame;
 	}
 	AVLayer::setPropertyFrame(frame);
 }

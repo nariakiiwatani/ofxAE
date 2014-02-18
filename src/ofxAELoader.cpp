@@ -36,7 +36,7 @@ void Loader::loadComposition(Composition& comp, const string& filepath)
 			setupCompositionJson(comp, json);
 		}
 		else {
-			ofLog(OF_LOG_WARNING, "can't open json file");
+			ofLog(OF_LOG_WARNING, "couldn't open json file: "+base_path_+filepath);
 		}
 	}
 }

@@ -22,6 +22,7 @@ private:
 	int start_, end_;
 	string before_, after_;
 	ofTexture texture_;
+	int prev_frame_;
 };
 
 OFX_AE_NAMESPACE_END
