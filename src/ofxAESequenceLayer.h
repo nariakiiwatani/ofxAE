@@ -2,7 +2,11 @@
 
 #include "ofxAEDef.h"
 #include "ofxAEAVLayer.h"
+#ifdef TARGET_WIN32
+#include <regex>
+#else
 #include "regex.h"
+#endif
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -17,7 +21,11 @@ private:
 	void setPropertyFrame(int frame);
 	void render(float alpha=1);
 private:
+#ifdef TARGET_WIN32
+	regex regex_;
+#else
 	regex_t regex_;
+#endif
 	int digit_;
 	int start_, end_;
 	string before_, after_;

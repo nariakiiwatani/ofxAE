@@ -1,10 +1,40 @@
 #include "ofxAESequenceLayer.h"
-#include "regex.h"
 #include "ofImage.h"
 #include "ofGraphics.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
+#ifdef TARGET_WIN32
+SequenceLayer::SequenceLayer()
+:regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
+//:regex_("(a)(b)")
+,prev_frame_(-1)
+{
+}
+SequenceLayer::~SequenceLayer()
+{
+}
+void SequenceLayer::setSequenceString(const string& str)
+{
+    cmatch matches;
+
+    if(!regex_match(str.c_str(), matches, regex_))
+    {
+		ofLog(OF_LOG_WARNING, "invalid string");
+        return;
+    }
+	int reg_size = matches.size();
+	if(reg_size != 5) {
+		ofLog(OF_LOG_WARNING, "invalid string");
+        return;
+    }
+	before_ = matches[1].str();
+	start_ = ofToInt(matches[2].str());
+	digit_ = matches[2].length();
+	end_ = ofToInt(matches[3].str());
+	after_ = matches[4].str();
+}
+#else
 SequenceLayer::SequenceLayer()
 :prev_frame_(-1)
 {
@@ -42,6 +72,7 @@ void SequenceLayer::setSequenceString(const string& str)
 	match = matches[4];
 	after_ = str.substr(match.rm_so, match.rm_eo - match.rm_so);
 }
+#endif
 void SequenceLayer::setPropertyFrame(int frame)
 {
 	int image_frame = frame - start_frame_;
