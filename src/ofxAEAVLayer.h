@@ -12,6 +12,7 @@ class Marker;
 class AVLayer : public Layer {
 	friend class Loader;
 public:
+	AVLayer();
 	virtual ~AVLayer();
 	void allocate(int width, int height, bool use_mask);
 	void draw(float alpha=1);

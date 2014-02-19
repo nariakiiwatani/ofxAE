@@ -4,6 +4,11 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
+AVLayer::AVLayer()
+:is_use_mask_(false)
+{
+}
+
 AVLayer::~AVLayer()
 {
 	for(vector<Mask*>::iterator it = mask_.begin(); it != mask_.end(); ++it) {
@@ -15,7 +20,7 @@ void AVLayer::allocate(int width, int height, bool use_mask)
 	size_.set(width, height);
 
 	if(use_mask) {
-		ofx_mask_.setup(width, height);
+		ofx_mask_.setup(width, height, ofxMask::ALPHA);
 	}
 	is_use_mask_ = use_mask;
 }
