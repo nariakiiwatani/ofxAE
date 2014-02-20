@@ -42,12 +42,14 @@ public:
 	vector<AVLayer*>& getAVLayers();
 	AVLayer *getAVLayer(int index);
 	AVLayer *getAVLayer(const string& name);
+	vector<AVLayer*> getAVLayers(const string& name);
 	
 	void addCameraLayer(CameraLayer *layer);
 	int getNumCameraLayer();
 	vector<CameraLayer*>& getCameraLayers();
 	CameraLayer *getCameraLayer(int index);
 	CameraLayer *getCameraLayer(const string& name);
+	vector<CameraLayer*> getCameraLayers(const string& name);
 	
 	void setActiveMarker(int index, float speed=1);
 	void setActiveMarker(const string& name, float speed=1);

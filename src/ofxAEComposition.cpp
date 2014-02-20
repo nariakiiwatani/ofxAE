@@ -365,6 +365,17 @@ AVLayer* Composition::getAVLayer(const string& name)
 	return NULL;
 }
 
+vector<AVLayer*> Composition::getAVLayers(const string& name)
+{
+	vector<AVLayer*> ret;
+	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
+		if((*it)->getName() == name) {
+			ret.push_back(*it);
+		}
+	}
+	return ret;
+}
+
 
 void Composition::addCameraLayer(CameraLayer *layer)
 {
@@ -391,6 +402,17 @@ CameraLayer* Composition::getCameraLayer(const string& name)
 		}
 	}
 	return NULL;
+}
+
+vector<CameraLayer*> Composition::getCameraLayers(const string& name)
+{
+	vector<CameraLayer*> ret;
+	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+		if((*it)->getName() == name) {
+			ret.push_back(*it);
+		}
+	}
+	return ret;
 }
 
 OFX_AE_NAMESPACE_END
