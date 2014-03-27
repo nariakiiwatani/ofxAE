@@ -21,7 +21,6 @@ Composition::~Composition()
 
 void Composition::allocate(int width, int height)
 {
-	fbo_.allocate(width, height, GL_RGBA);
 	width_ = width;
 	height_ = height;
 }
@@ -254,14 +253,36 @@ void Composition::draw(float alpha)
 			}
 		}
 	}
-	fbo_.begin();
-	ofClear(0);
-	drawCollapse(active_camera, alpha);
-	fbo_.end();
-	fbo_.draw(0,0,width_,height_);
+	beginClip();
+	draw(active_camera, alpha);
+	endClip();
 }
 
-void Composition::drawCollapse(ofCamera *camera, float alpha)
+void Composition::beginClip()
+{
+	GLdouble area0[4]={ 0, 1, 0, 0  };
+	GLdouble area1[4]={ 0, -1, 0, getHeight()};
+	GLdouble area2[4]={ 1, 0, 0, 0  };
+	GLdouble area3[4]={-1, 0, 0, getWidth()};
+	glClipPlane(GL_CLIP_PLANE0,area0);
+	glClipPlane(GL_CLIP_PLANE1,area1);
+	glClipPlane(GL_CLIP_PLANE2,area2);
+	glClipPlane(GL_CLIP_PLANE3,area3);
+	glEnable(GL_CLIP_PLANE0);
+	glEnable(GL_CLIP_PLANE1);
+	glEnable(GL_CLIP_PLANE2);
+	glEnable(GL_CLIP_PLANE3);
+}
+
+void Composition::endClip()
+{
+	glDisable(GL_CLIP_PLANE0);
+	glDisable(GL_CLIP_PLANE1);
+	glDisable(GL_CLIP_PLANE2);
+	glDisable(GL_CLIP_PLANE3);
+}
+
+void Composition::draw(ofCamera *camera, float alpha)
 {
 	multimap<float,AVLayer*> work;
 	for(vector<AVLayer*>::iterator layer = active_layers_.begin(); layer != active_layers_.end(); ++layer) {

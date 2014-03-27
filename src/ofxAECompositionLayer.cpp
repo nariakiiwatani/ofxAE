@@ -10,7 +10,7 @@ void CompositionLayer::prepare()
 void CompositionLayer::render(float alpha)
 {
 	if(isCollapse()) {
-		composition_.drawCollapse(NULL, opacity_*alpha);
+		composition_.draw(NULL, opacity_*alpha);
 	}
 	else {
 		composition_.draw(opacity_*alpha);

@@ -2,7 +2,6 @@
 
 #include "ofxAEDef.h"
 #include "ofConstants.h"
-#include "ofFbo.h"
 #include "FrameCounter.h"
 
 class ofCamera;
@@ -26,7 +25,7 @@ public:
 	bool isBackward();
 	void update();
 	void draw(float alpha=1);
-	void drawCollapse(ofCamera *camera, float alpha=1);
+	void draw(ofCamera *camera, float alpha=1);
 	void setFrame(int frame);
 	void resetFrame(int frame);
 	void setFrameByRatio(float ratio);
@@ -85,7 +84,6 @@ public:
 	Marker* getMarker(const string& name);
 	
 private:
-	ofFbo fbo_;
 	string name_;
 	float width_;
 	float height_;
@@ -100,6 +98,8 @@ private:
 private:
 	void setPropertyFrame(int frame);
 	void prepare();
+	void beginClip();
+	void endClip();
 };
 
 OFX_AE_NAMESPACE_END
