@@ -330,7 +330,7 @@ void Composition::draw(ofCamera *camera, float alpha)
 
 void Composition::setFrame(int frame)
 {
-	frame_.setFrame(frame);
+	frame_.resetFrame(frame);
 	update();
 }
 

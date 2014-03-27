@@ -7,7 +7,6 @@ OFX_AE_NAMESPACE_BEGIN
 #ifdef TARGET_WIN32
 SequenceLayer::SequenceLayer()
 :regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
-//:regex_("(a)(b)")
 ,prev_frame_(-1)
 {
 }
