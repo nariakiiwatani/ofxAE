@@ -1,18 +1,18 @@
 #pragma once
 
 #include "ofxAEDef.h"
-#include "ofxAEAVLayer.h"
+#include "ofxAEAVLayerCap.h"
 #include "ofTexture.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-class ImageLayer : public AVLayer
+class ImageCap : public AVCap
 {
-	friend class Loader;
 public:
+	ImageCap(AVLayer *layer);
 	void loadImage(const string& filepath);
+	void draw(float alpha=1);
 private:
-	void render(float alpha=1);
 	ofTexture texture_;
 };
 

@@ -1,20 +1,23 @@
-#include "ofxAEShapeLayer.h"
+#include "ofxAEShapeCap.h"
+#include "ofxAELayer.h"
 #include "ofGraphics.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-ShapeLayer::ShapeLayer()
+ShapeCap::ShapeCap(AVLayer *layer)
+:AVCap(layer)
 {
 	path_.setMode(ofPath::COMMANDS);
 }
-void ShapeLayer::prepare()
+
+void ShapeCap::update()
 {
 	path_.clear();
 	for(vector<ShapeContent*>::iterator it = content_.begin(); it != content_.end(); ++it) {
 		(*it)->push(path_);
 	}
 }
-void ShapeLayer::render(float alpha)
+void ShapeCap::draw(float alpha)
 {
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
@@ -26,12 +29,12 @@ void ShapeLayer::render(float alpha)
 	ofPopStyle();
 }
 
-void ShapeLayer::addContent(ShapeContent *content)
+void ShapeCap::addContent(ShapeContent *content)
 {
 	content_.push_back(content);
-	properties_.push_back(content);
+	layer_->addProperty(content);
 }
-	
+
 ShapeContentGroup::ShapeContentGroup()
 {
 	properties_.push_back(&transform_);

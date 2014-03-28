@@ -8,11 +8,11 @@
 #include "ofxAEMask.h"
 #include "ofxAEProperty.h"
 #include "ofxAECameraLayer.h"
-#include "ofxAECompositionLayer.h"
-#include "ofxAESolidLayer.h"
-#include "ofxAEImageLayer.h"
-#include "ofxAESequenceLayer.h"
-#include "ofxAEShapeLayer.h"
+#include "ofxAECompositionCap.h"
+#include "ofxAEPlaneCap.h"
+#include "ofxAEImageCap.h"
+#include "ofxAESequenceCap.h"
+#include "ofxAEShapeCap.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -57,26 +57,34 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			const string& type_name = layer.get("layerType", "unknown").asString();
 			Layer *l = NULL;
 			if(type_name == "composition") {
-				CompositionLayer *ll = new CompositionLayer();
-				setupCompositionLayerJson(*ll, layer);
+				AVLayer *ll = new AVLayer();
+				setupAVLayerJson(*ll, layer);
+				CompositionCap *cap = new CompositionCap(ll);
+				setupCompositionJson(cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
 			else if(type_name == "solid") {
-				SolidLayer *ll = new SolidLayer();
-				setupSolidLayerJson(*ll, layer);
+				AVLayer *ll = new AVLayer();
+				setupAVLayerJson(*ll, layer);
+				PlaneCap *cap = new PlaneCap(ll);
+				setupPlaneJson(cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
 			else if(type_name == "sequence") {
-				SequenceLayer *ll = new SequenceLayer();
-				setupSequenceLayerJson(*ll, layer);
+				AVLayer *ll = new AVLayer();
+				setupAVLayerJson(*ll, layer);
+				SequenceCap *cap = new SequenceCap(ll);
+				setupSequenceJson(cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
 			else if(type_name == "image") {
-				ImageLayer *ll = new ImageLayer();
-				setupImageLayerJson(*ll, layer);
+				AVLayer *ll = new AVLayer();
+				setupAVLayerJson(*ll, layer);
+				ImageCap *cap = new ImageCap(ll);
+				setupImageJson(cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
@@ -87,8 +95,10 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 				l = ll;
 			}
 			else if(type_name == "shape") {
-				ShapeLayer *ll = new ShapeLayer();
-				setupShapeLayerJson(*ll, layer);
+				AVLayer *ll = new AVLayer();
+				setupAVLayerJson(*ll, layer);
+				ShapeCap *cap = new ShapeCap(ll);
+				setupShapeJson(cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
@@ -182,53 +192,47 @@ void Loader::setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, C
 		}
 	}
 }
-
-void Loader::setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json)
+void Loader::setupCompositionJson(CompositionCap *cap, const Json::Value& json)
 {
-	setupAVLayerJson(layer, json);
 	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
-		loadComposition(layer.composition_, (source_dir.isNull()?"":source_dir.asString())+source.asString());
-//		setupCompositionJson(layer.composition_, source);
+		loadComposition(cap->getComposition(), (source_dir.isNull()?"":source_dir.asString())+source.asString());
+		//		setupCompositionJson(layer.composition_, source);
 	}
 }
-void Loader::setupSolidLayerJson(SolidLayer& layer, const Json::Value& json)
+void Loader::setupPlaneJson(PlaneCap *cap, const Json::Value& json)
 {
-	setupAVLayerJson(layer, json);
 	const Json::Value& color = json.get("color", Json::Value::null);
 	if(!color.isNull()) {
-		layer.setColor(ofFloatColor(color[0].asFloat(), color[1].asFloat(), color[2].asFloat()));
+		cap->setColor(ofFloatColor(color[0].asFloat(), color[1].asFloat(), color[2].asFloat()));
 	}
 }
-void Loader::setupImageLayerJson(ImageLayer& layer, const Json::Value& json)
+void Loader::setupImageJson(ImageCap *cap, const Json::Value& json)
 {
-	setupAVLayerJson(layer, json);
 	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
-		layer.loadImage(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
+		cap->loadImage(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
-void Loader::setupSequenceLayerJson(SequenceLayer& layer, const Json::Value& json)
+void Loader::setupSequenceJson(SequenceCap *cap, const Json::Value& json)
 {
-	setupAVLayerJson(layer, json);
 	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
-		layer.setSequenceString(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
+		cap->setSequenceString(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
-void Loader::setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json)
+void Loader::setupShapeJson(ShapeCap *cap, const Json::Value& json)
 {
-	setupAVLayerJson(layer, json);
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	if(properties.isMember("contents")) {
 		const Json::Value& contents = properties.get("contents", Json::Value::null);
-		setupShapeContentsJson(layer, contents);
+		setupShapeContentsJson(cap, contents);
 	}
 }
-void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& contents, ShapeContentGroup *parent)
+void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, ShapeContentGroup *parent)
 {
 	int content_count = contents.size();
 	for(int i = 0; i < content_count; ++i) {
@@ -238,13 +242,13 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 		if(type == "group") {
 			ShapeContentGroup *target = new ShapeContentGroup();
 			if(content.isMember("contents")) {
-				setupShapeContentsJson(layer, content.get("contents", Json::Value::null), target);
+				setupShapeContentsJson(cap, content.get("contents", Json::Value::null), target);
 			}
 			if(parent) {
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// ellipse
@@ -256,7 +260,7 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// rect
@@ -269,19 +273,19 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// path
 		else if(type == "path") {
 			ShapeContentPath *target = new ShapeContentPath();
-			target->setSize(layer.getSize());
+			target->setSize(cap->getSize());
 			setupPropertyKeysJson(target->getPath(), content.get("path", Json::Value::null));
 			if(parent) {
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// stroke
@@ -294,7 +298,7 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// fill
@@ -306,7 +310,7 @@ void Loader::setupShapeContentsJson(ShapeLayer& layer, const Json::Value& conten
 				parent->addContent(target);
 			}
 			else {
-				layer.addContent(target);
+				cap->addContent(target);
 			}
 		}
 		// transform

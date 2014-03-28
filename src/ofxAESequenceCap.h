@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxAEDef.h"
-#include "ofxAEAVLayer.h"
+#include "ofxAEImageCap.h"
 #ifdef TARGET_WIN32
 #include <regex>
 #else
@@ -10,16 +10,14 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-class SequenceLayer : public AVLayer
+class SequenceCap : public ImageCap
 {
-	friend class Loader;
 public:
-	SequenceLayer();
-	~SequenceLayer();
+	SequenceCap(AVLayer *layer);
+	~SequenceCap();
 	void setSequenceString(const string& str);
 private:
 	void setPropertyFrame(int frame);
-	void render(float alpha=1);
 private:
 #ifdef TARGET_WIN32
 	regex regex_;
@@ -29,7 +27,6 @@ private:
 	int digit_;
 	int start_, end_;
 	string before_, after_;
-	ofTexture texture_;
 	int prev_frame_;
 };
 

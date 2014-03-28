@@ -1,8 +1,6 @@
 #include "ofxAELayer.h"
-#include "ofGraphics.h"
-#include "ofxAEMask.h"
 #include "ofxAEProperty.h"
-#include "ofxAEMarker.h"
+#include "ofxAELayerCap.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -18,11 +16,32 @@ Layer::Layer()
 	active_ = true;
 	opacity_ = 1;
 	parent_ = NULL;
-	properties_.push_back(&active_);
-	properties_.push_back(&opacity_);
-	properties_.push_back(&transform_);
+	addProperty(&active_);
+	addProperty(&opacity_);
+	addProperty(&transform_);
 }
-	
+
+void Layer::addCap(ofxAE::LayerCap *cap)
+{
+	cap_.push_back(cap);
+}
+
+void Layer::removeCap(ofxAE::LayerCap *cap)
+{
+	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+		if(*c == cap) {
+			cap_.erase(c);
+			return;
+		}
+	}
+	ofLog(OF_LOG_WARNING, "tried removing unexiting cap.");
+}
+
+void Layer::addProperty(ofxAE::PropertyBase *property)
+{
+	properties_.push_back(property);
+}
+
 void Layer::setParent(Layer *layer)
 {
 	parent_ = layer;
@@ -41,7 +60,9 @@ void Layer::update()
 			(*prop)->update();
 		}
 	}
-	prepare();
+	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+		(*c)->update();
+	}
 }
 	
 void Layer::setPropertyFrame(int frame)

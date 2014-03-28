@@ -13,12 +13,13 @@ class Layer;
 class AVLayer;
 class Mask;
 class CameraLayer;
-class CompositionLayer;
-class SolidLayer;
-class ImageLayer;
-class SequenceLayer;
-class ShapeLayer;
 class ShapeContentGroup;
+
+class PlaneCap;
+class ImageCap;
+class SequenceCap;
+class ShapeCap;
+class CompositionCap;
 
 class Loader {
 public:
@@ -32,12 +33,13 @@ private:
 	void setupMaskJson(Mask& mask, const Json::Value& json);
 	void setupAVLayerJson(AVLayer& layer, const Json::Value& json);
 	void setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, Composition& comp);
-	void setupCompositionLayerJson(CompositionLayer& layer, const Json::Value& json);
-	void setupSolidLayerJson(SolidLayer& layer, const Json::Value& json);
-	void setupImageLayerJson(ImageLayer& layer, const Json::Value& json);
-	void setupSequenceLayerJson(SequenceLayer& layer, const Json::Value& json);
-	void setupShapeLayerJson(ShapeLayer& layer, const Json::Value& json);
-	void setupShapeContentsJson(ShapeLayer& layer, const Json::Value& contents, ShapeContentGroup *parent=NULL);
+	
+	void setupCompositionJson(CompositionCap *cap, const Json::Value& json);
+	void setupPlaneJson(PlaneCap *cap, const Json::Value &json);
+	void setupImageJson(ImageCap *cap, const Json::Value &json);
+	void setupSequenceJson(SequenceCap *cap, const Json::Value &json);
+	void setupShapeJson(ShapeCap *cap, const Json::Value &json);
+	void setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, ShapeContentGroup *parent=NULL);
 
 	void setupPropertyKeysJson(Property<bool>& prop, const Json::Value& json);
 	void setupPropertyKeysJson(Property<float>& prop, const Json::Value& json, float scale=1, float offset=0);

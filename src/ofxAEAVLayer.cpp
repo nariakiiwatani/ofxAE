@@ -1,4 +1,5 @@
 #include "ofxAEAVLayer.h"
+#include "ofxAEAVLayerCap.h"
 #include "ofGraphics.h"
 #include "ofxAEMask.h"
 
@@ -45,12 +46,16 @@ void AVLayer::draw(float alpha)
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
-		render(alpha);
+		for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+			(*c)->draw(alpha*opacity_);
+		}
 		ofx_mask_.end();
 		ofx_mask_.draw();
 	}
 	else {
-		render(alpha);
+		for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+			(*c)->draw(alpha*opacity_);
+		}
 	}
 	getNode().popMatrix();
 }

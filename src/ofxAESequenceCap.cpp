@@ -1,22 +1,21 @@
-#include "ofxAESequenceLayer.h"
-#include "ofImage.h"
-#include "ofGraphics.h"
+#include "ofxAESequenceCap.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
 #ifdef TARGET_WIN32
-SequenceLayer::SequenceLayer()
-:regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
+SequenceCap::SequenceCap(AVLayer *layer)
+:ImageCap(layer)
+,regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
 ,prev_frame_(-1)
 {
 }
-SequenceLayer::~SequenceLayer()
+SequenceCap::~SequenceCap()
 {
 }
-void SequenceLayer::setSequenceString(const string& str)
+void SequenceCap::setSequenceString(const string& str)
 {
     cmatch matches;
-
+	
     if(!regex_match(str.c_str(), matches, regex_))
     {
 		ofLog(OF_LOG_WARNING, "invalid string");
@@ -34,16 +33,17 @@ void SequenceLayer::setSequenceString(const string& str)
 	after_ = matches[4].str();
 }
 #else
-SequenceLayer::SequenceLayer()
-:prev_frame_(-1)
+SequenceCap::SequenceCap(AVLayer *layer)
+:ImageCap(layer)
+,prev_frame_(-1)
 {
 	regcomp( &regex_, "(.*)\\[([0-9]+)-([0-9]+)](.+)", REG_EXTENDED );
 }
-SequenceLayer::~SequenceLayer()
+SequenceCap::~SequenceCap()
 {
     regfree(&regex_);
 }
-void SequenceLayer::setSequenceString(const string& str)
+void SequenceCap::setSequenceString(const string& str)
 {
 	const int reg_size = 5;
     regmatch_t matches[reg_size];
@@ -72,23 +72,13 @@ void SequenceLayer::setSequenceString(const string& str)
 	after_ = str.substr(match.rm_so, match.rm_eo - match.rm_so);
 }
 #endif
-void SequenceLayer::setPropertyFrame(int frame)
+void SequenceCap::setPropertyFrame(int frame)
 {
 	int image_frame = frame - start_frame_;
 	if(prev_frame_ != image_frame && 0 <= image_frame && image_frame <= end_-start_) {
-		ofLoadImage(texture_, before_+ofToString(min(start_+image_frame, end_), digit_, '0')+after_);
+		loadImage(before_+ofToString(min(start_+image_frame, end_), digit_, '0')+after_);
 		prev_frame_ = image_frame;
 	}
-	AVLayer::setPropertyFrame(frame);
-}
-
-void SequenceLayer::render(float alpha)
-{
-	ofPushStyle();
-	ofEnableBlendMode(blend_mode_);
-	ofSetColor(ofColor::white, opacity_*alpha*255);
-	texture_.draw(0, 0, size_.x, size_.y);
-	ofPopStyle();
 }
 
 OFX_AE_NAMESPACE_END

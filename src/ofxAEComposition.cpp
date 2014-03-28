@@ -260,9 +260,9 @@ void Composition::draw(float alpha)
 
 void Composition::beginClip()
 {
-	GLdouble area0[4]={ 0, 1, 0, 0  };
+	GLdouble area0[4]={ 0, 1, 0, 0 };
 	GLdouble area1[4]={ 0, -1, 0, getHeight()};
-	GLdouble area2[4]={ 1, 0, 0, 0  };
+	GLdouble area2[4]={ 1, 0, 0, 0 };
 	GLdouble area3[4]={-1, 0, 0, getWidth()};
 	glClipPlane(GL_CLIP_PLANE0,area0);
 	glClipPlane(GL_CLIP_PLANE1,area1);

@@ -1,20 +1,25 @@
-#include "ofxAEImageLayer.h"
+#include "ofxAEImageCap.h"
 #include "ofImage.h"
 #include "ofGraphics.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-void ImageLayer::loadImage(const string& filepath)
+ImageCap::ImageCap(AVLayer *layer)
+:AVCap(layer)
+{
+}
+
+void ImageCap::loadImage(const string& filepath)
 {
 	ofLoadImage(texture_, filepath);
 }
-	
-void ImageLayer::render(float alpha)
+
+void ImageCap::draw(float alpha)
 {
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
 	ofSetColor(ofColor::white, opacity_*alpha*255);
-	texture_.draw(0, 0, size_.x, size_.y);
+	texture_.draw(rect_);
 	ofPopStyle();
 }
 

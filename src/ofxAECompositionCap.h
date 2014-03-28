@@ -1,20 +1,20 @@
 #pragma once
 
 #include "ofxAEDef.h"
-#include "ofxAEAVLayer.h"
+#include "ofxAEAVLayerCap.h"
 #include "ofxAEComposition.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-class CompositionLayer : public AVLayer
+class CompositionCap : public AVCap
 {
-	friend class Loader;
 public:
+	CompositionCap(AVLayer *layer);
 	void setPropertyFrame(int frame);
 	Composition& getComposition() { return composition_; }
+	void update();
+	void draw(float alpha=1);
 private:
-	void prepare();
-	void render(float alpha=1);
 	Composition composition_;
 };
 

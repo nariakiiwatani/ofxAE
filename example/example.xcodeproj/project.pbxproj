@@ -8,19 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		0E7E93E74F124EED134CB794 /* FrameCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C7FC06646BF6D466A7467199 /* FrameCounter.cpp */; };
-		2456CE082CCD822EDF93EEB5 /* ofxAECompositionLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F237061A7A16F5A5ED5DB /* ofxAECompositionLayer.cpp */; };
+		2456CE082CCD822EDF93EEB5 /* ofxAECompositionCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E0F237061A7A16F5A5ED5DB /* ofxAECompositionCap.cpp */; };
 		2E15BB0D0FB7158BE9E56A5E /* ofxAEComposition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4D9DA75786145E0C3529C268 /* ofxAEComposition.cpp */; };
 		35EDF414A36A6AAAB41EC500 /* ofxAELoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 35FBC58B51893123A89DAB1B /* ofxAELoader.cpp */; };
 		432870D8DA9279DB2A514DC1 /* ofxMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E9EB8306901D6675CF6994B /* ofxMask.cpp */; };
-		43AE25F87C805A1A63FFA9E6 /* ofxAESequenceLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C95D5BD8098654C56D470D1 /* ofxAESequenceLayer.cpp */; };
+		43AE25F87C805A1A63FFA9E6 /* ofxAESequenceCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C95D5BD8098654C56D470D1 /* ofxAESequenceCap.cpp */; };
 		4C70DE14ACB18576C3CF7486 /* ofxAEAVLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F3D0F0A1C196FDC386454 /* ofxAEAVLayer.cpp */; };
 		7CED9FCC5BF62C4915C8D09F /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 554E82F6BF0F134EC9BF40AA /* json_reader.cpp */; };
 		81285331C1D062F076D73E28 /* ofxAELayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */; };
-		842EA755BA4FA25447D34BC2 /* ofxAESolidLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61D06C2E992CA93360783525 /* ofxAESolidLayer.cpp */; };
+		819336E318E51283001F8829 /* ofxAELayerCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819336E118E51283001F8829 /* ofxAELayerCap.cpp */; };
+		819336E618E5AF2F001F8829 /* ofxAEAVLayerCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819336E418E5AF2F001F8829 /* ofxAEAVLayerCap.cpp */; };
+		842EA755BA4FA25447D34BC2 /* ofxAEPlaneCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61D06C2E992CA93360783525 /* ofxAEPlaneCap.cpp */; };
 		894942313BDB621CA9E325D7 /* ofxAEMarker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D9E2F0833E933039E26C966 /* ofxAEMarker.cpp */; };
 		89DBCE955EFE069B62B1A473 /* TransformNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BD8839A7A8907C6EBE4ADB40 /* TransformNode.cpp */; };
 		9154710EB99076F98D81EE15 /* Hierarchical.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 022F30EF8B70F456C1036D27 /* Hierarchical.cpp */; };
-		943DB355D9465A8F8734D9EF /* ofxAEShapeLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F31D7F96A631D80D67381E7 /* ofxAEShapeLayer.cpp */; };
+		943DB355D9465A8F8734D9EF /* ofxAEShapeCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4F31D7F96A631D80D67381E7 /* ofxAEShapeCap.cpp */; };
 		9B06C5CAE570B630A97E51C3 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58F8CBF3C566F6908846E5FB /* json_writer.cpp */; };
 		AE32F1807796B1050E082651 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F867B04BF36A560C2493C09 /* json_value.cpp */; };
 		BA44E061E7E8B3BE61D3E9F1 /* ofxAECameraLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FABE48D0429640317F9CB014 /* ofxAECameraLayer.cpp */; };
@@ -43,7 +45,7 @@
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
 		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		E5CF14BDD60556ABB33DD533 /* ofxAEImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7066ACC4945D5EB327C8D561 /* ofxAEImageLayer.cpp */; };
+		E5CF14BDD60556ABB33DD533 /* ofxAEImageCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7066ACC4945D5EB327C8D561 /* ofxAEImageCap.cpp */; };
 		E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */; };
 		E7E077E815D3B6510020DFD4 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E715D3B6510020DFD4 /* QTKit.framework */; };
 		E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F985F515E0DE99003869B5 /* Accelerate.framework */; };
@@ -83,7 +85,7 @@
 /* Begin PBXFileReference section */
 		022F30EF8B70F456C1036D27 /* Hierarchical.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Hierarchical.cpp; path = ../../../addons/ofxAE/libs/Hierarchical.cpp; sourceTree = SOURCE_ROOT; };
 		0CD3145A0F2A0E5266668B1B /* value.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = value.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/value.h; sourceTree = SOURCE_ROOT; };
-		0F2C26AAF53193C82D7084DF /* ofxAESolidLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAESolidLayer.h; path = ../../../addons/ofxAE/src/ofxAESolidLayer.h; sourceTree = SOURCE_ROOT; };
+		0F2C26AAF53193C82D7084DF /* ofxAEPlaneCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEPlaneCap.h; path = ../../../addons/ofxAE/src/ofxAEPlaneCap.h; sourceTree = SOURCE_ROOT; };
 		0F867B04BF36A560C2493C09 /* json_value.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = json_value.cpp; path = ../../../addons/ofxJSON/libs/jsoncpp/src/json_value.cpp; sourceTree = SOURCE_ROOT; };
 		11291C7D36878EB6E0A34F5C /* ofxAEAVLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEAVLayer.h; path = ../../../addons/ofxAE/src/ofxAEAVLayer.h; sourceTree = SOURCE_ROOT; };
 		188AC7CF78FCD83AB2543E08 /* ofxAECameraLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAECameraLayer.h; path = ../../../addons/ofxAE/src/ofxAECameraLayer.h; sourceTree = SOURCE_ROOT; };
@@ -95,29 +97,33 @@
 		3028619048CC06037A15EFBD /* ofxAEComposition.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAEComposition.h; path = ../../../addons/ofxAE/src/ofxAEComposition.h; sourceTree = SOURCE_ROOT; };
 		35FBC58B51893123A89DAB1B /* ofxAELoader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAELoader.cpp; path = ../../../addons/ofxAE/src/ofxAELoader.cpp; sourceTree = SOURCE_ROOT; };
 		3B869EDFC4EA231621749621 /* json_batchallocator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = json_batchallocator.h; path = ../../../addons/ofxJSON/libs/jsoncpp/src/json_batchallocator.h; sourceTree = SOURCE_ROOT; };
-		3DE2806E7E9A151099C8AFFD /* ofxAEShapeLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEShapeLayer.h; path = ../../../addons/ofxAE/src/ofxAEShapeLayer.h; sourceTree = SOURCE_ROOT; };
+		3DE2806E7E9A151099C8AFFD /* ofxAEShapeCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEShapeCap.h; path = ../../../addons/ofxAE/src/ofxAEShapeCap.h; sourceTree = SOURCE_ROOT; };
 		408CC70977CE7F81B4155361 /* TransformNode.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = TransformNode.h; path = ../../../addons/ofxAE/libs/TransformNode.h; sourceTree = SOURCE_ROOT; };
 		4A714B040499A8BF36C75D9E /* ofxAEMarker.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEMarker.h; path = ../../../addons/ofxAE/src/ofxAEMarker.h; sourceTree = SOURCE_ROOT; };
 		4D9DA75786145E0C3529C268 /* ofxAEComposition.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEComposition.cpp; path = ../../../addons/ofxAE/src/ofxAEComposition.cpp; sourceTree = SOURCE_ROOT; };
-		4E0F237061A7A16F5A5ED5DB /* ofxAECompositionLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAECompositionLayer.cpp; path = ../../../addons/ofxAE/src/ofxAECompositionLayer.cpp; sourceTree = SOURCE_ROOT; };
-		4F31D7F96A631D80D67381E7 /* ofxAEShapeLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEShapeLayer.cpp; path = ../../../addons/ofxAE/src/ofxAEShapeLayer.cpp; sourceTree = SOURCE_ROOT; };
+		4E0F237061A7A16F5A5ED5DB /* ofxAECompositionCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAECompositionCap.cpp; path = ../../../addons/ofxAE/src/ofxAECompositionCap.cpp; sourceTree = SOURCE_ROOT; };
+		4F31D7F96A631D80D67381E7 /* ofxAEShapeCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEShapeCap.cpp; path = ../../../addons/ofxAE/src/ofxAEShapeCap.cpp; sourceTree = SOURCE_ROOT; };
 		554E82F6BF0F134EC9BF40AA /* json_reader.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = json_reader.cpp; path = ../../../addons/ofxJSON/libs/jsoncpp/src/json_reader.cpp; sourceTree = SOURCE_ROOT; };
 		58EF237AE48AA9CE5B7BD052 /* ofxAEMask.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEMask.cpp; path = ../../../addons/ofxAE/src/ofxAEMask.cpp; sourceTree = SOURCE_ROOT; };
 		58F8CBF3C566F6908846E5FB /* json_writer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = json_writer.cpp; path = ../../../addons/ofxJSON/libs/jsoncpp/src/json_writer.cpp; sourceTree = SOURCE_ROOT; };
-		61D06C2E992CA93360783525 /* ofxAESolidLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAESolidLayer.cpp; path = ../../../addons/ofxAE/src/ofxAESolidLayer.cpp; sourceTree = SOURCE_ROOT; };
-		63A4F504D5F70BC53095A27F /* ofxAESequenceLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAESequenceLayer.h; path = ../../../addons/ofxAE/src/ofxAESequenceLayer.h; sourceTree = SOURCE_ROOT; };
+		61D06C2E992CA93360783525 /* ofxAEPlaneCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEPlaneCap.cpp; path = ../../../addons/ofxAE/src/ofxAEPlaneCap.cpp; sourceTree = SOURCE_ROOT; };
+		63A4F504D5F70BC53095A27F /* ofxAESequenceCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAESequenceCap.h; path = ../../../addons/ofxAE/src/ofxAESequenceCap.h; sourceTree = SOURCE_ROOT; };
 		65FCAE08D326D7EF1910A329 /* writer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = writer.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/writer.h; sourceTree = SOURCE_ROOT; };
-		68E7B73A056C5FF3A3AAF4BA /* ofxAELoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAELoader.h; path = ../../../addons/ofxAE/src/ofxAELoader.h; sourceTree = SOURCE_ROOT; };
+		68E7B73A056C5FF3A3AAF4BA /* ofxAELoader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAELoader.h; path = ../../../addons/ofxAE/src/ofxAELoader.h; sourceTree = SOURCE_ROOT; };
 		6F94ACA14609A0DE769D3B91 /* features.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = features.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/features.h; sourceTree = SOURCE_ROOT; };
-		7066ACC4945D5EB327C8D561 /* ofxAEImageLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEImageLayer.cpp; path = ../../../addons/ofxAE/src/ofxAEImageLayer.cpp; sourceTree = SOURCE_ROOT; };
+		7066ACC4945D5EB327C8D561 /* ofxAEImageCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEImageCap.cpp; path = ../../../addons/ofxAE/src/ofxAEImageCap.cpp; sourceTree = SOURCE_ROOT; };
 		7C0F3D0F0A1C196FDC386454 /* ofxAEAVLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEAVLayer.cpp; path = ../../../addons/ofxAE/src/ofxAEAVLayer.cpp; sourceTree = SOURCE_ROOT; };
-		7C95D5BD8098654C56D470D1 /* ofxAESequenceLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAESequenceLayer.cpp; path = ../../../addons/ofxAE/src/ofxAESequenceLayer.cpp; sourceTree = SOURCE_ROOT; };
+		7C95D5BD8098654C56D470D1 /* ofxAESequenceCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAESequenceCap.cpp; path = ../../../addons/ofxAE/src/ofxAESequenceCap.cpp; sourceTree = SOURCE_ROOT; };
 		81459C23189095D600DE7A80 /* ofxAEDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxAEDef.h; path = ../src/ofxAEDef.h; sourceTree = "<group>"; };
-		8C8E8EE7174DF306158E710D /* ofxAECompositionLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAECompositionLayer.h; path = ../../../addons/ofxAE/src/ofxAECompositionLayer.h; sourceTree = SOURCE_ROOT; };
+		819336E118E51283001F8829 /* ofxAELayerCap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAELayerCap.cpp; path = ../src/ofxAELayerCap.cpp; sourceTree = "<group>"; };
+		819336E218E51283001F8829 /* ofxAELayerCap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAELayerCap.h; path = ../src/ofxAELayerCap.h; sourceTree = "<group>"; };
+		819336E418E5AF2F001F8829 /* ofxAEAVLayerCap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAEAVLayerCap.cpp; path = ../src/ofxAEAVLayerCap.cpp; sourceTree = "<group>"; };
+		819336E518E5AF2F001F8829 /* ofxAEAVLayerCap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAEAVLayerCap.h; path = ../src/ofxAEAVLayerCap.h; sourceTree = "<group>"; };
+		8C8E8EE7174DF306158E710D /* ofxAECompositionCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAECompositionCap.h; path = ../../../addons/ofxAE/src/ofxAECompositionCap.h; sourceTree = SOURCE_ROOT; };
 		8F6AC5B8D416918909CF40C3 /* ofxMask.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxMask.h; path = ../../../addons/ofxMask/src/ofxMask.h; sourceTree = SOURCE_ROOT; };
 		955BC2F1684779596C85D6F2 /* ofxAELayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAELayer.h; path = ../../../addons/ofxAE/src/ofxAELayer.h; sourceTree = SOURCE_ROOT; };
 		98169AEC4E990DBDF3275463 /* config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = config.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/config.h; sourceTree = SOURCE_ROOT; };
-		9F3F7569B6555C39E22E502D /* ofxAEImageLayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEImageLayer.h; path = ../../../addons/ofxAE/src/ofxAEImageLayer.h; sourceTree = SOURCE_ROOT; };
+		9F3F7569B6555C39E22E502D /* ofxAEImageCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEImageCap.h; path = ../../../addons/ofxAE/src/ofxAEImageCap.h; sourceTree = SOURCE_ROOT; };
 		9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAELayer.cpp; path = ../../../addons/ofxAE/src/ofxAELayer.cpp; sourceTree = SOURCE_ROOT; };
 		A806A37759F30B6278E5A20D /* Hierarchical.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hierarchical.h; path = ../../../addons/ofxAE/libs/Hierarchical.h; sourceTree = SOURCE_ROOT; };
 		AA19C7B5EB9660087056E75A /* forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = forwards.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/forwards.h; sourceTree = SOURCE_ROOT; };
@@ -267,10 +273,14 @@
 				11291C7D36878EB6E0A34F5C /* ofxAEAVLayer.h */,
 				FABE48D0429640317F9CB014 /* ofxAECameraLayer.cpp */,
 				188AC7CF78FCD83AB2543E08 /* ofxAECameraLayer.h */,
+				819336E118E51283001F8829 /* ofxAELayerCap.cpp */,
+				819336E218E51283001F8829 /* ofxAELayerCap.h */,
+				819336E418E5AF2F001F8829 /* ofxAEAVLayerCap.cpp */,
+				819336E518E5AF2F001F8829 /* ofxAEAVLayerCap.h */,
 				4D9DA75786145E0C3529C268 /* ofxAEComposition.cpp */,
 				3028619048CC06037A15EFBD /* ofxAEComposition.h */,
-				4E0F237061A7A16F5A5ED5DB /* ofxAECompositionLayer.cpp */,
-				8C8E8EE7174DF306158E710D /* ofxAECompositionLayer.h */,
+				4E0F237061A7A16F5A5ED5DB /* ofxAECompositionCap.cpp */,
+				8C8E8EE7174DF306158E710D /* ofxAECompositionCap.h */,
 				9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */,
 				955BC2F1684779596C85D6F2 /* ofxAELayer.h */,
 				2D9E2F0833E933039E26C966 /* ofxAEMarker.cpp */,
@@ -279,14 +289,14 @@
 				201714EA7CBDC02685E822BF /* ofxAEMask.h */,
 				D8472C261B1F307697493E28 /* ofxAEProperty.cpp */,
 				F945B6452DA51D23C0ACB3D5 /* ofxAEProperty.h */,
-				7C95D5BD8098654C56D470D1 /* ofxAESequenceLayer.cpp */,
-				63A4F504D5F70BC53095A27F /* ofxAESequenceLayer.h */,
-				4F31D7F96A631D80D67381E7 /* ofxAEShapeLayer.cpp */,
-				3DE2806E7E9A151099C8AFFD /* ofxAEShapeLayer.h */,
-				61D06C2E992CA93360783525 /* ofxAESolidLayer.cpp */,
-				0F2C26AAF53193C82D7084DF /* ofxAESolidLayer.h */,
-				7066ACC4945D5EB327C8D561 /* ofxAEImageLayer.cpp */,
-				9F3F7569B6555C39E22E502D /* ofxAEImageLayer.h */,
+				7C95D5BD8098654C56D470D1 /* ofxAESequenceCap.cpp */,
+				63A4F504D5F70BC53095A27F /* ofxAESequenceCap.h */,
+				4F31D7F96A631D80D67381E7 /* ofxAEShapeCap.cpp */,
+				3DE2806E7E9A151099C8AFFD /* ofxAEShapeCap.h */,
+				61D06C2E992CA93360783525 /* ofxAEPlaneCap.cpp */,
+				0F2C26AAF53193C82D7084DF /* ofxAEPlaneCap.h */,
+				7066ACC4945D5EB327C8D561 /* ofxAEImageCap.cpp */,
+				9F3F7569B6555C39E22E502D /* ofxAEImageCap.h */,
 				81459C23189095D600DE7A80 /* ofxAEDef.h */,
 			);
 			name = src;
@@ -507,18 +517,20 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				35EDF414A36A6AAAB41EC500 /* ofxAELoader.cpp in Sources */,
+				819336E618E5AF2F001F8829 /* ofxAEAVLayerCap.cpp in Sources */,
 				4C70DE14ACB18576C3CF7486 /* ofxAEAVLayer.cpp in Sources */,
 				BA44E061E7E8B3BE61D3E9F1 /* ofxAECameraLayer.cpp in Sources */,
 				2E15BB0D0FB7158BE9E56A5E /* ofxAEComposition.cpp in Sources */,
-				2456CE082CCD822EDF93EEB5 /* ofxAECompositionLayer.cpp in Sources */,
+				819336E318E51283001F8829 /* ofxAELayerCap.cpp in Sources */,
+				2456CE082CCD822EDF93EEB5 /* ofxAECompositionCap.cpp in Sources */,
 				81285331C1D062F076D73E28 /* ofxAELayer.cpp in Sources */,
 				894942313BDB621CA9E325D7 /* ofxAEMarker.cpp in Sources */,
 				BE90EA3F10ACEB37C90ABF57 /* ofxAEMask.cpp in Sources */,
 				EBB3A27E1A6F6B93BAE5939D /* ofxAEProperty.cpp in Sources */,
-				43AE25F87C805A1A63FFA9E6 /* ofxAESequenceLayer.cpp in Sources */,
-				943DB355D9465A8F8734D9EF /* ofxAEShapeLayer.cpp in Sources */,
-				842EA755BA4FA25447D34BC2 /* ofxAESolidLayer.cpp in Sources */,
-				E5CF14BDD60556ABB33DD533 /* ofxAEImageLayer.cpp in Sources */,
+				43AE25F87C805A1A63FFA9E6 /* ofxAESequenceCap.cpp in Sources */,
+				943DB355D9465A8F8734D9EF /* ofxAEShapeCap.cpp in Sources */,
+				842EA755BA4FA25447D34BC2 /* ofxAEPlaneCap.cpp in Sources */,
+				E5CF14BDD60556ABB33DD533 /* ofxAEImageCap.cpp in Sources */,
 				0E7E93E74F124EED134CB794 /* FrameCounter.cpp in Sources */,
 				9154710EB99076F98D81EE15 /* Hierarchical.cpp in Sources */,
 				89DBCE955EFE069B62B1A473 /* TransformNode.cpp in Sources */,

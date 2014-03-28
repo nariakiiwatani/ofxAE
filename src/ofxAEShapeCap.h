@@ -1,21 +1,19 @@
 #pragma once
 
 #include "ofxAEDef.h"
-#include "ofxAEAVLayer.h"
-#include "ofPath.h"
+#include "ofxAEAVLayerCap.h"
 #include "ofxAEProperty.h"
+#include "ofPath.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
 class ShapeContent;
-class ShapeLayer : public AVLayer
+class ShapeCap : public AVCap
 {
-	friend class Loader;
 public:
-	ShapeLayer();
-private:
-	void prepare();
-	void render(float alpha=1);
+	ShapeCap(AVLayer *layer);
+	void update();
+	void draw(float alpha=1);
 	void addContent(ShapeContent *content);
 private:
 	ofPath path_;

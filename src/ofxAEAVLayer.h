@@ -22,9 +22,9 @@ public:
 	bool is3D() { return is_3d_; }
 	bool isCollapse() { return is_collapse_; }
 	void addMask(Mask *mask);
+	ofBlendMode getBlendMode() { return blend_mode_; }
 
 protected:
-	virtual void render(float alpha=1){};
 	bool is_3d_;
 	bool is_collapse_;
 	ofBlendMode blend_mode_;

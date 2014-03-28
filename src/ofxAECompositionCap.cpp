@@ -1,24 +1,28 @@
-#include "ofxAECompositionLayer.h"
+#include "ofxAECompositionCap.h"
 #include "ofGraphics.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-void CompositionLayer::prepare()
+CompositionCap::CompositionCap(AVLayer *layer)
+:AVCap(layer)
+{
+}
+
+void CompositionCap::update()
 {
 	composition_.update();
 }
-void CompositionLayer::render(float alpha)
+void CompositionCap::draw(float alpha)
 {
-	if(isCollapse()) {
+	if(isCollapseTransformation()) {
 		composition_.draw(NULL, opacity_*alpha);
 	}
 	else {
 		composition_.draw(opacity_*alpha);
 	}
 }
-void CompositionLayer::setPropertyFrame(int frame)
+void CompositionCap::setPropertyFrame(int frame)
 {
-	Layer::setPropertyFrame(frame);
 	composition_.setFrame(frame-start_frame_);
 }
 

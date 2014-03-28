@@ -7,6 +7,7 @@
 OFX_AE_NAMESPACE_BEGIN
 
 class Marker;
+class LayerCap;
 
 class Layer {
 	friend class Loader;
@@ -17,6 +18,9 @@ public:
 	virtual void setPropertyFrame(int frame);
 	void setParent(Layer *parent);
 	Layer* getParent() { return parent_; }
+	
+	void addCap(LayerCap *cap);
+	void removeCap(LayerCap *cap);
 	
 	bool isActive() { return active_; }
 	float getOpacity() { return opacity_; }
@@ -33,11 +37,15 @@ public:
 	const string& getName() { return name_; }
 	
 	void setFreeze(bool freeze) { transform_.setEnable(!freeze); }
+	
+	int getStartFrame() { return start_frame_; }
+		
+	void addProperty(PropertyBase *property);
 
 protected:
-	virtual void prepare(){};
-protected:
 	string name_;
+	vector<LayerCap*> cap_;
+
 	Layer *parent_;
 	Property<float> opacity_;
 	Property<bool> active_;
