@@ -5,8 +5,8 @@ OFX_AE_NAMESPACE_BEGIN
 CameraLayer::CameraLayer()
 {
 	camera_.setVFlip(true);
-	properties_.push_back(&fov_);
-	properties_.push_back(&look_at_);
+	addProperty(&fov_);
+	addProperty(&look_at_);
 }
 void CameraLayer::prepare()
 {

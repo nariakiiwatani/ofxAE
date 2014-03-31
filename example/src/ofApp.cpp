@@ -6,8 +6,8 @@ void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "nest_gap_time.json");
-	composition_.setLoopState(FrameCounter::LOOP_NONE);
+	loader.loadComposition(composition_, "3d_basic.json");
+	composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
 //--------------------------------------------------------------

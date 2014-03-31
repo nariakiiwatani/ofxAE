@@ -78,6 +78,9 @@ void Composition::update()
 			}
 		}
 	}
+	if(active_camera_) {
+		active_camera_->prepare();
+	}
 }
 
 void Composition::setActiveMarker(int index, float speed)

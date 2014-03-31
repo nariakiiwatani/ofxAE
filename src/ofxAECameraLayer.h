@@ -12,9 +12,9 @@ class CameraLayer : public Layer {
 public:
 	CameraLayer();
 	ofCamera* getCamera() { return &camera_; }
+	void prepare();
 
 private:
-	void prepare();
 	ofCamera camera_;
 	Property<float> fov_;
 	Property<ofVec3f> look_at_;
