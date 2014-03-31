@@ -17,24 +17,25 @@ Currently so buggy, So I need community help. :)
 ### Load and play on OF
 ofApp.h  
 
-	ofxAE::Composition composition_;
+	ofxAE::Loader loader_;
+	ofxAE::Composition *composition_;
 ofApp.cpp  
 
 	void ofApp::setup(){
 		ofxAE::Loader loader("exported_folder");
-		loader.loadComposition(composition_, "foo.json");	// "bin/data/exported_folder/foo.json"
-		composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
+		composition_ = loader_.loadComposition("foo.json");	// "bin/data/exported_folder/foo.json"
+		composition_->setLoopState(FrameCounter::LOOP_ONEWAY);
 	}
 
 	//--------------------------------------------------------------
 	void ofApp::update(){
-		composition_.update();
+		composition_->update();
 	}
 
 	//--------------------------------------------------------------
 	void ofApp::draw(){
 		ofBackground(0);
-		composition_.draw();
+		composition_->draw();
 	}
 
 ## The goal is...
