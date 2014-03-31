@@ -1,6 +1,7 @@
 #include "ofxAELayer.h"
 #include "ofxAEProperty.h"
 #include "ofxAELayerCap.h"
+#include "ofxAEMarker.h"
 
 OFX_AE_NAMESPACE_BEGIN
 

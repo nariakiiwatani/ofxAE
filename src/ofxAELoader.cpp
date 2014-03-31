@@ -158,8 +158,7 @@ void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 {
 	const Json::Value& properties = json.get("property", Json::Value::null);
-	bool use_mask = properties.isMember("mask");
-	layer.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat(), use_mask);
+	layer.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
 	layer.is_3d_ = json.get("is3d", false).asBool();
 	layer.is_collapse_ = json.get("isCollapse", false).asBool();
 	const string& blend_mode = json.get("blendingMode", "none").asString();
@@ -167,8 +166,8 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 	if(blend_mode == "add")			{ layer.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ layer.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 	setupLayerJson(layer, json);
-	if(use_mask) {
-		const Json::Value& masks = properties.get("mask", Json::Value::null);
+	const Json::Value& masks = properties.get("mask", Json::Value::null);
+	if(masks.isArray()) {
 		int mask_count = masks.size();
 		for(int i = 0; i < mask_count; ++i) {
 			const Json::Value& mask = masks.get(i, Json::Value::null);

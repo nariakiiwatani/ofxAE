@@ -14,7 +14,7 @@ class AVLayer : public Layer {
 public:
 	AVLayer();
 	virtual ~AVLayer();
-	void allocate(int width, int height, bool use_mask);
+	void allocate(int width, int height);
 	void draw(float alpha=1);
 	float getWidth() { return size_.x; }
 	float getHeight() { return size_.y; }
@@ -29,7 +29,6 @@ protected:
 	bool is_collapse_;
 	ofBlendMode blend_mode_;
 	ofVec2f size_;
-	bool is_use_mask_;
 	vector<Mask*> mask_;
 	ofxMask ofx_mask_;
 };

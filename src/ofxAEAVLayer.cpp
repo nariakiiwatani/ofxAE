@@ -6,7 +6,6 @@
 OFX_AE_NAMESPACE_BEGIN
 
 AVLayer::AVLayer()
-:is_use_mask_(false)
 {
 }
 
@@ -16,20 +15,15 @@ AVLayer::~AVLayer()
 		delete *it;
 	}
 }
-void AVLayer::allocate(int width, int height, bool use_mask)
+void AVLayer::allocate(int width, int height)
 {
 	size_.set(width, height);
-
-	if(use_mask) {
-		ofx_mask_.setup(width, height, ofxMask::ALPHA);
-	}
-	is_use_mask_ = use_mask;
 }
 
 void AVLayer::draw(float alpha)
 {
 	getNode().pushMatrix();
-	if(is_use_mask_) {
+	if(!mask_.empty()) {
 		ofx_mask_.beginMask();
 		if(mask_.empty()) {
 			ofClear(ofColor::white);
@@ -62,7 +56,10 @@ void AVLayer::draw(float alpha)
 
 void AVLayer::addMask(Mask *mask)
 {
-	mask->setSize(size_);
+	if(mask_.empty()) {
+		ofx_mask_.setup(getWidth(), getHeight(), ofxMask::ALPHA);
+	}
+	mask->setSize(getSize());
 	mask_.push_back(mask);
 	properties_.push_back(&mask->getPath());
 	properties_.push_back(&mask->getOpacity());
