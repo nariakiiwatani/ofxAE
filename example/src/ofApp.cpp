@@ -6,7 +6,7 @@ void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "marker_loop.json");
+	loader.loadComposition(composition_, "nest_basic.json");
 	composition_.setLoopState(FrameCounter::LOOP_NONE);
 }
 

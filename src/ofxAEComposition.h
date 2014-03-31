@@ -90,6 +90,7 @@ private:
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<AVLayer*> active_layers_;
+	CameraLayer *active_camera_;
 	vector<Marker*> marker_;
 	Marker *active_marker_;
 	
@@ -97,9 +98,6 @@ private:
 	FrameCounter frame_default_;
 private:
 	void setPropertyFrame(int frame);
-	void prepare();
-	void beginClip();
-	void endClip();
 };
 
 OFX_AE_NAMESPACE_END

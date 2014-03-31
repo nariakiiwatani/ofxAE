@@ -3,6 +3,7 @@
 #include "ofxAEDef.h"
 #include "ofxAEAVLayerCap.h"
 #include "ofxAEComposition.h"
+#include "ofFbo.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -16,6 +17,7 @@ public:
 	void draw(float alpha=1);
 private:
 	Composition composition_;
+	ofFbo fbo_;
 };
 
 OFX_AE_NAMESPACE_END

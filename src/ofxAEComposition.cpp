@@ -58,7 +58,23 @@ void Composition::update()
 	int frame = frame_.update();
 	if(frame >= 0) {
 		setPropertyFrame(frame);
-		prepare();
+		active_layers_.clear();
+		for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
+			AVLayer *l = *layer;
+			if(l->isActive()) {
+				l->update();
+				active_layers_.push_back(l);
+			}
+		}
+		active_camera_ = NULL;
+		for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
+			if((*camera)->isActive()) {
+				(*camera)->update();
+				if(!active_camera_) {
+					active_camera_ = *camera;
+				}
+			}
+		}
 	}
 }
 
@@ -230,56 +246,9 @@ Marker* Composition::getMarker(const string& name)
 	return NULL;
 }
 
-void Composition::prepare()
-{
-	active_layers_.clear();
-	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
-		AVLayer *l = *layer;
-		if(l->isActive()) {
-			l->update();
-			active_layers_.push_back(l);
-		}
-	}
-}
-
 void Composition::draw(float alpha)
 {
-	ofCamera *active_camera = NULL;
-	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-		if((*camera)->isActive()) {
-			(*camera)->update();
-			if(!active_camera) {
-				active_camera = (*camera)->getCamera();
-			}
-		}
-	}
-	beginClip();
-	draw(active_camera, alpha);
-	endClip();
-}
-
-void Composition::beginClip()
-{
-	GLdouble area0[4]={ 0, 1, 0, 0 };
-	GLdouble area1[4]={ 0, -1, 0, getHeight()};
-	GLdouble area2[4]={ 1, 0, 0, 0 };
-	GLdouble area3[4]={-1, 0, 0, getWidth()};
-	glClipPlane(GL_CLIP_PLANE0,area0);
-	glClipPlane(GL_CLIP_PLANE1,area1);
-	glClipPlane(GL_CLIP_PLANE2,area2);
-	glClipPlane(GL_CLIP_PLANE3,area3);
-	glEnable(GL_CLIP_PLANE0);
-	glEnable(GL_CLIP_PLANE1);
-	glEnable(GL_CLIP_PLANE2);
-	glEnable(GL_CLIP_PLANE3);
-}
-
-void Composition::endClip()
-{
-	glDisable(GL_CLIP_PLANE0);
-	glDisable(GL_CLIP_PLANE1);
-	glDisable(GL_CLIP_PLANE2);
-	glDisable(GL_CLIP_PLANE3);
+	draw(active_camera_?active_camera_->getCamera():NULL, alpha);
 }
 
 void Composition::draw(ofCamera *camera, float alpha)

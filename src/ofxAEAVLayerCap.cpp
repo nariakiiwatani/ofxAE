@@ -7,6 +7,7 @@ AVCap::AVCap(AVLayer *layer)
 :LayerCap(layer)
 ,rect_(0,0,layer->getWidth(),layer->getHeight())
 ,blend_mode_(layer->getBlendMode())
+,is_collapse_(layer->isCollapse())
 ,opacity_(1)
 {
 }
