@@ -39,6 +39,8 @@ class PropertyGroup : public PropertyBase
 public:
 	bool setFrame(int frame);
 	void update();
+	void addProperty(PropertyBase *property);
+	void removeProperty(PropertyBase *property);
 protected:
 	virtual void prepare(){}
 	vector<PropertyBase*> properties_;

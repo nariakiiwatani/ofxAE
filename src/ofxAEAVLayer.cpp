@@ -61,8 +61,8 @@ void AVLayer::addMask(Mask *mask)
 	}
 	mask->setSize(getSize());
 	mask_.push_back(mask);
-	properties_.push_back(&mask->getPath());
-	properties_.push_back(&mask->getOpacity());
+	addProperty(&mask->getPath());
+	addProperty(&mask->getOpacity());
 }
 
 OFX_AE_NAMESPACE_END

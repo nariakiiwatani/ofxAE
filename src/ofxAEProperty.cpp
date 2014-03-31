@@ -53,15 +53,27 @@ void PropertyGroup::update()
 	prepare();
 	is_dirty_ = false;
 }
+void PropertyGroup::addProperty(PropertyBase *property)
+{
+	properties_.push_back(property);
+}
+
+void PropertyGroup::removeProperty(PropertyBase *property)
+{
+	vector<PropertyBase*>::iterator element = find(properties_.begin(), properties_.end(), property);
+	if(element != properties_.end()) {
+		properties_.erase(element);
+	}
+}
 
 TransformProperty::TransformProperty()
 {
 	scale_ = ofVec3f(1,1,1);
-	properties_.push_back(&translation_);
-	properties_.push_back(&rotation_);
-	properties_.push_back(&orientation_);
-	properties_.push_back(&scale_);
-	properties_.push_back(&anchor_point_);
+	addProperty(&translation_);
+	addProperty(&rotation_);
+	addProperty(&orientation_);
+	addProperty(&scale_);
+	addProperty(&anchor_point_);
 }
 
 static void calcOrientation(TransformNode& node, const ofVec3f& orientation)
@@ -197,40 +209,31 @@ void PathProperty::setOutTangent(int index, const ofVec2f& val)
 void PathProperty::setVertexSize(int size)
 {
 	for(vector<Property<ofVec2f> >::iterator it = vertices_.begin(); it != vertices_.end(); ++it) {
-		vector<PropertyBase*>::iterator element = find(properties_.begin(), properties_.end(), &vertices_.front());
-		if(element != properties_.end()) {
-			properties_.erase(element);
-		}
+		removeProperty(&*it);
 	}
 	vertices_.resize(size);
 	for(vector<Property<ofVec2f> >::iterator it = vertices_.begin(); it != vertices_.end(); ++it) {
-		properties_.push_back(&*it);
+		addProperty(&*it);
 	}
 }
 void PathProperty::setInTangentSize(int size)
 {
 	for(vector<Property<ofVec2f> >::iterator it = in_tangents_.begin(); it != in_tangents_.end(); ++it) {
-		vector<PropertyBase*>::iterator element = find(properties_.begin(), properties_.end(), &in_tangents_.front());
-		if(element != properties_.end()) {
-			properties_.erase(element);
-		}
+		removeProperty(&*it);
 	}
 	in_tangents_.resize(size);
 	for(vector<Property<ofVec2f> >::iterator it = in_tangents_.begin(); it != in_tangents_.end(); ++it) {
-		properties_.push_back(&*it);
+		addProperty(&*it);
 	}
 }
 void PathProperty::setOutTangentSize(int size)
 {
 	for(vector<Property<ofVec2f> >::iterator it = out_tangents_.begin(); it != out_tangents_.end(); ++it) {
-		vector<PropertyBase*>::iterator element = find(properties_.begin(), properties_.end(), &out_tangents_.front());
-		if(element != properties_.end()) {
-			properties_.erase(element);
-		}
+		removeProperty(&*it);
 	}
 	out_tangents_.resize(size);
 	for(vector<Property<ofVec2f> >::iterator it = out_tangents_.begin(); it != out_tangents_.end(); ++it) {
-		properties_.push_back(&*it);
+		addProperty(&*it);
 	}
 }
 

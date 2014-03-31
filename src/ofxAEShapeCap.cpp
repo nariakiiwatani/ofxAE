@@ -37,11 +37,11 @@ void ShapeCap::addContent(ShapeContent *content)
 
 ShapeContentGroup::ShapeContentGroup()
 {
-	properties_.push_back(&transform_);
-	properties_.push_back(&rotation_z_);
-	properties_.push_back(&opacity_);
-	properties_.push_back(&skew_);
-	properties_.push_back(&skew_axis_);
+	addProperty(&transform_);
+	addProperty(&rotation_z_);
+	addProperty(&opacity_);
+	addProperty(&skew_);
+	addProperty(&skew_axis_);
 }
 void ShapeContentGroup::push(ofPath& path)
 {
@@ -68,7 +68,7 @@ void ShapeContentGroup::pop(ofPath& path)
 void ShapeContentGroup::addContent(ShapeContent *content)
 {
 	content_.push_back(content);
-	properties_.push_back(content);
+	addProperty(content);
 }
 void ShapeContentGroup::setPosition(const ofVec2f& position)
 {
@@ -105,7 +105,7 @@ void ShapeContentShape::pop(ofPath& path)
 ShapeContentPath::ShapeContentPath()
 {
 	path_.get().setMode(ofPath::COMMANDS);
-	properties_.push_back(&path_);
+	addProperty(&path_);
 }
 void ShapeContentPath::push(ofPath& path)
 {
@@ -120,8 +120,8 @@ void ShapeContentPath::push(ofPath& path)
 
 ShapeContentEllipse::ShapeContentEllipse()
 {
-	properties_.push_back(&size_);
-	properties_.push_back(&pos_);
+	addProperty(&size_);
+	addProperty(&pos_);
 }
 
 void ShapeContentEllipse::push(ofPath& path)
@@ -135,9 +135,9 @@ void ShapeContentEllipse::push(ofPath& path)
 
 ShapeContentRect::ShapeContentRect()
 {
-	properties_.push_back(&size_);
-	properties_.push_back(&pos_);
-	properties_.push_back(&roundness_);
+	addProperty(&size_);
+	addProperty(&pos_);
+	addProperty(&roundness_);
 }
 void ShapeContentRect::push(ofPath& path)
 {
@@ -149,13 +149,13 @@ void ShapeContentRect::push(ofPath& path)
 
 ShapeContentPoly::ShapeContentPoly()
 {
-	properties_.push_back(&corner_count_);
-	properties_.push_back(&pos_);
-	properties_.push_back(&rotation_);
-	properties_.push_back(&outer_radius_);
-	properties_.push_back(&outer_roundness_);
-	properties_.push_back(&inner_radius_);
-	properties_.push_back(&inner_roundness_);
+	addProperty(&corner_count_);
+	addProperty(&pos_);
+	addProperty(&rotation_);
+	addProperty(&outer_radius_);
+	addProperty(&outer_roundness_);
+	addProperty(&inner_radius_);
+	addProperty(&inner_roundness_);
 }
 void ShapeContentPoly::push(ofPath& path)
 {
@@ -170,9 +170,9 @@ void ShapeContentPoly::push(ofPath& path)
 
 ShapeContentStroke::ShapeContentStroke()
 {
-	properties_.push_back(&color_);
-	properties_.push_back(&opacity_);
-	properties_.push_back(&width_);
+	addProperty(&color_);
+	addProperty(&opacity_);
+	addProperty(&width_);
 }
 
 void ShapeContentStroke::pop(ofPath& path)
@@ -191,8 +191,8 @@ void ShapeContentStroke::pop(ofPath& path)
 
 ShapeContentFill::ShapeContentFill()
 {
-	properties_.push_back(&color_);
-	properties_.push_back(&opacity_);
+	addProperty(&color_);
+	addProperty(&opacity_);
 }
 void ShapeContentFill::pop(ofPath& path)
 {
