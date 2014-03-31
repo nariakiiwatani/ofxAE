@@ -6,19 +6,6 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-Composition::~Composition()
-{
-	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
-		delete *it;
-	}
-	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
-		delete *it;
-	}
-	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
-		delete *it;
-	}
-}
-
 void Composition::allocate(int width, int height)
 {
 	width_ = width;

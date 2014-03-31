@@ -5,9 +5,13 @@
 void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "3d_basic.json");
+	loader_.loadComposition(composition_, "mask_basic.json");
 	composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
+	ofxAE::Loader l;
+	for(int i = 0; i < 100; ++i) {
+		ofxAE::Composition c;
+		l.loadComposition(c, "3d_basic.json");
+	}
 }
 
 //--------------------------------------------------------------

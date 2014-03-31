@@ -13,7 +13,6 @@ class AVLayer : public Layer {
 	friend class Loader;
 public:
 	AVLayer();
-	virtual ~AVLayer();
 	void allocate(int width, int height);
 	void draw(float alpha=1);
 	float getWidth() { return size_.x; }

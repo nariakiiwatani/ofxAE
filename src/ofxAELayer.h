@@ -13,7 +13,6 @@ class Layer {
 	friend class Loader;
 public:
 	Layer();
-	virtual ~Layer();
 	void update();
 	virtual void setPropertyFrame(int frame);
 	void setParent(Layer *parent);

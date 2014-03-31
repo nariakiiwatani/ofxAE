@@ -5,13 +5,6 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-Layer::~Layer()
-{
-	for(vector<Marker*>::iterator it = marker_.begin(); it != marker_.end(); ++it) {
-		delete *it;
-	}
-}
-	
 Layer::Layer()
 {
 	active_ = true;

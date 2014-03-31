@@ -6,15 +6,12 @@
 OFX_AE_NAMESPACE_BEGIN
 
 AVLayer::AVLayer()
+:Layer()
+,is_3d_(false)
+,is_collapse_(false)
 {
 }
 
-AVLayer::~AVLayer()
-{
-	for(vector<Mask*>::iterator it = mask_.begin(); it != mask_.end(); ++it) {
-		delete *it;
-	}
-}
 void AVLayer::allocate(int width, int height)
 {
 	size_.set(width, height);

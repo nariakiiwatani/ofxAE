@@ -15,6 +15,7 @@ class Mask;
 class CameraLayer;
 class ShapeContentGroup;
 
+class LayerCap;
 class PlaneCap;
 class ImageCap;
 class SequenceCap;
@@ -24,6 +25,7 @@ class CompositionCap;
 class Loader {
 public:
 	Loader(const string& base_path="");
+	~Loader();
 	void setBasePath(const string& base_path);
 	void loadComposition(Composition& comp, const string& filepath);
 private:
@@ -51,6 +53,13 @@ private:
 private:
 	string base_path_;
 	map<string,string> file_cache_;
+	struct {
+		vector<Layer*> layer;
+		vector<LayerCap*> cap;
+		vector<PropertyBase*> property;
+		vector<Marker*> marker;
+		vector<Mask*> mask;
+	} allocated_;
 };
 
 OFX_AE_NAMESPACE_END

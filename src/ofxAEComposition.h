@@ -15,7 +15,6 @@ class Marker;
 class Composition {
 	friend class Loader;
 public:
-	~Composition();
 	void allocate(int width, int height);
 	void setLength(int length);
 	void setLoopState(FrameCounter::LoopState loop);
