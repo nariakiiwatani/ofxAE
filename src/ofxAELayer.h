@@ -37,8 +37,6 @@ public:
 	const string& getName() { return name_; }
 	
 	void setFreeze(bool freeze) { transform_.setEnable(!freeze); }
-	
-	int getStartFrame() { return start_frame_; }
 		
 	void addProperty(PropertyBase *property);
 
@@ -50,7 +48,7 @@ protected:
 	Property<float> opacity_;
 	Property<bool> active_;
 	TransformProperty transform_;
-	int start_frame_;
+	int frame_offset_, frame_in_, frame_out_;
 	vector<Marker*> marker_;
 	vector<PropertyBase*> properties_;
 };

@@ -136,7 +136,9 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 {
 	layer.name_ = json.get("name", "noname").asString();
-	layer.start_frame_ = json.get("startFrame", 0).asFloat();
+	layer.frame_offset_ = json.get("frameOffset", 0).asInt();
+	layer.frame_in_ = json.get("inFrame", 0).asInt();
+	layer.frame_out_ = json.get("outFrame", 0).asInt();
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	setupPropertyKeysJson(layer.active_, properties.get("active", Json::Value::null));
 	setupPropertyKeysJson(layer.opacity_, properties.get("Opacity", Json::Value::null), 0.01f);

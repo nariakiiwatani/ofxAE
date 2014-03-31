@@ -96,8 +96,6 @@ private:
 	
 	FrameCounter frame_;
 	FrameCounter frame_default_;
-private:
-	void setPropertyFrame(int frame);
 };
 
 OFX_AE_NAMESPACE_END

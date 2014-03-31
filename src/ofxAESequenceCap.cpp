@@ -74,10 +74,9 @@ void SequenceCap::setSequenceString(const string& str)
 #endif
 void SequenceCap::setPropertyFrame(int frame)
 {
-	int image_frame = frame - start_frame_;
-	if(prev_frame_ != image_frame && 0 <= image_frame && image_frame <= end_-start_) {
-		loadImage(before_+ofToString(min(start_+image_frame, end_), digit_, '0')+after_);
-		prev_frame_ = image_frame;
+	if(prev_frame_ != frame && 0 <= frame && frame <= end_-start_) {
+		loadImage(before_+ofToString(min(start_+frame, end_), digit_, '0')+after_);
+		prev_frame_ = frame;
 	}
 }
 

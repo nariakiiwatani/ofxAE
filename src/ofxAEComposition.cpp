@@ -56,23 +56,25 @@ bool Composition::isBackward()
 void Composition::update()
 {
 	int frame = frame_.update();
-	if(frame >= 0) {
-		setPropertyFrame(frame);
-		active_layers_.clear();
-		for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
-			AVLayer *l = *layer;
-			if(l->isActive()) {
-				l->update();
-				active_layers_.push_back(l);
-			}
+
+	active_layers_.clear();
+	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
+		AVLayer *l = *layer;
+		l->setPropertyFrame(frame);
+		if(l->isActive()) {
+			l->update();
+			active_layers_.push_back(l);
 		}
-		active_camera_ = NULL;
-		for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-			if((*camera)->isActive()) {
-				(*camera)->update();
-				if(!active_camera_) {
-					active_camera_ = *camera;
-				}
+	}
+
+	active_camera_ = NULL;
+	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
+		CameraLayer *c = *camera;
+		c->setPropertyFrame(frame);
+		if(c->isActive()) {
+			c->update();
+			if(!active_camera_) {
+				active_camera_ = c;
 			}
 		}
 	}
@@ -316,16 +318,6 @@ void Composition::setFrameByRatio(float ratio)
 void Composition::resetFrameByRatio(float ratio)
 {
 	resetFrame(ofMap(ratio, 0, 1, 0, frame_.getLength()-1));
-}
-
-void Composition::setPropertyFrame(int frame)
-{
-	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-		(*camera)->setPropertyFrame(frame);
-	}
-	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
-		(*layer)->setPropertyFrame(frame);
-	}
 }
 
 void Composition::addAVLayer(AVLayer *layer)

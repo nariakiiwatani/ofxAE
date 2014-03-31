@@ -1,18 +1,15 @@
 ﻿#include "./exportUtil.jsxinc"
-function getLayerKeys(layer, startTime, duration) {
+function getLayerKeys(layer, frameOffset, inFrame, outFrame) {
 	var comp = layer.containingComp;
 	
 	function getFrameTime(f) {
-		return startTime + f*comp.frameDuration;
+		return (f+frameOffset)*comp.frameDuration;
 	}
-	endFrame = function() {
-		return Math.ceil(duration/comp.frameDuration)+1;
-	}();
 	function procPropertyKeys(target, propName, valueFunc)
 	{
 		var ret = new Object();
 		var prevValue = null;
-		for(var f = 0; f < endFrame; ++f) {
+		for(var f = inFrame; f < outFrame; ++f) {
 			var val;
 			if(propName instanceof Array) {
 				val = new Array();
@@ -44,7 +41,7 @@ function getLayerKeys(layer, startTime, duration) {
 	{
 		var ret = new Object();
 		var prevValue = null;
-		for(var f = 0; f < endFrame; ++f) {
+		for(var f = inFrame; f < outFrame; ++f) {
 			var val = valueFunc(target, getFrameTime(f));
 			if(!ExportUtil.compare(prevValue, val)) {
 				ret[f] = val;
@@ -179,7 +176,6 @@ function getLayerKeys(layer, startTime, duration) {
 
 	function proc() {
 		var obj = new Object();
-
 		obj.active = procKeys(layer, function(l,time){return l.activeAtTime(time);});
 		var propNames = {
 			Position:"Position",

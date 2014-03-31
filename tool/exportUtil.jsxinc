@@ -101,7 +101,7 @@ compare : function(a0, a1)
 		return false;
 	}
 	if(a0 instanceof Array) {
-		if(a0.length != a1.length) {
+		if(a0.length !== a1.length) {
 			return false;
 		}
 		for(var i = 0; i < a0.length; ++i) {
@@ -113,27 +113,6 @@ compare : function(a0, a1)
 	else if(a0 !== a1) {
 		return false;
 	}
-	/*
-	if(!a0 && !a1) {
-		return true;
-	}
-	if(!a0 || !a1) {
-		return false;
-	}
-	if(a0 instanceof Array) {
-		if(a0.length != a1.length) {
-			return false;
-		}
-		for(var i = 0; i < a0.length; ++i) {
-			if(a0[i] !== a1[i]) {
-				return false;
-			}
-		}
-	}
-	else if(a0 === a1) {
-		return true;
-	}
-	*/
 	return true;
 },
 

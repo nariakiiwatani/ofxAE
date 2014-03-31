@@ -67,10 +67,19 @@ void Layer::update()
 	
 void Layer::setPropertyFrame(int frame)
 {
-	for(vector<PropertyBase*>::iterator prop = properties_.begin(); prop != properties_.end(); ++prop) {
-		if((*prop)->isEnable()) {
-			(*prop)->setFrame(frame);
+	frame -= frame_offset_;
+	if(frame_in_ <= frame && frame < frame_out_) {
+		for(vector<PropertyBase*>::iterator prop = properties_.begin(); prop != properties_.end(); ++prop) {
+			if((*prop)->isEnable()) {
+				(*prop)->setFrame(frame);
+			}
 		}
+		for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+			(*c)->setPropertyFrame(frame);
+		}
+	}
+	else {
+		setActive(false);
 	}
 }
 

@@ -34,7 +34,7 @@ void CompositionCap::draw(float alpha)
 }
 void CompositionCap::setPropertyFrame(int frame)
 {
-	composition_.setFrame(frame-start_frame_);
+	composition_.resetFrame(frame);
 }
 
 OFX_AE_NAMESPACE_END

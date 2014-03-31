@@ -7,7 +7,6 @@ OFX_AE_NAMESPACE_BEGIN
 
 LayerCap::LayerCap(Layer *layer)
 :layer_(layer)
-,start_frame_(layer->getStartFrame())
 {
 	layer_->addCap(this);
 }

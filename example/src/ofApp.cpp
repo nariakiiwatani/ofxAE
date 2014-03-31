@@ -6,7 +6,7 @@ void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
 	ofxAE::Loader loader;
-	loader.loadComposition(composition_, "nest_basic.json");
+	loader.loadComposition(composition_, "nest_gap_time.json");
 	composition_.setLoopState(FrameCounter::LOOP_NONE);
 }
 
@@ -27,7 +27,7 @@ void ofApp::keyPressed(int key){
 		composition_.setActiveMarker(key-'1');
 	}
 	else if(key == '0') {
-		composition_.clearActiveMarker();
+		composition_.clearActiveMarker(true);
 	}
 }
 

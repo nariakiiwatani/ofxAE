@@ -19,14 +19,14 @@ function proc(comp)
 	var startTime = comp.workAreaStart;
 	var duration = comp.workAreaDuration;
 
-	function procMarkers(markers)
+	function procMarkers(markers, offsetTime)
 	{
 		var ret = new Array();
 		for(var i = 1; i <= markers.numKeys; ++i) {
 			var obj = new Object();
 //			obj.comment = markers.keyValue(i).comment;
 			obj.comment = markers.keyValue(i).comment.replace(/[\r\n]+/g, '\\r\\n');
-			obj.from = Math.round((markers.keyTime(i)-startTime)*frameRate);
+			obj.from = Math.round((markers.keyTime(i)-offsetTime)*frameRate);
 			obj.length = Math.round((markers.keyValue(i).duration)*frameRate);
 			ret.push(obj);
 		}
@@ -38,7 +38,6 @@ function proc(comp)
 		var obj = new Object();
 		obj.name = l.name;
 		obj.index = l.index;
-		obj.startFrame = (l.startTime-startTime)*frameRate;
 		if(l.parent) {
 			obj.parent = l.parent.index;
 		}
@@ -89,10 +88,13 @@ function proc(comp)
 		}
 
 		// timeline
-		obj.property = getLayerKeys(l, startTime, duration);
+		obj.frameOffset = (l.startTime-startTime)*frameRate;
+		obj.inFrame = (l.inPoint-l.startTime)*frameRate;
+		obj.outFrame = (l.outPoint-l.startTime)*frameRate;
+		obj.property = getLayerKeys(l, obj.frameOffset, obj.inFrame, obj.outFrame);
 		// maker
 		if(l.marker && l.marker.numKeys > 0) {
-			obj.marker = procMarkers(l.marker);
+			obj.marker = procMarkers(l.marker, l.startTime-startTime);
 		}
 
 		return obj;
@@ -105,7 +107,7 @@ function proc(comp)
 	json.length = duration*frameRate;
 	var markers = getCompMarker(comp);
 	if(markers && markers.numKeys > 0) {
-		json.marker = procMarkers(markers);
+		json.marker = procMarkers(markers, startTime);
 	}
 	json.layer = new Array();
 	var layers = comp.layers;
@@ -124,8 +126,8 @@ function getCompArrayToProc(proj) {
 				if(isSelected(comp.usedIn[i], true)) {
 					return true;
 				}
-				return false;
 			}
+			return false;
 		}(comp));
 	}
 	var ret = [];
