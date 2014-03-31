@@ -1,37 +1,32 @@
 #include "ofApp.h"
-#include "ofxAELoader.h"
+#include "ofxAEComposition.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	loader_.loadComposition(composition_, "mask_basic.json");
-	composition_.setLoopState(FrameCounter::LOOP_ONEWAY);
-	ofxAE::Loader l;
-	for(int i = 0; i < 100; ++i) {
-		ofxAE::Composition c;
-		l.loadComposition(c, "3d_basic.json");
-	}
+	composition_ = loader_.loadComposition("mask_basic.json");
+	composition_->setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	composition_.update();
+	composition_->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofBackground(0);
-	composition_.draw();
+	composition_->draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	if('1' <= key && key <= '9') {
-		composition_.setActiveMarker(key-'1');
+		composition_->setActiveMarker(key-'1');
 	}
 	else if(key == '0') {
-		composition_.clearActiveMarker(true);
+		composition_->clearActiveMarker(true);
 	}
 }
 

@@ -16,6 +16,8 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
+map<string,string> Loader::file_cache_;
+
 Loader::Loader(const string& base_path)
 {
 	setBasePath(base_path);
@@ -42,10 +44,37 @@ Loader::~Loader()
 		delete allocated_.layer.front();
 		allocated_.layer.erase(allocated_.layer.begin());
 	}
+	while(!allocated_.comp.empty()) {
+		delete allocated_.comp.front();
+		allocated_.comp.erase(allocated_.comp.begin());
+	}
 }
 void Loader::setBasePath(const string &base_path)
 {
 	base_path_ = ofFilePath::addTrailingSlash(base_path);
+}
+Composition* Loader::loadComposition(const string& filepath)
+{
+	Composition *comp = new Composition();
+	allocated_.comp.push_back(comp);
+	string ext = ofFilePath::getFileExt(filepath);
+	if(ext == "json") {
+		ofxJSONElement json;
+		if(file_cache_.find(base_path_+filepath) == file_cache_.end()) {
+			file_cache_.insert(pair<string,string>(base_path_+filepath,ofBufferFromFile(base_path_+filepath).getText()));
+		}
+		if(json.parse(file_cache_[base_path_+filepath])) {
+			setupCompositionJson(*comp, json);
+		}
+		else {
+			ofLog(OF_LOG_WARNING, "couldn't open json file: "+base_path_+filepath);
+		}
+	}
+	return comp;
+}
+Composition* Loader::getComposition(int index)
+{
+	return allocated_.comp[index];
 }
 void Loader::loadComposition(Composition& comp, const string& filepath)
 {

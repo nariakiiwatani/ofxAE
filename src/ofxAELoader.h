@@ -27,7 +27,10 @@ public:
 	Loader(const string& base_path="");
 	~Loader();
 	void setBasePath(const string& base_path);
-	void loadComposition(Composition& comp, const string& filepath);
+	Composition* loadComposition(const string& filepath);
+	Composition* getComposition(int index);
+	
+	void loadComposition(Composition& comp, const string& filepath);	// will be deleted on next update
 private:
 	void setupCompositionJson(Composition& comp, const Json::Value& json);
 	void setupLayerJson(Layer& layer, const Json::Value& json);
@@ -52,8 +55,9 @@ private:
 	void setupPropertyKeysJson(PathProperty& prop, const Json::Value& json);
 private:
 	string base_path_;
-	map<string,string> file_cache_;
+	static map<string,string> file_cache_;
 	struct {
+		vector<Composition*> comp;
 		vector<Layer*> layer;
 		vector<LayerCap*> cap;
 		vector<PropertyBase*> property;

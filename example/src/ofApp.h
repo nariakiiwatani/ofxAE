@@ -2,8 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxAELoader.h"
-#include "ofxAEComposition.h"
 
+namespace ofxAE {
+	class Composition;
+}
 class ofApp : public ofBaseApp{
 
 	public:
@@ -22,5 +24,5 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 private:
 	ofxAE::Loader loader_;
-	ofxAE::Composition composition_;
+	ofxAE::Composition *composition_;
 };
