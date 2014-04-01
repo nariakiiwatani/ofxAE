@@ -16,8 +16,10 @@ function proc(comp)
 	var width = comp.width;
 	var height = comp.height;
 	var frameRate = comp.frameRate;
-	var startTime = comp.workAreaStart;
-	var duration = comp.workAreaDuration;
+	var startTime = 0;
+	var duration = comp.duration;
+	// var startTime = comp.workAreaStart;
+	// var duration = comp.workAreaDuration;
 
 	function procMarkers(markers, offsetTime)
 	{

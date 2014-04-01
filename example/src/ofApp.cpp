@@ -5,7 +5,7 @@
 void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	composition_ = loader_.loadComposition("mask_basic.json");
+	composition_ = loader_.loadComposition("nest_basic.json");
 	composition_->setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
