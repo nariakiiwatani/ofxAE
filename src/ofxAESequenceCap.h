@@ -16,8 +16,7 @@ public:
 	SequenceCap(AVLayer *layer);
 	~SequenceCap();
 	void setSequenceString(const string& str);
-private:
-	void setPropertyFrame(int frame);
+	void update();
 private:
 #ifdef TARGET_WIN32
 	regex regex_;

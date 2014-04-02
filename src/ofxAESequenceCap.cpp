@@ -1,4 +1,5 @@
 #include "ofxAESequenceCap.h"
+#include "ofxAELayer.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -72,8 +73,9 @@ void SequenceCap::setSequenceString(const string& str)
 	after_ = str.substr(match.rm_so, match.rm_eo - match.rm_so);
 }
 #endif
-void SequenceCap::setPropertyFrame(int frame)
+void SequenceCap::update()
 {
+	int frame = layer_->getFrame();
 	if(prev_frame_ != frame && 0 <= frame && frame <= end_-start_) {
 		loadImage(before_+ofToString(min(start_+frame, end_), digit_, '0')+after_);
 		prev_frame_ = frame;

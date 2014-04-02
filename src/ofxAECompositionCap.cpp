@@ -12,7 +12,7 @@ CompositionCap::CompositionCap(AVLayer *layer)
 
 void CompositionCap::update()
 {
-	composition_.update();
+	composition_.setFrame(layer_->getFrame());
 }
 void CompositionCap::draw(float alpha)
 {
@@ -31,10 +31,6 @@ void CompositionCap::draw(float alpha)
 		fbo_.draw(0,0);
 		ofPopStyle();
 	}
-}
-void CompositionCap::setPropertyFrame(int frame)
-{
-	composition_.resetFrame(frame);
 }
 
 OFX_AE_NAMESPACE_END

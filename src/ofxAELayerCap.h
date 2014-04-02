@@ -12,7 +12,6 @@ public:
 	LayerCap(Layer *layer);
 	virtual ~LayerCap();
 	virtual void update(){}
-	virtual void setPropertyFrame(int frame){}
 	virtual void draw(float alpha=1){}
 protected:
 	Layer *layer_;

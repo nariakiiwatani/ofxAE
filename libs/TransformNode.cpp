@@ -171,6 +171,42 @@ void TransformNode::setOrientation(float angle1, const ofVec3f& axis1,
 	dirty(LOCAL);
 }
 
+void TransformNode::setOrientation(const ofVec3f& orientation)
+{
+	switch(rotation_order_) {
+		case ROTATION_ORDER_XYZ:
+			setOrientation(	orientation.x, ofVec3f(1,0,0),
+							orientation.y, ofVec3f(0,1,0),
+							orientation.z, ofVec3f(0,0,1));
+			break;
+		case ROTATION_ORDER_YZX:
+			setOrientation(	orientation.y, ofVec3f(0,1,0),
+							orientation.z, ofVec3f(0,0,1),
+							orientation.x, ofVec3f(1,0,0));
+			break;
+		case ROTATION_ORDER_ZXY:
+			setOrientation(	orientation.z, ofVec3f(0,0,1),
+							orientation.x, ofVec3f(1,0,0),
+							orientation.y, ofVec3f(0,1,0));
+			break;
+		case ROTATION_ORDER_XZY:
+			setOrientation(	orientation.x, ofVec3f(1,0,0),
+							orientation.z, ofVec3f(0,0,1),
+							orientation.y, ofVec3f(0,1,0));
+			break;
+		case ROTATION_ORDER_YXZ:
+			setOrientation(	orientation.y, ofVec3f(0,1,0),
+							orientation.x, ofVec3f(1,0,0),
+							orientation.z, ofVec3f(0,0,1));
+			break;
+		case ROTATION_ORDER_ZYX:
+			setOrientation(	orientation.z, ofVec3f(0,0,1),
+							orientation.y, ofVec3f(0,1,0),
+							orientation.x, ofVec3f(1,0,0));
+			break;
+	}
+}
+
 void TransformNode::setRotation(const ofVec3f& rotation)
 {
 	rotation_.set(rotation);

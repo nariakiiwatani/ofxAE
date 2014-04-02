@@ -21,11 +21,13 @@ public:
 	void addCap(LayerCap *cap);
 	void removeCap(LayerCap *cap);
 	
-	bool isActive() { return active_; }
+	bool isActive() { return is_active_; }
 	float getOpacity() { return opacity_; }
 	TransformNode& getNode() { return transform_; }
+	const string& getName() { return name_; }
+	int getFrame() { return frame_; }
 
-	void setActive(bool active) { active_=active; }
+	void setActive(bool active) { is_active_=active; }
 	void setOpacity(float opacity) { opacity_=opacity; }
 	void setTranslation(const ofVec3f& translation) { transform_.setTranslation(translation); }
 	void setRotation(const ofVec3f& rotation) { transform_.setRotation(rotation); }
@@ -33,20 +35,22 @@ public:
 	void setScale(const ofVec3f& scale) { transform_.setScale(scale); }
 	void setAnchorPoint(const ofVec3f& anchor_point) { transform_.setAnchorPoint(anchor_point); }
 	
-	const string& getName() { return name_; }
+	void addOpacityProperty(Property<float> *prop);
+	void addActiveProperty(Property<bool> *prop);
+	void addTransformProperty(TransformProperty *prop);
 	
-	void setFreeze(bool freeze) { transform_.setEnable(!freeze); }
-		
-	void addProperty(PropertyBase *property);
+	void addProperty(PropertyBase *prop);
+	void removeProperty(PropertyBase *prop);
 
 protected:
 	string name_;
 	vector<LayerCap*> cap_;
+	int frame_;
 
 	Layer *parent_;
-	Property<float> opacity_;
-	Property<bool> active_;
-	TransformProperty transform_;
+	float opacity_;
+	bool is_active_;
+	TransformNode transform_;
 	int frame_offset_, frame_in_, frame_out_;
 	vector<Marker*> marker_;
 	vector<PropertyBase*> properties_;

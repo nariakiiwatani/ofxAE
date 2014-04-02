@@ -35,14 +35,8 @@ void ShapeCap::addContent(ShapeContent *content)
 	layer_->addProperty(content);
 }
 
-ShapeContentGroup::ShapeContentGroup()
-{
-	addProperty(&transform_);
-	addProperty(&rotation_z_);
-	addProperty(&opacity_);
-	addProperty(&skew_);
-	addProperty(&skew_axis_);
-}
+/* =================== */
+
 void ShapeContentGroup::push(ofPath& path)
 {
 	for(vector<ShapeContent*>::iterator it = content_.begin(); it != content_.end(); ++it) {
@@ -51,7 +45,10 @@ void ShapeContentGroup::push(ofPath& path)
 }
 void ShapeContentGroup::pop(ofPath& path)
 {
-	transform_.get().pushMatrix();
+	if(transform_.isDirty()) {
+		transform_.refreshMatrix();
+	}
+	transform_.pushMatrix();
 	ofColor prev_st = path.getStrokeColor();
 	ofColor prev_fi = path.getFillColor();
 	float opacity_st = prev_st.a/255.f*opacity_;
@@ -63,38 +60,69 @@ void ShapeContentGroup::pop(ofPath& path)
 	}
 	path.setStrokeColor(prev_st);
 	path.setFillColor(prev_fi);
-	transform_.get().popMatrix();
+	transform_.popMatrix();
 }
 void ShapeContentGroup::addContent(ShapeContent *content)
 {
 	content_.push_back(content);
-	addProperty(content);
 }
 void ShapeContentGroup::setPosition(const ofVec2f& position)
 {
 	transform_.setTranslation(position);
-	dirty();
 }
 void ShapeContentGroup::setRotation(float z)
 {
-	rotation_z_ = z;
-	dirty();
+	transform_.setRotation(ofVec3f(0,0,rotation_z_));
 }
 void ShapeContentGroup::setScale(const ofVec2f& scale)
 {
 	transform_.setScale(ofVec3f(scale.x,scale.y,1));
-	dirty();
 }
 void ShapeContentGroup::setAnchorPoint(const ofVec2f& anchor)
 {
 	transform_.setAnchorPoint(anchor);
-	dirty();
 }
-void ShapeContentGroup::prepare()
+
+void ShapeContentGroup::addTransformProperty(ofxAE::TransformProperty *prop)
 {
-	transform_.setRotation(ofVec3f(0,0,rotation_z_));
-	transform_.get().refreshMatrix();
+	prop->translation_.setCallback(&transform_, &TransformNode::setTranslation);
+//	prop->rotation_.setCallback(&transform_, &TransformNode::setRotation);
+	prop->scale_.setCallback(&transform_, &TransformNode::setScale);
+//	prop->orientation_.setCallback(&transform_, &TransformNode::setOrientation);
+	prop->anchor_point_.setCallback(&transform_, &TransformNode::setAnchorPoint);
+	addProperty(prop);
 }
+
+void ShapeContentGroup::addOpacityProperty(Property<float> *prop)
+{
+	prop->setTarget(&opacity_);
+	addProperty(prop);
+}
+
+void ShapeContentGroup::addRotationZProperty(Property<float> *prop)
+{
+	prop->setCallback(this, &ShapeContentGroup::rotationZPropCallback);
+	addProperty(prop);
+}
+void ShapeContentGroup::rotationZPropCallback(const float &val)
+{
+	setRotation(val);
+}
+
+void ShapeContentGroup::addSkewProperty(Property<float> *prop)
+{
+	prop->setTarget(&skew_);
+	addProperty(prop);
+}
+
+void ShapeContentGroup::addSkewAxisProperty(Property<float> *prop)
+{
+	prop->setTarget(&skew_axis_);
+	addProperty(prop);
+}
+
+/* =================== */
+
 void ShapeContentShape::pop(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
@@ -102,61 +130,84 @@ void ShapeContentShape::pop(ofPath& path)
 		command.pop_back();
 	}
 }
-ShapeContentPath::ShapeContentPath()
+
+/* =================== */
+
+ShapeContentPath::ShapeContentPath(const string &name)
+:ShapeContentShape(name)
 {
-	path_.get().setMode(ofPath::COMMANDS);
-	addProperty(&path_);
+	path_.setMode(ofPath::COMMANDS);
 }
 void ShapeContentPath::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
-	vector<ofPath::Command>& my_command = path_.get().getCommands();
+	vector<ofPath::Command>& my_command = path_.getCommands();
 	for(vector<ofPath::Command>::iterator it = my_command.begin(); it != my_command.end(); ++it) {
 		command.push_back(*it);
 	}
 	command_count_ = command.size() - command_count_prev;
 }
 
-ShapeContentEllipse::ShapeContentEllipse()
+void ShapeContentPath::addPathProperty(PathProperty *prop)
 {
-	addProperty(&size_);
-	addProperty(&pos_);
+	prop->setTarget(&path_);
+	addProperty(prop);
 }
+
+/* =================== */
 
 void ShapeContentEllipse::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
-	path.ellipse(pos_.get().x, pos_.get().y, size_.get().x, size_.get().y);
+	path.ellipse(pos_.x, pos_.y, size_.x, size_.y);
 	path.close();
 	command_count_ = command.size() - command_count_prev;
 }
 
-ShapeContentRect::ShapeContentRect()
+void ShapeContentEllipse::addPositionProperty(Property<ofVec2f> *prop)
 {
-	addProperty(&size_);
-	addProperty(&pos_);
-	addProperty(&roundness_);
+	prop->setTarget(&pos_);
+	addProperty(prop);
 }
+
+void ShapeContentEllipse::addSizeProperty(Property<ofVec2f> *prop)
+{
+	prop->setTarget(&size_);
+	addProperty(prop);
+}
+
+/* =================== */
+
 void ShapeContentRect::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
-	path.rectRounded(pos_.get()-size_.get()/2.f, size_.get().x, size_.get().y, roundness_);
+	path.rectRounded(pos_-size_/2.f, size_.x, size_.y, roundness_);
 	command_count_ = command.size() - command_count_prev;
 }
 
-ShapeContentPoly::ShapeContentPoly()
+void ShapeContentRect::addSizeProperty(Property<ofVec2f> *prop)
 {
-	addProperty(&corner_count_);
-	addProperty(&pos_);
-	addProperty(&rotation_);
-	addProperty(&outer_radius_);
-	addProperty(&outer_roundness_);
-	addProperty(&inner_radius_);
-	addProperty(&inner_roundness_);
+	prop->setTarget(&size_);
+	addProperty(prop);
 }
+
+void ShapeContentRect::addPositionProperty(Property<ofVec2f> *prop)
+{
+	prop->setTarget(&pos_);
+	addProperty(prop);
+}
+
+void ShapeContentRect::addRoundnessProperty(Property<float> *prop)
+{
+	prop->setTarget(&roundness_);
+	addProperty(prop);
+}
+
+/* =================== */
+
 void ShapeContentPoly::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
@@ -168,12 +219,55 @@ void ShapeContentPoly::push(ofPath& path)
 	command_count_ = command.size() - command_count_prev;
 }
 
-ShapeContentStroke::ShapeContentStroke()
+void ShapeContentPoly::addStarProperty(Property<bool> *prop)
 {
-	addProperty(&color_);
-	addProperty(&opacity_);
-	addProperty(&width_);
+	prop->setTarget(&is_star_);
+	addProperty(prop);
 }
+
+void ShapeContentPoly::addCornerCountProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addPositionProperty(Property<ofVec2f> *prop)
+{
+	prop->setTarget(&pos_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addRotationProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addOuterRadiusProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addOuterRoundnessProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addInnerRadiusProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+void ShapeContentPoly::addInnerRoundnessProperty(Property<float> *prop)
+{
+	prop->setTarget(&corner_count_);
+	addProperty(prop);
+}
+
+/* =================== */
 
 void ShapeContentStroke::pop(ofPath& path)
 {
@@ -181,30 +275,57 @@ void ShapeContentStroke::pop(ofPath& path)
 	path.setFilled(false);
 	ofColor prev = path.getStrokeColor();
 	float opacity = prev.a/255.f*opacity_;
-	path.setStrokeColor(ofColor(color_.get(), opacity*255));
-	path.setStrokeWidth(width_);
+	path.setStrokeColor(ofColor(color_, opacity*255));
+	path.setStrokeWidth(stroke_width_);
 	ofEnableBlendMode(blend_mode_);
 	path.draw();
 	path.setStrokeColor(prev);
 	ofPopStyle();
 }
 
-ShapeContentFill::ShapeContentFill()
+void ShapeContentStroke::addColorProperty(Property<ofFloatColor> *prop)
 {
-	addProperty(&color_);
-	addProperty(&opacity_);
+	prop->setTarget(&color_);
+	addProperty(prop);
 }
+
+void ShapeContentStroke::addOpacityProperty(Property<float> *prop)
+{
+	prop->setTarget(&opacity_);
+	addProperty(prop);
+}
+
+void ShapeContentStroke::addStrokeWidthProperty(Property<float> *prop)
+{
+	prop->setTarget(&stroke_width_);
+	addProperty(prop);
+}
+
+/* =================== */
+
 void ShapeContentFill::pop(ofPath& path)
 {
 	ofPushStyle();
 	path.setFilled(true);
 	ofColor prev = path.getFillColor();
 	float opacity = prev.a/255.f*opacity_;
-	path.setFillColor(ofColor(color_.get(), opacity*255));
+	path.setFillColor(ofColor(color_, opacity*255));
 	ofEnableBlendMode(blend_mode_);
 	path.draw();
 	path.setFillColor(prev);
 	ofPopStyle();
+}
+
+void ShapeContentFill::addColorProperty(Property<ofFloatColor> *prop)
+{
+	prop->setTarget(&color_);
+	addProperty(prop);
+}
+
+void ShapeContentFill::addOpacityProperty(Property<float> *prop)
+{
+	prop->setTarget(&opacity_);
+	addProperty(prop);
 }
 
 OFX_AE_NAMESPACE_END

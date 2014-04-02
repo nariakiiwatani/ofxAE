@@ -4,46 +4,47 @@
 #include <map>
 #include "TransformNode.h"
 #include "ofPath.h"
+#include "ofEventUtils.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
 class PropertyBase
 {
 public:
-	PropertyBase():is_dirty_(true),is_enable_(true){}
+	PropertyBase(const string &name):name_(name),is_enable_(true){}
 	virtual ~PropertyBase(){}
-	virtual bool setFrame(int frame)=0;
-	virtual void update(){ is_dirty_ = false; }
-	virtual bool isDirty() { return is_dirty_; }
-	void dirty() { is_dirty_ = true; }
+	const string& getName() { return name_; }
+	virtual void setFrame(int frame)=0;
 	void setEnable(bool enable) { is_enable_=enable; }
 	bool isEnable() { return is_enable_; }
 protected:
-	bool is_dirty_;
+	string name_;
 	bool is_enable_;
 };
 template<typename Type>
 class Property : public PropertyBase
 {
 public:
-	operator const Type&() { return current_; }
-	Type& get() { return current_; }
-	const Type& operator =(const Type& val) { current_ = val; return val; }
+	Property(const string &name=""):PropertyBase(name),target_(NULL){}
+	void setTarget(Type *target) { target_=target; }
+	template<class ListenerClass>
+	void setCallback(ListenerClass *listener, void (ListenerClass::*listenerMethod)(const Type&)) { ofAddListener(event_, listener, listenerMethod); }
 	void addKey(int frame, const Type& val);
-	bool setFrame(int frame);
+	void setFrame(int frame);
+	const Type& getValueAtFrame(int frame);
 private:
-	Type current_;
+	Type *target_;
+	ofEvent<const Type> event_;
 	std::map<int, Type> key_;
 };
 class PropertyGroup : public PropertyBase
 {
 public:
-	bool setFrame(int frame);
-	void update();
+	PropertyGroup(const string &name):PropertyBase(name){}
+	void setFrame(int frame);
 	void addProperty(PropertyBase *property);
 	void removeProperty(PropertyBase *property);
 protected:
-	virtual void prepare(){}
 	vector<PropertyBase*> properties_;
 };
 
@@ -51,35 +52,21 @@ class TransformProperty : public PropertyGroup
 {
 	friend class Loader;
 public:
-	TransformProperty();
-	operator const TransformNode&() { return current_; }
-	TransformNode& get() { return current_; }
-	operator TransformNode&() { return current_; }
-	void setTranslation(const ofVec3f& translation);
-	void setRotation(const ofVec3f& rotation);
-	void setOrientation(const ofVec3f& orientation);
-	void setScale(const ofVec3f& scale);
-	void setAnchorPoint(const ofVec3f& anchor_point);
-	bool isDirty();
-private:
-	TransformNode current_;
+	TransformProperty(const string &name="transform");
 	Property<ofVec3f> translation_;
 	Property<ofVec3f> rotation_;
 	Property<ofVec3f> orientation_;
 	Property<ofVec3f> scale_;
 	Property<ofVec3f> anchor_point_;
-private:
-	void prepare();
 };
 
 class PathProperty : public PropertyGroup
 {
 	friend class Loader;
 public:
-	operator const ofPath&() { return current_; }
-	ofPath& get() { return current_; }
-	operator ofPath&() { return current_; }
-	
+	PathProperty(const string &name="path"):PropertyGroup(name),target_(NULL){}
+	void setTarget(ofPath *target) { target_=target; }
+	void setFrame(int frame);
 	void setInverted(bool inverted) { is_inverted_ = inverted; }
 	void setSize(const ofVec2f& size) { size_ = size; }
 	
@@ -90,14 +77,12 @@ public:
 	void setInTangentSize(int size);
 	void setOutTangentSize(int size);
 private:
-	ofPath current_;
+	ofPath *target_;
 	bool is_inverted_;
 	ofVec2f size_;
 	vector<Property<ofVec2f> > vertices_;
 	vector<Property<ofVec2f> > in_tangents_;
 	vector<Property<ofVec2f> > out_tangents_;
-private:
-	void prepare();
 };
 
 OFX_AE_NAMESPACE_END

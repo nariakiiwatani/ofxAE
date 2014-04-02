@@ -121,10 +121,10 @@
 		819336E518E5AF2F001F8829 /* ofxAEAVLayerCap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAEAVLayerCap.h; path = ../src/ofxAEAVLayerCap.h; sourceTree = "<group>"; };
 		8C8E8EE7174DF306158E710D /* ofxAECompositionCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAECompositionCap.h; path = ../../../addons/ofxAE/src/ofxAECompositionCap.h; sourceTree = SOURCE_ROOT; };
 		8F6AC5B8D416918909CF40C3 /* ofxMask.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxMask.h; path = ../../../addons/ofxMask/src/ofxMask.h; sourceTree = SOURCE_ROOT; };
-		955BC2F1684779596C85D6F2 /* ofxAELayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAELayer.h; path = ../../../addons/ofxAE/src/ofxAELayer.h; sourceTree = SOURCE_ROOT; };
+		955BC2F1684779596C85D6F2 /* ofxAELayer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAELayer.h; path = ../../../addons/ofxAE/src/ofxAELayer.h; sourceTree = SOURCE_ROOT; };
 		98169AEC4E990DBDF3275463 /* config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = config.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/config.h; sourceTree = SOURCE_ROOT; };
 		9F3F7569B6555C39E22E502D /* ofxAEImageCap.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEImageCap.h; path = ../../../addons/ofxAE/src/ofxAEImageCap.h; sourceTree = SOURCE_ROOT; };
-		9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAELayer.cpp; path = ../../../addons/ofxAE/src/ofxAELayer.cpp; sourceTree = SOURCE_ROOT; };
+		9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ofxAELayer.cpp; path = ../../../addons/ofxAE/src/ofxAELayer.cpp; sourceTree = SOURCE_ROOT; };
 		A806A37759F30B6278E5A20D /* Hierarchical.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Hierarchical.h; path = ../../../addons/ofxAE/libs/Hierarchical.h; sourceTree = SOURCE_ROOT; };
 		AA19C7B5EB9660087056E75A /* forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = forwards.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/forwards.h; sourceTree = SOURCE_ROOT; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
 		EFDDF1A86CE5C1107EFF3873 /* json_tool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = json_tool.h; path = ../../../addons/ofxJSON/libs/jsoncpp/src/json_tool.h; sourceTree = SOURCE_ROOT; };
 		F2B099E6BD1199664C48B177 /* ofxJSONElement.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxJSONElement.cpp; path = ../../../addons/ofxJSON/src/ofxJSONElement.cpp; sourceTree = SOURCE_ROOT; };
-		F945B6452DA51D23C0ACB3D5 /* ofxAEProperty.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxAEProperty.h; path = ../../../addons/ofxAE/src/ofxAEProperty.h; sourceTree = SOURCE_ROOT; };
+		F945B6452DA51D23C0ACB3D5 /* ofxAEProperty.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = ofxAEProperty.h; path = ../../../addons/ofxAE/src/ofxAEProperty.h; sourceTree = SOURCE_ROOT; };
 		FABE48D0429640317F9CB014 /* ofxAECameraLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAECameraLayer.cpp; path = ../../../addons/ofxAE/src/ofxAECameraLayer.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 

@@ -11,7 +11,6 @@ class CompositionCap : public AVCap
 {
 public:
 	CompositionCap(AVLayer *layer);
-	void setPropertyFrame(int frame);
 	Composition& getComposition() { return composition_; }
 	void update();
 	void draw(float alpha=1);

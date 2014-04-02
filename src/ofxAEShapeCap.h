@@ -24,6 +24,7 @@ class ShapeContent : public PropertyGroup
 {
 	friend class Loader;
 public:
+	ShapeContent(const string &name="content"):PropertyGroup(name){}
 	virtual void push(ofPath& path){};
 	virtual void pop(ofPath& path){};
 };
@@ -32,11 +33,18 @@ class ShapeContentGroup : public ShapeContent
 {
 	friend class Loader;
 public:
-	ShapeContentGroup();
+	ShapeContentGroup(const string &name="group"):ShapeContent(name){}
+
 	void push(ofPath& path);
 	void pop(ofPath& path);
 	
 	void addContent(ShapeContent *content);
+	
+	void addTransformProperty(TransformProperty *prop);
+	void addRotationZProperty(Property<float> *prop);
+	void addOpacityProperty(Property<float> *prop);
+	void addSkewProperty(Property<float> *prop);
+	void addSkewAxisProperty(Property<float> *prop);
 	
 	void setPosition(const ofVec2f& position);
 	void setRotation(float z);
@@ -47,115 +55,147 @@ public:
 	void setSkewAxis(float axis) { skew_axis_ = axis; }	// not supported
 private:
 	vector<ShapeContent*> content_;
-	TransformProperty transform_;
-	Property<float> rotation_z_;
-	Property<float> opacity_;
-	Property<float> skew_;
-	Property<float> skew_axis_;
+	TransformNode transform_;
+	float rotation_z_;
+	float opacity_;
+	float skew_;
+	float skew_axis_;
 private:
+	void rotationZPropCallback(const float &val);
 	void prepare();
 };
 class ShapeContentShape : public ShapeContent
 {
 	friend class Loader;
 public:
+	ShapeContentShape(const string &name="shape"):ShapeContent(name){}
 	void pop(ofPath& path);
 protected:
 	int command_count_;
 };
+
 class ShapeContentPath : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentPath();
+	ShapeContentPath(const string &name="path");
 	void push(ofPath& path);
-	PathProperty& getPath() { return path_; }
-	void setSize(const ofVec2f& size) { path_.setSize(size); }
+	void addPathProperty(PathProperty *prop);
 private:
-	PathProperty path_;
+	ofPath path_;
 };
 
 class ShapeContentEllipse : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentEllipse();
+	ShapeContentEllipse(const string &name="ellipse"):ShapeContentShape(name){}
 	void push(ofPath& path);
 	void setSize(const ofVec2f& size) { size_=size; }
 	void setPosition(const ofVec2f& pos) { pos_=pos; }
+	
+	void addSizeProperty(Property<ofVec2f> *prop);
+	void addPositionProperty(Property<ofVec2f> *prop);
 private:
-	Property<ofVec2f> size_;
-	Property<ofVec2f> pos_;
+	ofVec2f size_;
+	ofVec2f pos_;
 };
+
 class ShapeContentRect : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentRect();
+	ShapeContentRect(const string &name="rect"):ShapeContentShape(name){}
 	void push(ofPath& path);
 	void setSize(const ofVec2f& size) { size_=size; }
 	void setPosition(const ofVec2f& pos) { pos_=pos; }
 	void setRoundness(float roundness) { roundness_=roundness; }
+
+	void addSizeProperty(Property<ofVec2f> *prop);
+	void addPositionProperty(Property<ofVec2f> *prop);
+	void addRoundnessProperty(Property<float> *prop);
 private:
-	Property<ofVec2f> size_;
-	Property<ofVec2f> pos_;
-	Property<float> roundness_;
+	ofVec2f size_;
+	ofVec2f pos_;
+	float roundness_;
 };
+
 class ShapeContentPoly : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentPoly();
+	ShapeContentPoly(const string &name="poly");
 	void push(ofPath& path);
 	void setIsStar(bool star) { is_star_=star; }
-	void setCornerCount(int count) { corner_count_=count; }
+	void setCornerCount(float count) { corner_count_=count; }
 	void setPosition(const ofVec2f& pos) { pos_=pos; }
 	void setRotation(float rotation) { rotation_=rotation; }
 	void setOuterRadius(float radius) { outer_radius_=radius; }
 	void setOuterRoundness(float roundness) { outer_roundness_=roundness; }
 	void setInnerRadius(float radius) { inner_radius_=radius; }
 	void setInnerRoundness(float roundness) { inner_roundness_=roundness; }
+	
+	void addStarProperty(Property<bool> *prop);
+	void addCornerCountProperty(Property<float> *prop);
+	void addPositionProperty(Property<ofVec2f> *prop);
+	void addRotationProperty(Property<float> *prop);
+	void addOuterRadiusProperty(Property<float> *prop);
+	void addOuterRoundnessProperty(Property<float> *prop);
+	void addInnerRadiusProperty(Property<float> *prop);
+	void addInnerRoundnessProperty(Property<float> *prop);
+
 private:
 	bool is_star_;
-	Property<float> corner_count_;
-	Property<ofVec2f> pos_;
-	Property<float> rotation_;
-	Property<float> outer_radius_;
-	Property<float> outer_roundness_;
-	Property<float> inner_radius_;
-	Property<float> inner_roundness_;
+	float corner_count_;
+	ofVec2f pos_;
+	float rotation_;
+	float outer_radius_;
+	float outer_roundness_;
+	float inner_radius_;
+	float inner_roundness_;
 };
 class ShapeContentGraphic : public ShapeContent
 {
 	friend class Loader;
+public:
+	ShapeContentGraphic(const string &name="graphic"):ShapeContent(name){}
 protected:
 	ofBlendMode blend_mode_;
 };
+
 class ShapeContentStroke : public ShapeContentGraphic
 {
 	friend class Loader;
 public:
-	ShapeContentStroke();
+	ShapeContentStroke(const string &name="stroke"):ShapeContentGraphic(name){}
 	void pop(ofPath& path);
 	void setColor(const ofFloatColor& color) { color_=color; }
 	void setOpacity(float opacity) { opacity_=opacity; }
-	void setWidth(float width) { width_=width; }
+	void setStrokeWidth(float width) { stroke_width_=width; }
+
+	void addColorProperty(Property<ofFloatColor> *prop);
+	void addOpacityProperty(Property<float> *prop);
+	void addStrokeWidthProperty(Property<float> *prop);
 private:
-	Property<ofFloatColor> color_;
-	Property<float> opacity_;
-	Property<float> width_;
+	ofFloatColor color_;
+	float opacity_;
+	float stroke_width_;
 };
+
 class ShapeContentFill : public ShapeContentGraphic
 {
 	friend class Loader;
 public:
-	ShapeContentFill();
+	ShapeContentFill(const string &name="fill"):ShapeContentGraphic(name){}
 	void pop(ofPath& path);
 	void setColor(const ofFloatColor& color) { color_=color; }
 	void setOpacity(float opacity) { opacity_=opacity; }
+	
+	void addColorProperty(Property<ofFloatColor> *prop);
+	void addOpacityProperty(Property<float> *prop);
 private:
-	Property<ofFloatColor> color_;
-	Property<float> opacity_;
+	ofFloatColor color_;
+	float opacity_;
 };
 
 OFX_AE_NAMESPACE_END

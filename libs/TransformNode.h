@@ -38,6 +38,7 @@ public:
 	void setOrientation(float angle1, const ofVec3f& axis1,
 						float angle2, const ofVec3f& axis2,
 						float angle3, const ofVec3f& axis3);
+	void setOrientation(const ofVec3f& orientation);
 	void setRotation(const ofVec3f& rotation);
 	void setRotation(float x, float y, float z);
 	void setRotationX(float x);
@@ -81,11 +82,14 @@ public:
 	void addAnchorPointY(float y);
 	void addAnchorPointZ(float z);
 	
-	const ofVec3f& getAnchorPoint() { return anchor_point_; }
-
-	void refreshMatrix();
-	
+	ofVec3f& getTranslation() { return translation_; }
+	ofQuaternion& getOrientation() { return orientation_; }
+	ofVec3f& getScale() { return scale_; }
+	ofVec3f& getAnchorPoint() { return anchor_point_; }
+	ofVec3f& getRotation() { return rotation_; }
 	RotationOrder getRotationOrder() { return rotation_order_; }
+	
+	void refreshMatrix();
 private:
 	void calcLocalMatrix();
 	bool isLocalMatrixIdentity() const{return is_local_matrix_identity_;}

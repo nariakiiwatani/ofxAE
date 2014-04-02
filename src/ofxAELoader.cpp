@@ -36,10 +36,6 @@ Loader::~Loader()
 		delete allocated_.marker.front();
 		allocated_.marker.erase(allocated_.marker.begin());
 	}
-	while(!allocated_.mask.empty()) {
-		delete allocated_.mask.front();
-		allocated_.mask.erase(allocated_.mask.begin());
-	}
 	while(!allocated_.layer.empty()) {
 		delete allocated_.layer.front();
 		allocated_.layer.erase(allocated_.layer.begin());
@@ -204,9 +200,24 @@ void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 	layer.frame_in_ = json.get("inFrame", 0).asInt();
 	layer.frame_out_ = json.get("outFrame", 0).asInt();
 	const Json::Value& properties = json.get("property", Json::Value::null);
-	setupPropertyKeysJson(layer.active_, properties.get("active", Json::Value::null));
-	setupPropertyKeysJson(layer.opacity_, properties.get("Opacity", Json::Value::null), 0.01f);
-	setupPropertyKeysJson(layer.transform_, properties);
+	{
+		Property<bool> *prop = new Property<bool>("active");
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, properties.get("active", Json::Value::null));
+		layer.addActiveProperty(prop);
+	}
+	{
+		Property<float> *prop = new Property<float>("opacity");
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, properties.get("Opacity", Json::Value::null), 0.01f);
+		layer.addOpacityProperty(prop);
+	}
+	{
+		TransformProperty *prop = new TransformProperty();
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, properties);
+		layer.addTransformProperty(prop);
+	}
 	// Markers
 	const Json::Value& markers = json.get("marker", Json::Value::null);
 	if(markers.isArray()) {
@@ -237,7 +248,7 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 		for(int i = 0; i < mask_count; ++i) {
 			const Json::Value& mask = masks.get(i, Json::Value::null);
 			Mask *target = new Mask();
-			allocated_.mask.push_back(target);
+			allocated_.property.push_back(target);
 			setupMaskJson(*target, mask);
 			layer.addMask(target);
 		}
@@ -248,15 +259,25 @@ void Loader::setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, C
 {
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	setupLayerJson(layer, json);
-	setupPropertyKeysJson(layer.look_at_, properties.get("LookAt", Json::Value::null), ofVec3f(1,1,-1));
-	if(properties.isMember("Zoom")) {
-		const Json::Value& keys = properties.get("Zoom", Json::Value::null);
-		for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
-			const string& name = key.key().asString();
-			int key_frame = ofToInt(name);
-			float value = 2 * atan(comp.getHeight() / (2 * keys[name].asFloat())) * (180 / PI);
-			layer.fov_.addKey(key_frame, value);
+	{
+		Property<ofVec3f> *prop = new Property<ofVec3f>("look at");
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, properties.get("LookAt", Json::Value::null), ofVec3f(1,1,-1));
+		layer.addLookAtProperty(prop);
+	}
+	{
+		Property<float> *prop = new Property<float>("fov");
+		allocated_.property.push_back(prop);
+		if(properties.isMember("Zoom")) {
+			const Json::Value& keys = properties.get("Zoom", Json::Value::null);
+			for(Json::Value::iterator key = keys.begin(); key != keys.end(); ++key) {
+				const string& name = key.key().asString();
+				int key_frame = ofToInt(name);
+				float value = 2 * atan(comp.getHeight() / (2 * keys[name].asFloat())) * (180 / PI);
+				prop->addKey(key_frame, value);
+			}
 		}
+		layer.addFovProperty(prop);
 	}
 }
 void Loader::setupCompositionJson(CompositionCap *cap, const Json::Value& json)
@@ -265,7 +286,6 @@ void Loader::setupCompositionJson(CompositionCap *cap, const Json::Value& json)
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
 		loadComposition(cap->getComposition(), (source_dir.isNull()?"":source_dir.asString())+source.asString());
-		//		setupCompositionJson(layer.composition_, source);
 	}
 }
 void Loader::setupPlaneJson(PlaneCap *cap, const Json::Value& json)
@@ -323,8 +343,18 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		else if(type == "ellipse") {
 			ShapeContentEllipse *target = new ShapeContentEllipse();
 			allocated_.property.push_back(target);
-			setupPropertyKeysJson(target->pos_, content.get("Position", Json::Value::null));
-			setupPropertyKeysJson(target->size_, content.get("Size", Json::Value::null));
+			{
+				Property<ofVec2f> *prop = new Property<ofVec2f>("position");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Position", Json::Value::null));
+				target->addPositionProperty(prop);
+			}
+			{
+				Property<ofVec2f> *prop = new Property<ofVec2f>("size");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Size", Json::Value::null));
+				target->addSizeProperty(prop);
+			}
 			if(parent) {
 				parent->addContent(target);
 			}
@@ -336,9 +366,24 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		else if(type == "rect") {
 			ShapeContentRect *target = new ShapeContentRect();
 			allocated_.property.push_back(target);
-			setupPropertyKeysJson(target->pos_, content.get("Position", Json::Value::null));
-			setupPropertyKeysJson(target->size_, content.get("Size", Json::Value::null));
-			setupPropertyKeysJson(target->roundness_, content.get("Roundness", Json::Value::null));
+			{
+				Property<ofVec2f> *prop = new Property<ofVec2f>("position");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Position", Json::Value::null));
+				target->addPositionProperty(prop);
+			}
+			{
+				Property<ofVec2f> *prop = new Property<ofVec2f>("size");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Size", Json::Value::null));
+				target->addSizeProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("roundness");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Roundness", Json::Value::null));
+				target->addRoundnessProperty(prop);
+			}
 			if(parent) {
 				parent->addContent(target);
 			}
@@ -350,8 +395,13 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		else if(type == "path") {
 			ShapeContentPath *target = new ShapeContentPath();
 			allocated_.property.push_back(target);
-			target->setSize(cap->getSize());
-			setupPropertyKeysJson(target->getPath(), content.get("path", Json::Value::null));
+			{
+				PathProperty *prop = new PathProperty();
+				allocated_.property.push_back(prop);
+				prop->setSize(cap->getSize());
+				setupPropertyKeysJson(*prop, content.get("path", Json::Value::null));
+				target->addPathProperty(prop);
+			}
 			if(parent) {
 				parent->addContent(target);
 			}
@@ -363,9 +413,24 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		else if(type == "stroke") {
 			ShapeContentStroke *target = new ShapeContentStroke();
 			allocated_.property.push_back(target);
-			setupPropertyKeysJson(target->color_, content.get("Color", Json::Value::null));
-			setupPropertyKeysJson(target->opacity_, content.get("Opacity", Json::Value::null), 0.01f);
-			setupPropertyKeysJson(target->width_, content.get("StrokeWidth", Json::Value::null));
+			{
+				Property<ofFloatColor> *prop = new Property<ofFloatColor>("color");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Color", Json::Value::null));
+				target->addColorProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("opacity");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Opacity", Json::Value::null), 0.01f);
+				target->addOpacityProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("stroke width");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("StrokeWidth", Json::Value::null));
+				target->addStrokeWidthProperty(prop);
+			}
 			if(parent) {
 				parent->addContent(target);
 			}
@@ -377,8 +442,18 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		else if(type == "fill") {
 			ShapeContentFill *target = new ShapeContentFill();
 			allocated_.property.push_back(target);
-			setupPropertyKeysJson(target->color_, content.get("Color", Json::Value::null));
-			setupPropertyKeysJson(target->opacity_, content.get("Opacity", Json::Value::null), 0.01f);
+			{
+				Property<ofFloatColor> *prop = new Property<ofFloatColor>("color");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Color", Json::Value::null));
+				target->addColorProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("opacity");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Opacity", Json::Value::null), 0.01f);
+				target->addOpacityProperty(prop);
+			}
 			if(parent) {
 				parent->addContent(target);
 			}
@@ -388,13 +463,38 @@ void Loader::setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, 
 		}
 		// transform
 		else if(type == "transform") {
-			setupPropertyKeysJson(parent->transform_.translation_, content.get("Position", Json::Value::null));
-			setupPropertyKeysJson(parent->transform_.anchor_point_, content.get("AnchorPoint", Json::Value::null));
-			setupPropertyKeysJson(parent->transform_.scale_, content.get("Scale", Json::Value::null), ofVec3f(0.01f,0.01f,0), ofVec3f(0,0,1));
-			setupPropertyKeysJson(parent->rotation_z_, content.get("Rotation", Json::Value::null));
-			setupPropertyKeysJson(parent->opacity_, content.get("Opacity", Json::Value::null), 0.01f);
-			setupPropertyKeysJson(parent->skew_, content.get("Skew", Json::Value::null));
-			setupPropertyKeysJson(parent->skew_axis_, content.get("SkewAxis", Json::Value::null));
+			{
+				TransformProperty *prop  = new TransformProperty();
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(prop->translation_, content.get("Position", Json::Value::null));
+				setupPropertyKeysJson(prop->anchor_point_, content.get("AnchorPoint", Json::Value::null));
+				setupPropertyKeysJson(prop->scale_, content.get("Scale", Json::Value::null), ofVec3f(0.01f,0.01f,0), ofVec3f(0,0,1));
+				parent->addTransformProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("rotation");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Rotation", Json::Value::null));
+				parent->addRotationZProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("opacity");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Opacity", Json::Value::null), 0.01f);
+				parent->addOpacityProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("skew");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("Skew", Json::Value::null));
+				parent->addSkewProperty(prop);
+			}
+			{
+				Property<float> *prop = new Property<float>("skew axis");
+				allocated_.property.push_back(prop);
+				setupPropertyKeysJson(*prop, content.get("SkewAxis", Json::Value::null));
+				parent->addSkewAxisProperty(prop);
+			}
 		}
 	}
 }
@@ -413,8 +513,18 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
 	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_DISABLED; }
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ mask.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
-	setupPropertyKeysJson(mask.path_, json);
-	setupPropertyKeysJson(mask.opacity_, json.get("opacity", Json::Value::null), 0.01f);
+	{
+		PathProperty *prop = new PathProperty();
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, json);
+		mask.addPathProperty(prop);
+	}
+	{
+		Property<float> *prop = new Property<float>("opacity");
+		allocated_.property.push_back(prop);
+		setupPropertyKeysJson(*prop, json.get("opacity", Json::Value::null), 0.01f);
+		mask.addOpacityProperty(prop);
+	}
 }
 
 void Loader::setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json)

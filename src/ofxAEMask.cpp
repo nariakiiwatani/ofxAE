@@ -3,26 +3,37 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-Mask::Mask()
+Mask::Mask(const string &name)
+:PropertyGroup(name)
 {
-	ofPath& path = path_.get();
-	path.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
-	path.setColor(ofColor::white);
+	path_.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
+	path_.setColor(ofColor::white);
 }
 
 void Mask::draw()
 {
-	ofPath& path = path_.get();
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
-	path.setColor(ofColor(ofColor::white, opacity_*255));
-	path.draw();
+	path_.setColor(ofColor(ofColor::white, opacity_*255));
+	path_.draw();
 	ofPopStyle();
 }
 
 bool Mask::isSubtract()
 {
 	return blend_mode_==OF_BLENDMODE_SUBTRACT;
+}
+
+void Mask::addPathProperty(PathProperty *prop)
+{
+	prop->setTarget(&path_);
+	addProperty(prop);
+}
+
+void Mask::addOpacityProperty(Property<float> *prop)
+{
+	prop->setTarget(&opacity_);
+	addProperty(prop);
 }
 
 OFX_AE_NAMESPACE_END

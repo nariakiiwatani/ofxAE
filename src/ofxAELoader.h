@@ -13,6 +13,7 @@ class Layer;
 class AVLayer;
 class Mask;
 class CameraLayer;
+class ShapeContent;
 class ShapeContentGroup;
 
 class LayerCap;
@@ -62,7 +63,6 @@ private:
 		vector<LayerCap*> cap;
 		vector<PropertyBase*> property;
 		vector<Marker*> marker;
-		vector<Mask*> mask;
 	} allocated_;
 };
 
