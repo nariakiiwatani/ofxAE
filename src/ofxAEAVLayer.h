@@ -22,6 +22,9 @@ public:
 	bool isCollapse() { return is_collapse_; }
 	void addMask(Mask *mask);
 	ofBlendMode getBlendMode() { return blend_mode_; }
+	
+	bool isHit(float x, float y);
+	bool isHit(const ofVec3f &point);
 
 protected:
 	bool is_3d_;

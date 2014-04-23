@@ -25,6 +25,8 @@ public:
 	
 	const ofMatrix4x4* getWorldMatrix() const;
 	const ofMatrix4x4* getLocalMatrix() const;
+	const ofMatrix4x4* getWorldMatrixInversed() const;
+	const ofMatrix4x4* getLocalMatrixInversed() const;
 	
 	void setTranslation(const ofVec3f& trans);
 	void setTranslation(float x, float y, float z);
@@ -96,7 +98,7 @@ private:
 	bool isWorldMatrixIdentity() const{return is_world_matrix_identity_;}
 
 private:
-	const ofMatrix4x4* world_matrix_ptr_;
+	const ofMatrix4x4 *world_matrix_ptr_;
 	ofMatrix4x4 world_matrix_;
 	ofMatrix4x4 local_matrix_;
 	ofVec3f translation_;
@@ -108,6 +110,11 @@ private:
 
 	bool is_local_matrix_identity_;
 	bool is_world_matrix_identity_;
+
+	const ofMatrix4x4 *world_matrix_inversed_ptr_;
+	ofMatrix4x4 world_matrix_inversed_;
+	const ofMatrix4x4 *local_matrix_inversed_ptr_;
+	ofMatrix4x4 local_matrix_inversed_;
 };
 
 

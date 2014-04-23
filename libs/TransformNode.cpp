@@ -12,6 +12,10 @@ TransformNode::TransformNode()
 ,world_matrix_()
 ,local_matrix_()
 ,world_matrix_ptr_(&world_matrix_)
+,world_matrix_inversed_()
+,world_matrix_inversed_ptr_(&world_matrix_inversed_)
+,local_matrix_inversed_()
+,local_matrix_inversed_ptr_(&local_matrix_inversed_)
 ,is_local_matrix_identity_(true)
 ,is_world_matrix_identity_(true)
 {
@@ -22,6 +26,13 @@ void TransformNode::refreshMatrix()
 	if(isDirty(LOCAL)) {
 		calcLocalMatrix();
 		clsDirtyFlag(LOCAL);
+		if(isLocalMatrixIdentity()) {
+			local_matrix_inversed_ptr_ = &local_matrix_;
+		}
+		else {
+			local_matrix_inversed_.makeInvertOf(local_matrix_);
+			local_matrix_inversed_ptr_ = &local_matrix_inversed_;
+		}
 	}
 	if(TransformNode* parent = static_cast<TransformNode*>(getParent())) {
 		if(isDirty(PARENT)) {
@@ -46,6 +57,13 @@ void TransformNode::refreshMatrix()
 	else {
 		world_matrix_ptr_ = &local_matrix_;
 		is_world_matrix_identity_ = is_local_matrix_identity_;
+	}
+	if(isWorldMatrixIdentity()) {
+		world_matrix_inversed_ptr_ = world_matrix_ptr_;
+	}
+	else {
+		world_matrix_inversed_.makeInvertOf(*world_matrix_ptr_);
+		world_matrix_inversed_ptr_ = &world_matrix_inversed_;
 	}
 }
 
@@ -110,6 +128,16 @@ const ofMatrix4x4* TransformNode::getWorldMatrix() const
 const ofMatrix4x4* TransformNode::getLocalMatrix() const
 {
 	return &local_matrix_;
+}
+
+const ofMatrix4x4* TransformNode::getWorldMatrixInversed() const
+{
+	return world_matrix_inversed_ptr_;
+}
+
+const ofMatrix4x4* TransformNode::getLocalMatrixInversed() const
+{
+	return local_matrix_inversed_ptr_;
 }
 
 void TransformNode::setTranslation(const ofVec3f& trans)

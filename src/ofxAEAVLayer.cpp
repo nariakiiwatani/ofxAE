@@ -61,5 +61,17 @@ void AVLayer::addMask(Mask *mask)
 	addProperty(mask);
 }
 
+
+bool AVLayer::isHit(float x, float y)
+{
+	return isHit(ofVec3f(x,y));
+}
+
+bool AVLayer::isHit(const ofVec3f &point)
+{
+	ofVec3f inv = getNode().getWorldMatrixInversed()->preMult(point);
+	return 0 <= inv.x && inv.x < size_.x && 0 <= inv.y && inv.y < size_.y;
+}
+
 OFX_AE_NAMESPACE_END
 /* EOF */

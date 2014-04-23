@@ -1,11 +1,12 @@
 #include "ofApp.h"
 #include "ofxAEComposition.h"
+#include "ofxAEAVLayer.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	composition_ = loader_.loadComposition("3d_basic.json");
+	composition_ = loader_.loadComposition("marker_basic.json");
 	composition_->setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
@@ -18,6 +19,16 @@ void ofApp::update(){
 void ofApp::draw(){
 	ofBackground(0);
 	composition_->draw();
+	ofxAE::AVLayer *layer = composition_->getAVLayer(0);
+	float x = ofGetMouseX();
+	float y = ofGetMouseY();
+	if(layer && layer->isHit(x,y)) {
+		ofPushStyle();
+		ofSetColor(ofColor::red);
+		ofFill();
+		ofEllipse(x,y,10,10);
+		ofPopStyle();
+	}
 }
 
 //--------------------------------------------------------------
@@ -37,7 +48,6 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-
 }
 
 //--------------------------------------------------------------
