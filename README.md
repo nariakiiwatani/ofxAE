@@ -1,20 +1,20 @@
 # ofxAE
 by nariakiiwatani
 
-## Abstract
-This is a project to make an addon for porting Adobe AfterEffects' composition to openFrameworks realtime animation.  
-Currently so buggy, So I need community help. :)
+## 概要
+Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタイムアニメーションにエクスポートするofxaddonを作るプロジェクトです。  
+未完成なので、pull requestやissueをお待ちしてます！
 
-## Depends on...
+## 必要addon、ライブラリ等
 - [ofxMask](https://github.com/nariakiiwatani/ofxMask "ofxMask")
 - [ofxJSON](https://github.com/jefftimesten/ofxJSON "ofxJSON")
 
-## Usage...
-### Export composition data from AfterEffects
-1. Select composition(s) in project pane.
-2. execute tool/compExport.jsx (File-->Script-->Execute) and choose a folder to export data.
+## 使用法
+### AEから書き出し
+1. プロジェクトペインで書き出したいコンポジションを選択
+2. 「ファイル」-->スクリプト-->実行」でtool/compExport.jsxを選択し、データを保存するフォルダを選択
 
-### Load and play on OF
+### OFで再生
 ofApp.h  
 
 	ofxAE::Loader loader_;
@@ -38,16 +38,15 @@ ofApp.cpp
 		composition_->draw();
 	}
 
-## The goal is...
-1. Drive all features in AE on OF.  
-But of course it's impossible because AE is not for realtime animations.  
-So I want the exporter to be able to select enable/disable with some features.  
+## 目標
+1. AEの全機能をOFでサポート  
+とはいえAEはOFと違ってリアルタイムが前提でないので、マシンパワー的にも思想的にも完全なエンジンは作れないと思われるので  
+スクリプトからの書き出し時またはOFでのロード時に機能毎にenable/disableスイッチを設ける方向を考えています。  
 
-2. Provide interfaces to operate animations interactively.  
-This is why I decide to make this addon.  
-change image sources, motion loop, add realtime effects,,,  
+2. アニメーションをインタラクティブに操作するインターフェースを提供  
+このaddonを作ろうと思った動機で、これが最重要です。  
+画像の差し替え、インタラクティブなロケーター制御、リアルタイムエフェクトなどなど・・・  
 
-3. Write exporters for various animation softwares.  
-Though this addon is named AE, AE is not only way to make animations.  
-Other softwares will also work if it can export a json file in same format.  
-So it's important to keep independence between AE and OF.  
+3. AE以外のアニメーション作成ソフトをサポート  
+ofxAEと名づけてはいますが、同じフォーマットのjsonが書き出せれば他のソフトから書きだした情報でも当然使用できます。  
+当面AEにフォーカスして進めますが、AEとOFの独立性は保ちながらやっていきたいです。  
