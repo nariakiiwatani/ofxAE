@@ -2,7 +2,7 @@
 by nariakiiwatani
 
 ## 20140427ワークショップ用ブランチ
-[当日ドキュメント](http://piratepad.net/Ua9Uu4OOpd, "piratepad")
+[当日ドキュメント](http://piratepad.net/ofxAEWS20140427 "piratepad")
 
 ## 概要
 Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタイムアニメーションにエクスポートするofxaddonを作るプロジェクトです。  
