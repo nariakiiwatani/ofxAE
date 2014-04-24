@@ -5,7 +5,10 @@ DRAWMODE_TABLE : {
 	13: "add",
 	14: "subtract",
 
-	/**
+	20: "add",
+
+	4820: "add",
+
 	6012: "none",
 	6013: "add",
 	6014: "subtract",
@@ -14,12 +17,13 @@ DRAWMODE_TABLE : {
 	6213: "add",
 	6214: "subtract",
 //	6215: "cross",
-	/**/
 },
 
 getDrawMode : function(mode)
 {
-	return this.DRAWMODE_TABLE[mode%100]?this.DRAWMODE_TABLE[mode%100]:mode;
+	var a = this.DRAWMODE_TABLE[mode];
+	var b = this.DRAWMODE_TABLE[mode%100];
+	return a?a:(b?b:mode);
 },
 
 LayerType : {
