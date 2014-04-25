@@ -27,7 +27,7 @@ public:
 	const string& getName() { return name_; }
 	int getFrame() { return frame_; }
 
-	void setActive(bool active) { is_active_=active; }
+	void setActive(bool active);
 	void setOpacity(float opacity) { opacity_=opacity; }
 	void setTranslation(const ofVec3f& translation) { transform_.setTranslation(translation); }
 	void setRotation(const ofVec3f& rotation) { transform_.setRotation(rotation); }
@@ -54,6 +54,9 @@ protected:
 	int frame_offset_, frame_in_, frame_out_;
 	vector<Marker*> marker_;
 	vector<PropertyBase*> properties_;
+	
+private:
+	void setActiveCallback(const bool &active) { setActive(active); }
 };
 
 OFX_AE_NAMESPACE_END

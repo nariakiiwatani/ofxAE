@@ -20,6 +20,7 @@ class LayerCap;
 class PlaneCap;
 class ImageCap;
 class SequenceCap;
+class MovieCap;
 class ShapeCap;
 class CompositionCap;
 
@@ -44,6 +45,7 @@ private:
 	void setupPlaneJson(PlaneCap *cap, const Json::Value &json);
 	void setupImageJson(ImageCap *cap, const Json::Value &json);
 	void setupSequenceJson(SequenceCap *cap, const Json::Value &json);
+	void setupMovieJson(MovieCap *cap, const Json::Value &json);
 	void setupShapeJson(ShapeCap *cap, const Json::Value &json);
 	void setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, ShapeContentGroup *parent=NULL);
 

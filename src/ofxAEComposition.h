@@ -15,6 +15,7 @@ class Marker;
 class Composition {
 	friend class Loader;
 public:
+	Composition();
 	void allocate(int width, int height);
 	void setLength(int length);
 	void setLoopState(FrameCounter::LoopState loop);
@@ -29,11 +30,15 @@ public:
 	void resetFrame(int frame);
 	void setFrameByRatio(float ratio);
 	void resetFrameByRatio(float ratio);
+	void setFrameRate(float rate) { frame_rate_=rate; }
 	bool isEnd() { return frame_.isEnd(); }
 	float getWidth() { return width_; }
 	float getHeight() { return height_; }
 	int getLength() { return frame_default_.getLength(); }
 	int getFrame() { return frame_.getCurrent(); }
+	float getFrameRate() { return frame_rate_; }
+	void setEnableTimeUpdating(bool time_updating) { is_time_updating_=time_updating; }
+	float getSpeed() { return frame_.getSpeed(); }
 	
 	void addAVLayer(AVLayer *layer);
 	int getNumAVLayer();
@@ -86,6 +91,8 @@ private:
 	string name_;
 	float width_;
 	float height_;
+	int frame_rate_;
+	bool is_time_updating_;
 	vector<AVLayer*> av_;
 	vector<CameraLayer*> camera_;
 	vector<AVLayer*> active_layers_;

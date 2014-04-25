@@ -12,6 +12,7 @@
 #include "ofxAEPlaneCap.h"
 #include "ofxAEImageCap.h"
 #include "ofxAESequenceCap.h"
+#include "ofxAEMovieCap.h"
 #include "ofxAEShapeCap.h"
 
 OFX_AE_NAMESPACE_BEGIN
@@ -94,6 +95,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 	comp.name_ = json.get("name", "noname").asString();
 	comp.allocate(json.get("width", 1).asFloat(), json.get("height", 1).asFloat());
 	comp.setLength(json.get("length", 0).asInt());
+	comp.setFrameRate(json.get("frameRate", 0).asInt());
 	// Layers
 	const Json::Value& layers = json.get("layer", Json::Value::null);
 	if(layers.isArray()) {
@@ -141,6 +143,17 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 				ImageCap *cap = new ImageCap(ll);
 				allocated_.cap.push_back(cap);
 				setupImageJson(cap, layer);
+				comp.av_.push_back(ll);
+				l = ll;
+			}
+			else if(type_name == "movie") {
+				AVLayer *ll = new AVLayer();
+				allocated_.layer.push_back(ll);
+				setupAVLayerJson(*ll, layer);
+				MovieCap *cap = new MovieCap(ll);
+				allocated_.cap.push_back(cap);
+				setupMovieJson(cap, layer);
+				cap->setComposition(&comp);
 				comp.av_.push_back(ll);
 				l = ll;
 			}
@@ -301,6 +314,14 @@ void Loader::setupImageJson(ImageCap *cap, const Json::Value& json)
 	const Json::Value& source = json.get("source", Json::Value::null);
 	if(!source.isNull()) {
 		cap->loadImage(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
+	}
+}
+void Loader::setupMovieJson(MovieCap *cap, const Json::Value& json)
+{
+	const Json::Value& source_dir = json.get("sourceDirectory", Json::Value::null);
+	const Json::Value& source = json.get("source", Json::Value::null);
+	if(!source.isNull()) {
+		cap->loadMovie(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
 }
 void Loader::setupSequenceJson(SequenceCap *cap, const Json::Value& json)

@@ -1,4 +1,4 @@
-﻿#include "./exportUtil.jsxinc"
+#include "./exportUtil.jsxinc"
 #include "./exportKeys.jsxinc"
 #include "./getCompMarker.jsxinc"
 #include "./itemUtil.jsxinc"
@@ -78,6 +78,10 @@ function proc(comp)
 					copyItem(l.source, FOLDER.toString());
 				}
 				break;
+			case ExportUtil.LayerType.MOVIE:
+				obj.source = l.source.file.toString().replace(/.*\//,"");
+				copyItem(l.source, FOLDER.toString());
+				break;
 			case ExportUtil.LayerType.SEQUENCE:
 				obj.source = l.source.name;
 				copySequenceItem(l.source, FOLDER.toString());
@@ -106,6 +110,7 @@ function proc(comp)
 	json.name = name;
 	json.width = width;
 	json.height = height;
+	json.frameRate = frameRate;
 	json.length = duration*frameRate;
 	var markers = getCompMarker(comp);
 	if(markers && markers.numKeys > 0) {

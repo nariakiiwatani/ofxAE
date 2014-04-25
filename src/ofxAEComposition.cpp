@@ -6,6 +6,13 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
+Composition::Composition()
+:width_(0)
+,height_(0)
+,frame_rate_(ofGetTargetFrameRate())
+,is_time_updating_(false)
+{
+}
 void Composition::allocate(int width, int height)
 {
 	width_ = width;
@@ -42,7 +49,8 @@ bool Composition::isBackward()
 
 void Composition::update()
 {
-	int frame = frame_.update();
+	bool use_time = is_time_updating_||ofGetTargetFrameRate()==0;
+	int frame = frame_.update(use_time?ofGetLastFrameTime()*frame_rate_:frame_rate_/ofGetTargetFrameRate());
 
 	active_layers_.clear();
 	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {

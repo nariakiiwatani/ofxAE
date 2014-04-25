@@ -13,6 +13,7 @@ public:
 	virtual ~LayerCap();
 	virtual void update(){}
 	virtual void draw(float alpha=1){}
+	virtual void setActive(bool active){}
 protected:
 	Layer *layer_;
 };

@@ -1,4 +1,4 @@
-﻿ExportUtil = {
+ExportUtil = {
 
 DRAWMODE_TABLE : {
 	12: "none",
@@ -91,6 +91,7 @@ isAVLayer : function(layer)
 		case "composition":
 		case "image":
 		case "sequence":
+		case "movie":
 		case "solid":
 		case "text":
 		case "shape":

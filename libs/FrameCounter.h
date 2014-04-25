@@ -9,6 +9,7 @@ public:
 	};
 	FrameCounter();
 	int update();
+	int update(float elapsed_frame);
 	int getCurrent();
 	void setLoopState(LoopState state) { loop_ = state; }
 	void setRange(int from, int length) { from_ = from; length_ = length; }
@@ -18,11 +19,12 @@ public:
 	void resetFrame(int frame) { frame_ = frame; first_ = true; }
 	
 	bool isEnd();
-	bool isForward() { return !is_backward_; }
-	bool isBackward() { return is_backward_; }
+	bool isForward() { return is_backward_ == is_backward_internal_; }
+	bool isBackward() { return is_backward_ != is_backward_internal_; }
 	bool isStable() { return speed_ == 0; }
 	int getLength() { return length_; }
 	int getFrom() { return from_; }
+	float getSpeed() { return speed_; }
 
 private:
 	float frame_;
@@ -30,6 +32,7 @@ private:
 	int from_, length_;
 	LoopState loop_;
 	bool is_backward_;
+	bool is_backward_internal_;
 	float speed_;
 	bool first_;
 

@@ -44,6 +44,14 @@ void Layer::removeProperty(ofxAE::PropertyBase *prop)
 	ofLog(OF_LOG_WARNING, "tried removing unexiting property: %s", prop->getName().c_str());
 }
 
+void Layer::setActive(bool active)
+{
+	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
+		(*c)->setActive(active);
+	}
+	is_active_ = active;
+}
+
 void Layer::setParent(Layer *layer)
 {
 	parent_ = layer;
@@ -89,7 +97,8 @@ void Layer::addOpacityProperty(Property<float> *prop)
 }
 void Layer::addActiveProperty(Property<bool> *prop)
 {
-	prop->setTarget(&is_active_);
+	prop->setCallback(this, &Layer::setActiveCallback);
+//	prop->setTarget(&is_active_);
 	addProperty(prop);
 }
 void Layer::addTransformProperty(TransformProperty *prop)
