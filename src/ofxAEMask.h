@@ -14,8 +14,6 @@ public:
 	void prepare();
 	
 	bool isSubtract();
-	void setInverted(bool inverted) { is_inverted_=inverted; }
-	void setSize(const ofVec2f& size) { size_=size; }
 	float getOpacity() { return opacity_; }
 	
 	void addPathProperty(PathProperty *prop);
@@ -24,8 +22,6 @@ private:
 	string name_;
 	ofBlendMode blend_mode_;
 	ofPath path_;
-	bool is_inverted_;
-	ofVec2f size_;
 	float opacity_;
 };
 

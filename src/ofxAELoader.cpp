@@ -262,7 +262,7 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 			const Json::Value& mask = masks.get(i, Json::Value::null);
 			Mask *target = new Mask();
 			allocated_.property.push_back(target);
-			setupMaskJson(*target, mask);
+			setupMaskJson(*target, mask, ofVec2f(layer.getWidth(),layer.getHeight()));
 			layer.addMask(target);
 		}
 	}
@@ -526,10 +526,9 @@ void Loader::setupMarkerJson(Marker& marker, const Json::Value& json)
 	marker.length_ = json.get("length", 0).asInt();
 }
 
-void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
+void Loader::setupMaskJson(Mask& mask, const Json::Value& json, const ofVec2f &size)
 {
 	mask.name_ = json.get("name", "noname").asString();
-	mask.setInverted(json.get("inverted", false).asBool());
 	const string& blend_mode = json.get("mode", "none").asString();
 	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_DISABLED; }
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
@@ -538,6 +537,8 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json)
 		PathProperty *prop = new PathProperty();
 		allocated_.property.push_back(prop);
 		setupPropertyKeysJson(*prop, json);
+		prop->setSize(size);
+		prop->setInverted(json.get("inverted", false).asBool());
 		mask.addPathProperty(prop);
 	}
 	{

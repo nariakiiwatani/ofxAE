@@ -56,7 +56,6 @@ void AVLayer::addMask(Mask *mask)
 	if(mask_.empty()) {
 		ofx_mask_.setup(getWidth(), getHeight(), ofxMask::ALPHA);
 	}
-	mask->setSize(getSize());
 	mask_.push_back(mask);
 	addProperty(mask);
 }
