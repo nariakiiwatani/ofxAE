@@ -15,6 +15,7 @@
 		43AE25F87C805A1A63FFA9E6 /* ofxAESequenceCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C95D5BD8098654C56D470D1 /* ofxAESequenceCap.cpp */; };
 		4C70DE14ACB18576C3CF7486 /* ofxAEAVLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F3D0F0A1C196FDC386454 /* ofxAEAVLayer.cpp */; };
 		7CED9FCC5BF62C4915C8D09F /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 554E82F6BF0F134EC9BF40AA /* json_reader.cpp */; };
+		81138920190A937F00A493FD /* ofxAEMovieCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113891E190A937F00A493FD /* ofxAEMovieCap.cpp */; };
 		81285331C1D062F076D73E28 /* ofxAELayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FD2E3B2CF2B00EF1281116D /* ofxAELayer.cpp */; };
 		819336E318E51283001F8829 /* ofxAELayerCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819336E118E51283001F8829 /* ofxAELayerCap.cpp */; };
 		819336E618E5AF2F001F8829 /* ofxAEAVLayerCap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819336E418E5AF2F001F8829 /* ofxAEAVLayerCap.cpp */; };
@@ -114,6 +115,8 @@
 		7066ACC4945D5EB327C8D561 /* ofxAEImageCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEImageCap.cpp; path = ../../../addons/ofxAE/src/ofxAEImageCap.cpp; sourceTree = SOURCE_ROOT; };
 		7C0F3D0F0A1C196FDC386454 /* ofxAEAVLayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAEAVLayer.cpp; path = ../../../addons/ofxAE/src/ofxAEAVLayer.cpp; sourceTree = SOURCE_ROOT; };
 		7C95D5BD8098654C56D470D1 /* ofxAESequenceCap.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxAESequenceCap.cpp; path = ../../../addons/ofxAE/src/ofxAESequenceCap.cpp; sourceTree = SOURCE_ROOT; };
+		8113891E190A937F00A493FD /* ofxAEMovieCap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAEMovieCap.cpp; path = ../src/ofxAEMovieCap.cpp; sourceTree = "<group>"; };
+		8113891F190A937F00A493FD /* ofxAEMovieCap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAEMovieCap.h; path = ../src/ofxAEMovieCap.h; sourceTree = "<group>"; };
 		81459C23189095D600DE7A80 /* ofxAEDef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ofxAEDef.h; path = ../src/ofxAEDef.h; sourceTree = "<group>"; };
 		819336E118E51283001F8829 /* ofxAELayerCap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxAELayerCap.cpp; path = ../src/ofxAELayerCap.cpp; sourceTree = "<group>"; };
 		819336E218E51283001F8829 /* ofxAELayerCap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxAELayerCap.h; path = ../src/ofxAELayerCap.h; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 		9E882072BFC933B6B8EE3844 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8113891E190A937F00A493FD /* ofxAEMovieCap.cpp */,
+				8113891F190A937F00A493FD /* ofxAEMovieCap.h */,
 				35FBC58B51893123A89DAB1B /* ofxAELoader.cpp */,
 				68E7B73A056C5FF3A3AAF4BA /* ofxAELoader.h */,
 				7C0F3D0F0A1C196FDC386454 /* ofxAEAVLayer.cpp */,
@@ -515,6 +520,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				81138920190A937F00A493FD /* ofxAEMovieCap.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				35EDF414A36A6AAAB41EC500 /* ofxAELoader.cpp in Sources */,
 				819336E618E5AF2F001F8829 /* ofxAEAVLayerCap.cpp in Sources */,
