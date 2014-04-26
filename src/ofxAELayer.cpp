@@ -28,6 +28,14 @@ void Layer::removeCap(ofxAE::LayerCap *cap)
 	ofLog(OF_LOG_WARNING, "tried removing unexiting cap.");
 }
 
+LayerCap* Layer::getCap(int index)
+{
+	if(0 <= index && index < cap_.size()) {
+		return cap_[index];
+	}
+	return NULL;
+}
+
 void Layer::addProperty(ofxAE::PropertyBase *prop)
 {
 	properties_.push_back(prop);

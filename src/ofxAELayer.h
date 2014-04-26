@@ -20,6 +20,7 @@ public:
 	
 	void addCap(LayerCap *cap);
 	void removeCap(LayerCap *cap);
+	LayerCap* getCap(int index);
 	
 	bool isActive() { return is_active_; }
 	float getOpacity() { return opacity_; }
