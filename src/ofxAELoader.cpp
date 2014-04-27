@@ -251,7 +251,7 @@ void Loader::setupAVLayerJson(AVLayer& layer, const Json::Value& json)
 	layer.is_3d_ = json.get("is3d", false).asBool();
 	layer.is_collapse_ = json.get("isCollapse", false).asBool();
 	const string& blend_mode = json.get("blendingMode", "none").asString();
-	if(blend_mode == "none")		{ layer.blend_mode_ = OF_BLENDMODE_DISABLED; }
+	if(blend_mode == "none")		{ layer.blend_mode_ = OF_BLENDMODE_ALPHA; }
 	if(blend_mode == "add")			{ layer.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ layer.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 	setupLayerJson(layer, json);
@@ -530,7 +530,7 @@ void Loader::setupMaskJson(Mask& mask, const Json::Value& json, const ofVec2f &s
 {
 	mask.name_ = json.get("name", "noname").asString();
 	const string& blend_mode = json.get("mode", "none").asString();
-	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_DISABLED; }
+	if(blend_mode == "none")		{ mask.blend_mode_ = OF_BLENDMODE_ALPHA; }
 	if(blend_mode == "add")			{ mask.blend_mode_ = OF_BLENDMODE_ADD; }
 	if(blend_mode == "subtract")	{ mask.blend_mode_ = OF_BLENDMODE_SUBTRACT; }
 	{
