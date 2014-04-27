@@ -65,6 +65,7 @@ void ShapeContentGroup::pop(ofPath& path)
 void ShapeContentGroup::addContent(ShapeContent *content)
 {
 	content_.push_back(content);
+	addProperty(content);
 }
 void ShapeContentGroup::setPosition(const ofVec2f& position)
 {
