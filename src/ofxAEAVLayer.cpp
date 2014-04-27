@@ -37,15 +37,15 @@ void AVLayer::draw(float alpha)
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
-		for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
-			(*c)->draw(alpha*opacity_);
+		if(cap_) {
+			cap_->draw(alpha*opacity_);
 		}
 		ofx_mask_.end();
 		ofx_mask_.draw();
 	}
 	else {
-		for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
-			(*c)->draw(alpha*opacity_);
+		if(cap_) {
+			cap_->draw(alpha*opacity_);
 		}
 	}
 	getNode().popMatrix();

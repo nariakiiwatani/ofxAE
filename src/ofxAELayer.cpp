@@ -12,30 +12,6 @@ Layer::Layer()
 {
 }
 
-void Layer::addCap(ofxAE::LayerCap *cap)
-{
-	cap_.push_back(cap);
-}
-
-void Layer::removeCap(ofxAE::LayerCap *cap)
-{
-	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
-		if(*c == cap) {
-			cap_.erase(c);
-			return;
-		}
-	}
-	ofLog(OF_LOG_WARNING, "tried removing unexiting cap.");
-}
-
-LayerCap* Layer::getCap(int index)
-{
-	if(0 <= index && index < cap_.size()) {
-		return cap_[index];
-	}
-	return NULL;
-}
-
 void Layer::addProperty(ofxAE::PropertyBase *prop)
 {
 	properties_.push_back(prop);
@@ -54,8 +30,8 @@ void Layer::removeProperty(ofxAE::PropertyBase *prop)
 
 void Layer::setActive(bool active)
 {
-	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
-		(*c)->setActive(active);
+	if(cap_) {
+		cap_->setActive(active);
 	}
 	is_active_ = active;
 }
@@ -76,8 +52,8 @@ void Layer::update()
 	if(transform_.isDirty()) {
 		transform_.refreshMatrix();
 	}
-	for(vector<LayerCap*>::iterator c = cap_.begin(); c != cap_.end(); ++c) {
-		(*c)->update();
+	if(cap_) {
+		cap_->update();
 	}
 }
 	

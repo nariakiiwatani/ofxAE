@@ -8,12 +8,14 @@ OFX_AE_NAMESPACE_BEGIN
 LayerCap::LayerCap(Layer *layer)
 :layer_(layer)
 {
-	layer_->addCap(this);
+	layer_->setCap(this);
 }
 
 LayerCap::~LayerCap()
 {
-	layer_->removeCap(this);
+	if(this == layer_->getCap()) {
+		layer_->setCap(NULL);
+	}
 }
 
 OFX_AE_NAMESPACE_END

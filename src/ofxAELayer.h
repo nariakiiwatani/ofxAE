@@ -18,9 +18,8 @@ public:
 	void setParent(Layer *parent);
 	Layer* getParent() { return parent_; }
 	
-	void addCap(LayerCap *cap);
-	void removeCap(LayerCap *cap);
-	LayerCap* getCap(int index);
+	void setCap(LayerCap *cap) { cap_=cap; }
+	LayerCap* getCap() { return cap_; }
 	
 	bool isActive() { return is_active_; }
 	float getOpacity() { return opacity_; }
@@ -45,7 +44,7 @@ public:
 
 protected:
 	string name_;
-	vector<LayerCap*> cap_;
+	LayerCap *cap_;
 	int frame_;
 
 	Layer *parent_;
