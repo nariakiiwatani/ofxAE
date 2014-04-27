@@ -6,7 +6,7 @@
 void ofApp::setup(){
 	ofSetFrameRate(30);
 	ofEnableAlphaBlending();
-	composition_ = loader_.loadComposition("marker_basic.json");
+	composition_ = loader_.loadComposition("3d_nest.json");
 	composition_->setLoopState(FrameCounter::LOOP_ONEWAY);
 }
 
