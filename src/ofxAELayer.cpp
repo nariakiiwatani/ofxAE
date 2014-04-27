@@ -9,6 +9,7 @@ Layer::Layer()
 ,opacity_(1)
 ,parent_(NULL)
 ,frame_(0)
+,cap_(NULL)
 {
 }
 
