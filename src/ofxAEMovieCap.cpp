@@ -34,12 +34,12 @@ void MovieCap::update()
 		if(comp_->isBackward()) {
 			movie_.setSpeed(-comp_->getSpeed());
 			movie_position = movie_.getPosition()*movie_.getDuration();
-			app_position = movie_.getDuration()-layer_->getFrame()/frame_rate_;
+			app_position = movie_.getDuration()-layer_->getFrame()/comp_->getFrameRate();
 		}
 		else {
 			movie_.setSpeed(comp_->getSpeed());
 			movie_position = movie_.getPosition()*movie_.getDuration();
-			app_position = layer_->getFrame()/frame_rate_;
+			app_position = layer_->getFrame()/comp_->getFrameRate();
 		}
 		if(abs(app_position-movie_position) > abs(comp_->getSpeed())) {
 			movie_.setPosition(app_position/movie_.getDuration());
