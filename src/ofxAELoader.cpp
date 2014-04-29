@@ -323,6 +323,8 @@ void Loader::setupMovieJson(MovieCap *cap, const Json::Value& json)
 	if(!source.isNull()) {
 		cap->loadMovie(base_path_+(source_dir.isNull()?"":source_dir.asString())+source.asString());
 	}
+	bool use_audio = json.get("hasAudio", true).asBool() && json.get("audioActive", true).asBool();
+	cap->setUseAudio(use_audio);
 }
 void Loader::setupSequenceJson(SequenceCap *cap, const Json::Value& json)
 {

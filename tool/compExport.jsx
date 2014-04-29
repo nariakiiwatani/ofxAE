@@ -82,6 +82,8 @@ function proc(comp)
 			case ExportUtil.LayerType.MOVIE:
 				obj.source = source.file.toString().replace(/.*\//,"");
 				copyItem(source, FOLDER.toString());
+				obj.hasAudio = l.hasAudio;
+				obj.audioActive = l.audioActive;
 				break;
 			case ExportUtil.LayerType.SEQUENCE:
 				obj.source = source.name;

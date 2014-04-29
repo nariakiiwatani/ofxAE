@@ -10,6 +10,7 @@ MovieCap::MovieCap(AVLayer *layer)
 :AVCap(layer)
 ,frame_rate_(ofGetTargetFrameRate())
 ,comp_(NULL)
+,use_audio_(true)
 {
 }
 
@@ -22,9 +23,16 @@ void MovieCap::loadMovie(const string& filepath)
 
 void MovieCap::setActive(bool active)
 {
+	active = use_audio_&&active;
 	if(active != movie_.isPlaying()) {
 		active?movie_.play():movie_.stop();
 	}
+}
+
+void MovieCap::setUseAudio(bool use_audio)
+{
+	use_audio_ = use_audio;
+	setActive(layer_->isActive());
 }
 
 void MovieCap::update()
@@ -41,7 +49,7 @@ void MovieCap::update()
 			movie_position = movie_.getPosition()*movie_.getDuration();
 			app_position = layer_->getFrame()/comp_->getFrameRate();
 		}
-		if(abs(app_position-movie_position) > abs(comp_->getSpeed())) {
+		if(!use_audio_ || abs(app_position-movie_position) > abs(comp_->getSpeed())) {
 			movie_.setPosition(app_position/movie_.getDuration());
 		}
 	}
