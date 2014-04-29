@@ -12,6 +12,13 @@ MovieCap::MovieCap(AVLayer *layer)
 ,comp_(NULL)
 ,use_audio_(true)
 {
+	const string &lazy = layer_->getParam("lazy");
+	if(lazy == "") {
+		lazy_seconds_ = 1;
+	}
+	else {
+		lazy_seconds_ = ofToFloat(lazy);
+	}
 }
 
 void MovieCap::loadMovie(const string& filepath)
@@ -49,7 +56,7 @@ void MovieCap::update()
 			movie_position = movie_.getPosition()*movie_.getDuration();
 			app_position = layer_->getFrame()/comp_->getFrameRate();
 		}
-		if(!use_audio_ || abs(app_position-movie_position) > abs(comp_->getSpeed())) {
+		if(!use_audio_ || abs(app_position-movie_position) > abs(comp_->getSpeed()*lazy_seconds_)) {
 			movie_.setPosition(app_position/movie_.getDuration());
 		}
 	}

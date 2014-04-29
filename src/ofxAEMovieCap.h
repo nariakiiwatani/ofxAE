@@ -23,6 +23,7 @@ private:
 	Composition *comp_;
 	float frame_rate_;
 	bool use_audio_;
+	float lazy_seconds_;
 };
 
 OFX_AE_NAMESPACE_END
