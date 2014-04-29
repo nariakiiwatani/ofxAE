@@ -108,6 +108,9 @@ void Composition::setActiveMarker(Marker *marker, float speed)
 		else if(loop == "pingpong") {
 			frame_.setLoopState(FrameCounter::LOOP_PINGPONG);
 		}
+		else if(loop == "random") {
+			frame_.setLoopState(FrameCounter::LOOP_RANDOM);
+		}
 	}
 	active_marker_ = marker;
 	resetFrame(0);

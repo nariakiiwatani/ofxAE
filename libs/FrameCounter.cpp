@@ -77,6 +77,10 @@ int FrameCounter::calcInternalFrame(int input)
 				is_backward_internal_ = false;
 			}
 			break;
+		case LOOP_RANDOM:
+			frame = ofRandom(length_);
+			is_backward_internal_ = false;
+			break;
 	}
 	return frame;
 }

@@ -6,6 +6,7 @@ public:
 		LOOP_NONE,
 		LOOP_ONEWAY,
 		LOOP_PINGPONG,
+		LOOP_RANDOM,
 	};
 	FrameCounter();
 	int update();
