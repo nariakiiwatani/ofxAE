@@ -212,6 +212,7 @@ void Loader::setupLayerJson(Layer& layer, const Json::Value& json)
 	layer.frame_offset_ = json.get("frameOffset", 0).asInt();
 	layer.frame_in_ = json.get("inFrame", 0).asInt();
 	layer.frame_out_ = json.get("outFrame", 0).asInt();
+	layer.setParamByComment(json.get("comment", "").asString());
 	const Json::Value& properties = json.get("property", Json::Value::null);
 	{
 		Property<bool> *prop = new Property<bool>("active");

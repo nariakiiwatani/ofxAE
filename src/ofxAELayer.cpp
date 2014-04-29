@@ -57,7 +57,17 @@ void Layer::update()
 		cap_->update();
 	}
 }
-	
+
+void Layer::setParamByComment(const string &com)
+{
+	comment::extractParam(param_, com);
+}
+const string& Layer::getParam(const string& key)
+{
+	return comment::getParam(param_, key);
+}
+
+
 void Layer::setPropertyFrame(int frame)
 {
 	frame -= frame_offset_;

@@ -40,6 +40,7 @@ function proc(comp)
 		var obj = new Object();
 		obj.name = l.name;
 		obj.index = l.index;
+		obj.comment = l.comment;
 		if(l.parent) {
 			obj.parent = l.parent.index;
 		}

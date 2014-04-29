@@ -42,6 +42,8 @@ public:
 	void addProperty(PropertyBase *prop);
 	void removeProperty(PropertyBase *prop);
 
+	void setParamByComment(const string &comment);
+	const string& getParam(const string &key);
 protected:
 	string name_;
 	LayerCap *cap_;
@@ -54,6 +56,7 @@ protected:
 	int frame_offset_, frame_in_, frame_out_;
 	vector<Marker*> marker_;
 	vector<PropertyBase*> properties_;
+	std::map<string, string> param_;
 	
 private:
 	void setActiveCallback(const bool &active) { setActive(active); }
