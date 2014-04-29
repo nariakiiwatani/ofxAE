@@ -42,17 +42,17 @@ LayerType : {
 
 getLayerType : function(layer)
 {
-	if(layer.source) {
-		var s = layer.source;
-		if(s instanceof CompItem) {
-			return this.LayerType.COMPOSITION;
-		}
-		else if(s.mainSource instanceof FileSource) {
-			if(s.mainSource.isStill) {
+	if(!layer.source.useProxy && layer.source instanceof CompItem) {
+		return this.LayerType.COMPOSITION;
+	}
+	var s = layer.source.useProxy ? layer.source.proxySource : layer.source.mainSource;
+	if(s) {
+		if(s instanceof FileSource) {
+			if(s.isStill) {
 				return this.LayerType.IMAGE;
 			}
 			else  {
-				if(s.mainSource.conformFrameRate === s.mainSource.nativeFrameRate) {
+				if(s.conformFrameRate === s.nativeFrameRate) {
 					return this.LayerType.SEQUENCE;
 				}
 				else {
@@ -60,10 +60,10 @@ getLayerType : function(layer)
 				}
 			}
 		}
-		else if(s.mainSource instanceof SolidSource) {
+		else if(s instanceof SolidSource) {
 			return this.LayerType.SOLID;
 		}
-		else if(s.mainSource instanceof PlaceHolderSource) {
+		else if(s instanceof PlaceHolderSource) {
 			return this.LayerType.PLACEHOLDER;
 		}
 	}

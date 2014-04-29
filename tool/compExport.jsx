@@ -53,8 +53,9 @@ function proc(comp)
 			obj.blendingMode = ExportUtil.getDrawMode(l.blendingMode);
 		}
 		obj.layerType = ExportUtil.getLayerType(l);
-		if(l.source) {
-			obj.sourceDirectory = getItemFolder(l.source);
+		var source = l.source.useProxy ? l.source.proxySource : l.source.mainSource;
+		if(source) {
+			obj.sourceDirectory = getItemFolder(source);
 		}
 		// type specific
 		switch(obj.layerType) {
@@ -62,32 +63,32 @@ function proc(comp)
 				obj.source = l.source.name+'.json';
 				break;
 			case ExportUtil.LayerType.IMAGE:
-				if(l.source.file.toString().match(/\.(ai|psd)$/)) {
-					if(l.source.name.match(/\//)) {
-						var sp = l.source.name.split('/');
+				if(source.file.toString().match(/\.(ai|psd)$/)) {
+					if(source.name.match(/\//)) {
+						var sp = source.name.split('/');
 						obj.sourceDirectory += sp[1]+'/';
 						obj.source = (sp[0] + '.png').replace(/ /g,'-');
 					}
 					else {
-						obj.sourceDirectory += l.source.name+'/';
-						obj.source = l.source.name.replace(/\.(ai|psd)$/,"") + '.png';
+						obj.sourceDirectory += source.name+'/';
+						obj.source = source.name.replace(/\.(ai|psd)$/,"") + '.png';
 					}
 				}
 				else {
-					obj.source = l.source.file.toString().replace(/.*\//,"");
-					copyItem(l.source, FOLDER.toString());
+					obj.source = source.file.toString().replace(/.*\//,"");
+					copyItem(source, FOLDER.toString());
 				}
 				break;
 			case ExportUtil.LayerType.MOVIE:
-				obj.source = l.source.file.toString().replace(/.*\//,"");
-				copyItem(l.source, FOLDER.toString());
+				obj.source = source.file.toString().replace(/.*\//,"");
+				copyItem(source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SEQUENCE:
-				obj.source = l.source.name;
-				copySequenceItem(l.source, FOLDER.toString());
+				obj.source = source.name;
+				copySequenceItem(source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SOLID:
-				obj.color = l.source.mainSource.color;
+				obj.color = source.color;
 				break;
 			case ExportUtil.LayerType.CAMERA:
 				break;
@@ -139,7 +140,7 @@ function getCompArrayToProc(proj) {
 	}
 	var ret = [];
 	for(var i = 1; i <= proj.numItems; ++i) {
-		if(proj.item(i) instanceof CompItem && isSelected(proj.item(i), true)) {
+		if(!proj.item(i).useProxy && proj.item(i) instanceof CompItem && isSelected(proj.item(i), true)) {
 			ret.push(proj.item(i));
 		}
 	}
