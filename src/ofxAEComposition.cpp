@@ -100,18 +100,7 @@ void Composition::setActiveMarker(Marker *marker, float speed)
 	frame_.setSpeed(speed);
 	frame_.setRange(from, length);
 	frame_.setLoopState(FrameCounter::LOOP_NONE);
-	const string& loop = marker->getParam("loop");
-	if(loop != "") {
-		if(loop == "oneway") {
-			frame_.setLoopState(FrameCounter::LOOP_ONEWAY);
-		}
-		else if(loop == "pingpong") {
-			frame_.setLoopState(FrameCounter::LOOP_PINGPONG);
-		}
-		else if(loop == "random") {
-			frame_.setLoopState(FrameCounter::LOOP_RANDOM);
-		}
-	}
+	frame_.setLoopState(marker->getLoopState());
 	active_marker_ = marker;
 	resetFrame(0);
 }

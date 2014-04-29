@@ -25,6 +25,7 @@ static void extractParam(map<string,string>& dst, const string& src, size_t pos)
 		}
 	}
 }
+
 void Marker::setupByComment(const string& comment)
 {
 	size_t pos = comment.find(NEW_LINE);
@@ -34,6 +35,19 @@ void Marker::setupByComment(const string& comment)
 	}
 	name_ = comment.substr(0, pos);
 	extractParam(param_, comment, pos+NEW_LINE.length());
+	loop_ = FrameCounter::LOOP_NONE;
+	const string& loop = getParam("loop");
+	if(loop != "") {
+		if(loop == "oneway") {
+			loop_ = FrameCounter::LOOP_ONEWAY;
+		}
+		else if(loop == "pingpong") {
+			loop_ = FrameCounter::LOOP_PINGPONG;
+		}
+		else if(loop == "random") {
+			loop_ = FrameCounter::LOOP_RANDOM;
+		}
+	}
 }
 
 const string& Marker::getParam(const string& key)
