@@ -200,7 +200,7 @@ void Loader::setupCompositionJson(Composition& comp, const Json::Value& json)
 			Marker *m = new Marker();
 			allocated_.marker.push_back(m);
 			setupMarkerJson(*m, marker);
-			comp.marker_.push_back(m);
+			comp.addMarker(m);
 		}
 	}
 	comp.setFrame(0);

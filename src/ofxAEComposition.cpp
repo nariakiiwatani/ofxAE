@@ -76,21 +76,27 @@ void Composition::update()
 	if(active_camera_) {
 		active_camera_->prepare();
 	}
+	for(vector<MarkerWrapper>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
+		MarkerWrapper &m = *marker;
+		m.is_in_prev = m.is_in;
+		int from = m.ptr->getFrom();
+		int to = from + m.ptr->getLength()-1;
+		m.is_in = (m.ptr->getFrom() <= frame) && (frame <= from + m.ptr->getLength()-1);
+	}
 }
 
 void Composition::setActiveMarker(int index, float speed)
 {
-	if(0 <= index && index < marker_.size()) {
-		setActiveMarker(marker_[index], speed);
+	Marker *marker = getMarker(index);
+	if(marker) {
+		setActiveMarker(marker, speed);
 	}
 }
 void Composition::setActiveMarker(const string& name, float speed)
 {
-	for(vector<Marker*>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
-		if((*marker)->getName() == name) {
-			setActiveMarker(*marker, speed);
-			return;
-		}
+	Marker *marker = getMarker(name);
+	if(marker) {
+		setActiveMarker(marker, speed);
 	}
 }
 void Composition::setActiveMarker(Marker *marker, float speed)
@@ -119,50 +125,74 @@ void Composition::clearActiveMarker(bool reset_frame)
 
 bool Composition::isDuringMarker(int index)
 {
-	Marker *marker = getMarker(index);
-	return marker?isDuringMarker(marker):false;
+	if(0 <= index && index < marker_.size()) {
+		return marker_[index].is_in;
+	}
+	return false;
 }
 bool Composition::isDuringMarker(const string& name)
 {
-	Marker *marker = getMarker(name);
-	return marker?isDuringMarker(marker):false;
+	return isDuringMarker(getMarkerIndex(name));
 }
 bool Composition::isDuringMarker(Marker *marker)
 {
-	int frame = frame_.getCurrent();
-	int from = marker->getFrom();
-	int to = from + marker->getLength()-1;
-	return from <= frame && frame <= to;
+	return isDuringMarker(getMarkerIndex(marker));
 }
 
 bool Composition::isMarkerStartFrame(int index)
 {
-	Marker *marker = getMarker(index);
-	return marker?isMarkerStartFrame(marker):false;
+	return isMarkerBegin(index);
 }
 bool Composition::isMarkerStartFrame(const string& name)
 {
-	Marker *marker = getMarker(name);
-	return marker?isMarkerStartFrame(marker):false;
+	return isMarkerBegin(name);
 }
 bool Composition::isMarkerStartFrame(Marker *marker)
 {
-	return frame_.getCurrent() == marker->getFrom();
+	return isMarkerBegin(marker);
+}
+bool Composition::isMarkerBegin(int index)
+{
+	if(0 <= index && index < marker_.size()) {
+		return !marker_[index].is_in_prev && marker_[index].is_in;
+	}
+	return false;
+}
+bool Composition::isMarkerBegin(const string& name)
+{
+	return isMarkerBegin(getMarkerIndex(name));
+}
+bool Composition::isMarkerBegin(Marker *marker)
+{
+	return isMarkerBegin(getMarkerIndex(marker));
 }
 
 bool Composition::isMarkerEndFrame(int index)
 {
-	Marker *marker = getMarker(index);
-	return marker?isMarkerEndFrame(marker):false;
+	return isMarkerEnd(index);
 }
 bool Composition::isMarkerEndFrame(const string& name)
 {
-	Marker *marker = getMarker(name);
-	return marker?isMarkerEndFrame(marker):false;
+	return isMarkerEnd(name);
 }
 bool Composition::isMarkerEndFrame(Marker *marker)
 {
-	return frame_.getCurrent() == (marker->getFrom()+marker->getLength()-1);
+	return isMarkerEnd(marker);
+}
+bool Composition::isMarkerEnd(int index)
+{
+	if(0 <= index && index < marker_.size()) {
+		return marker_[index].is_in_prev && !marker_[index].is_in;
+	}
+	return false;
+}
+bool Composition::isMarkerEnd(const string& name)
+{
+	return isMarkerEnd(getMarkerIndex(name));
+}
+bool Composition::isMarkerEnd(Marker *marker)
+{
+	return isMarkerEnd(getMarkerIndex(marker));
 }
 
 bool Composition::isMarkerActive(int index)
@@ -224,18 +254,40 @@ void Composition::jumpToMarkerEndFrame(Marker *marker)
 Marker* Composition::getMarker(int index)
 {
 	if(0 <= index && index < marker_.size()) {
-		return marker_[index];
+		return marker_[index].ptr;
 	}
 	return NULL;
 }
 Marker* Composition::getMarker(const string& name)
 {
-	for(vector<Marker*>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
-		if((*marker)->getName() == name) {
-			return *marker;
+	return getMarker(getMarkerIndex(name));
+}
+
+int Composition::getMarkerIndex(const string &name)
+{
+	int size = marker_.size();
+	for(int i = 0; i < size; ++i) {
+		if(name == marker_[i].ptr->getName()) {
+			return i;
 		}
 	}
-	return NULL;
+	return -1;
+}
+
+int Composition::getMarkerIndex(Marker *marker)
+{
+	int size = marker_.size();
+	for(int i = 0; i < size; ++i) {
+		if(marker == marker_[i].ptr) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+void Composition::addMarker(Marker *marker)
+{
+	marker_.push_back(MarkerWrapper(marker));
 }
 
 void Composition::draw(float alpha)

@@ -63,13 +63,21 @@ public:
 	bool isDuringMarker(const string& name);
 	bool isDuringMarker(Marker *marker);
 	
-	bool isMarkerStartFrame(int index);
-	bool isMarkerStartFrame(const string& name);
-	bool isMarkerStartFrame(Marker *marker);
+	bool isMarkerStartFrame(int index);				// duplicated. use isMarkerBegin
+	bool isMarkerStartFrame(const string& name);	// duplicated. use isMarkerBegin
+	bool isMarkerStartFrame(Marker *marker);		// duplicated. use isMarkerBegin
 	
-	bool isMarkerEndFrame(int index);
-	bool isMarkerEndFrame(const string& name);
-	bool isMarkerEndFrame(Marker *marker);
+	bool isMarkerEndFrame(int index);				// duplicated. use isMarkerEnd
+	bool isMarkerEndFrame(const string& name);		// duplicated. use isMarkerEnd
+	bool isMarkerEndFrame(Marker *marker);			// duplicated. use isMarkerEnd
+
+	bool isMarkerBegin(int index);
+	bool isMarkerBegin(const string &name);
+	bool isMarkerBegin(Marker *marker);
+	
+	bool isMarkerEnd(int index);
+	bool isMarkerEnd(const string &name);
+	bool isMarkerEnd(Marker *marker);
 	
 	bool isMarkerActive(int index);
 	bool isMarkerActive(const string& name);
@@ -86,6 +94,10 @@ public:
 	
 	Marker* getMarker(int index);
 	Marker* getMarker(const string& name);
+	int getMarkerIndex(const string &name);
+	int getMarkerIndex(Marker *marker);
+	
+	void addMarker(Marker *marker);
 	
 private:
 	string name_;
@@ -97,7 +109,12 @@ private:
 	vector<CameraLayer*> camera_;
 	vector<AVLayer*> active_layers_;
 	CameraLayer *active_camera_;
-	vector<Marker*> marker_;
+	struct MarkerWrapper {
+		bool is_in, is_in_prev;
+		Marker *ptr;
+		MarkerWrapper(Marker *marker):is_in(false),is_in_prev(false),ptr(marker) {}
+	};
+	vector<MarkerWrapper> marker_;
 	Marker *active_marker_;
 	
 	FrameCounter frame_;
