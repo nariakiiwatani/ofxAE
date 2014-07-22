@@ -25,7 +25,7 @@ public:
 	void setSize(const ofVec2f &size) { rect_.width=size.x;rect_.height=size.y; }
 	void setRectangle(const ofRectangle &rect) { rect_=rect; }
 	void setBlendMode(ofBlendMode mode) { blend_mode_=mode; }
-	void setOpacity() { return opacity_; }
+	void setOpacity(float opacity) { opacity_=opacity; }
 	
 	bool isCollapseTransformation() { return is_collapse_; }
 	float getOffsetX() { return rect_.x; }
