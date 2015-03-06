@@ -55,24 +55,25 @@ function proc(comp)
 		}
 		obj.layerType = ExportUtil.getLayerType(l);
 		var source = l.source.useProxy ? l.source.proxySource : l.source.mainSource;
+		var source_name = l.source.name;
 		if(source) {
 			obj.sourceDirectory = getItemFolder(source);
 		}
 		// type specific
 		switch(obj.layerType) {
 			case ExportUtil.LayerType.COMPOSITION:
-				obj.source = l.source.name+'.json';
+				obj.source = source_name+'.json';
 				break;
 			case ExportUtil.LayerType.IMAGE:
 				if(source.file.toString().match(/\.(ai|psd)$/)) {
-					if(source.name.match(/\//)) {
-						var sp = source.name.split('/');
+					if(source_name.match(/\//)) {
+						var sp = source_name.split('/');
 						obj.sourceDirectory += sp[1]+'/';
 						obj.source = (sp[0] + '.png').replace(/ /g,'-');
 					}
 					else {
-						obj.sourceDirectory += source.name+'/';
-						obj.source = source.name.replace(/\.(ai|psd)$/,"") + '.png';
+						obj.sourceDirectory += source_name+'/';
+						obj.source = source_name.replace(/\.(ai|psd)$/,"") + '.png';
 					}
 				}
 				else {
@@ -87,7 +88,7 @@ function proc(comp)
 				obj.audioActive = l.audioActive;
 				break;
 			case ExportUtil.LayerType.SEQUENCE:
-				obj.source = source.name;
+				obj.source = source_name;
 				copySequenceItem(source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SOLID:

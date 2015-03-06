@@ -27,7 +27,7 @@ void CompositionCap::draw(float alpha)
 		ofPushStyle();
 		ofSetColor(ofColor::white, opacity_*alpha*255);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
 		fbo_.draw(0,0);
 		ofPopStyle();
 	}
