@@ -10,6 +10,7 @@ OFX_AE_NAMESPACE_BEGIN
 class Marker {
 	friend class Loader;
 public:
+	Marker();
 	void setupByComment(const string& com);
 	const string& getName() { return name_; }
 	int getFrom() { return from_; }

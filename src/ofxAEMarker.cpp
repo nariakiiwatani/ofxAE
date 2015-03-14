@@ -2,6 +2,13 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
+Marker::Marker()
+:name_("")
+,from_(0)
+,length_(1)
+,loop_(FrameCounter::LOOP_NONE)
+{}
+
 void Marker::setupByComment(const string& com)
 {
 	size_t pos = com.find(comment::NEW_LINE);
