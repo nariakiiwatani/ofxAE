@@ -56,8 +56,8 @@ function proc(comp)
 		obj.layerType = ExportUtil.getLayerType(l);
 		var source = l.source.useProxy ? l.source.proxySource : l.source.mainSource;
 		var source_name = l.source.name;
-		if(source) {
-			obj.sourceDirectory = getItemFolder(source);
+		if(l.source) {
+			obj.sourceDirectory = getItemFolder(l.source);
 		}
 		// type specific
 		switch(obj.layerType) {
@@ -78,7 +78,7 @@ function proc(comp)
 				}
 				else {
 					obj.source = source.file.toString().replace(/.*\//,"");
-					copyItem(source, FOLDER.toString());
+					copyItem(l.source, FOLDER.toString());
 				}
 				break;
 			case ExportUtil.LayerType.MOVIE:
@@ -89,7 +89,7 @@ function proc(comp)
 				break;
 			case ExportUtil.LayerType.SEQUENCE:
 				obj.source = source_name;
-				copySequenceItem(source, FOLDER.toString());
+				copySequenceItem(l.source, FOLDER.toString());
 				break;
 			case ExportUtil.LayerType.SOLID:
 				obj.color = source.color;
