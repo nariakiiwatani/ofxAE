@@ -26,7 +26,7 @@ void ofApp::draw(){
 		ofPushStyle();
 		ofSetColor(ofColor::red);
 		ofFill();
-		ofEllipse(x,y,10,10);
+		ofDrawEllipse(x,y,10,10);
 		ofPopStyle();
 	}
 }

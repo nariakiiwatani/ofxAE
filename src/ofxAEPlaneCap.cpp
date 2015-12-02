@@ -14,7 +14,7 @@ void PlaneCap::draw(float alpha)
 	ofPushStyle();
 	ofEnableBlendMode(blend_mode_);
 	ofSetColor(color_, opacity_*alpha*color_.a);
-	ofRect(rect_);
+	ofDrawRectangle(rect_);
 	ofPopStyle();
 }
 
