@@ -1,3 +1,3 @@
 ofxAE
-ofxJSON
+ofxJsonUtils
 ofxMask

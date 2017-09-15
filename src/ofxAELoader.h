@@ -2,8 +2,8 @@
 
 #include "ofxAEDef.h"
 #include "ofConstants.h"
-#include "json.h"
 #include "ofxAEProperty.h"
+#include "json_compatible.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
@@ -32,30 +32,29 @@ public:
 	Composition* loadComposition(const string& filepath);
 	Composition* getComposition(int index);
 	
-	void loadComposition(Composition& comp, const string& filepath);	// will be deleted on next update
 private:
-	void setupCompositionJson(Composition& comp, const Json::Value& json);
-	void setupLayerJson(Layer& layer, const Json::Value& json);
-	void setupMarkerJson(Marker& marker, const Json::Value& json);
-	void setupMaskJson(Mask& mask, const Json::Value& json, const ofVec2f &size);
-	void setupAVLayerJson(AVLayer& layer, const Json::Value& json);
-	void setupCameraLayerJson(CameraLayer& layer, const Json::Value& json, Composition& comp);
+	void setupCompositionJson(Composition& comp, const ofJson& json);
+	void setupLayerJson(Layer& layer, const ofJson& json);
+	void setupMarkerJson(Marker& marker, const ofJson& json);
+	void setupMaskJson(Mask& mask, const ofJson& json, const ofVec2f &size);
+	void setupAVLayerJson(AVLayer& layer, const ofJson& json);
+	void setupCameraLayerJson(CameraLayer& layer, const ofJson& json, Composition& comp);
 	
-	void setupCompositionJson(CompositionCap *cap, const Json::Value& json);
-	void setupPlaneJson(PlaneCap *cap, const Json::Value &json);
-	void setupImageJson(ImageCap *cap, const Json::Value &json);
-	void setupSequenceJson(SequenceCap *cap, const Json::Value &json);
-	void setupMovieJson(MovieCap *cap, const Json::Value &json);
-	void setupShapeJson(ShapeCap *cap, const Json::Value &json);
-	void setupShapeContentsJson(ShapeCap *cap, const Json::Value& contents, ShapeContentGroup *parent=NULL);
+	void setupCompositionJson(CompositionCap *cap, const ofJson& json);
+	void setupPlaneJson(PlaneCap *cap, const ofJson &json);
+	void setupImageJson(ImageCap *cap, const ofJson &json);
+	void setupSequenceJson(SequenceCap *cap, const ofJson &json);
+	void setupMovieJson(MovieCap *cap, const ofJson &json);
+	void setupShapeJson(ShapeCap *cap, const ofJson &json);
+	void setupShapeContentsJson(ShapeCap *cap, const ofJson& contents, ShapeContentGroup *parent=NULL);
 
-	void setupPropertyKeysJson(Property<bool>& prop, const Json::Value& json);
-	void setupPropertyKeysJson(Property<float>& prop, const Json::Value& json, float scale=1, float offset=0);
-	void setupPropertyKeysJson(Property<ofVec2f>& prop, const Json::Value& json, const ofVec2f& scale=ofVec2f(1,1), const ofVec2f& offset=ofVec2f(0,0));
-	void setupPropertyKeysJson(Property<ofVec3f>& prop, const Json::Value& json, const ofVec3f& scale=ofVec3f(1,1,1), const ofVec3f& offset=ofVec3f(0,0,0));
-	void setupPropertyKeysJson(Property<ofFloatColor>& prop, const Json::Value& json, const ofFloatColor& scale=ofFloatColor(1,1,1,1), const ofFloatColor& offset=ofFloatColor(0,0,0,0));
-	void setupPropertyKeysJson(TransformProperty& prop, const Json::Value& json);
-	void setupPropertyKeysJson(PathProperty& prop, const Json::Value& json);
+	void setupPropertyKeysJson(Property<bool>& prop, const ofJson& json);
+	void setupPropertyKeysJson(Property<float>& prop, const ofJson& json, float scale=1, float offset=0);
+	void setupPropertyKeysJson(Property<ofVec2f>& prop, const ofJson& json, const ofVec2f& scale=ofVec2f(1,1), const ofVec2f& offset=ofVec2f(0,0));
+	void setupPropertyKeysJson(Property<ofVec3f>& prop, const ofJson& json, const ofVec3f& scale=ofVec3f(1,1,1), const ofVec3f& offset=ofVec3f(0,0,0));
+	void setupPropertyKeysJson(Property<ofFloatColor>& prop, const ofJson& json, const ofFloatColor& scale=ofFloatColor(1,1,1,1), const ofFloatColor& offset=ofFloatColor(0,0,0,0));
+	void setupPropertyKeysJson(TransformProperty& prop, const ofJson& json);
+	void setupPropertyKeysJson(PathProperty& prop, const ofJson& json);
 private:
 	string base_path_;
 	static map<string,string> file_cache_;

@@ -7,7 +7,7 @@ Currently so buggy, So I need community help. :)
 
 ## Depends on...
 - [ofxMask](https://github.com/nariakiiwatani/ofxMask "ofxMask")
-- [ofxJSON](https://github.com/jefftimesten/ofxJSON "ofxJSON")
+- [ofxJsonUtils](https://github.com/2bbb/ofxJsonUtils "ofxJsonUtils")
 
 ## Usage...
 ### Export composition data from AfterEffects

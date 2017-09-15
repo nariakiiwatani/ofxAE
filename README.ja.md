@@ -7,7 +7,7 @@ Adobe AfterEffects(AE)のコンポジションをopenFrameworksのリアルタ�
 
 ## 必要addon、ライブラリ等
 - [ofxMask](https://github.com/nariakiiwatani/ofxMask "ofxMask")
-- [ofxJSON](https://github.com/jefftimesten/ofxJSON "ofxJSON")
+- [ofxJsonUtils](https://github.com/2bbb/ofxJsonUtils "ofxJsonUtils")
 
 ## 使用法
 ### AEから書き出し
