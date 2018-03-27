@@ -3,7 +3,7 @@
 #include "ofxAEDef.h"
 #include "ofConstants.h"
 #include "ofxAEProperty.h"
-#include "json_compatible.h"
+#include "ofJson_compatible.h"
 
 OFX_AE_NAMESPACE_BEGIN
 

@@ -54,7 +54,7 @@ void AVLayer::draw(float alpha)
 void AVLayer::addMask(Mask *mask)
 {
 	if(mask_.empty()) {
-		ofx_mask_.setup(getWidth(), getHeight(), ofxMask::ALPHA);
+		ofx_mask_.allocate(getWidth(), getHeight(), ofxMask::ALPHA);
 	}
 	mask_.push_back(mask);
 	addProperty(mask);
