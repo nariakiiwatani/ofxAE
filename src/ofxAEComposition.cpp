@@ -76,30 +76,31 @@ void Composition::update()
 	if(active_camera_) {
 		active_camera_->prepare();
 	}
-	for(vector<MarkerWrapper>::iterator marker = marker_.begin(); marker != marker_.end(); ++marker) {
-		MarkerWrapper &m = *marker;
-		m.is_in_prev = m.is_in;
-		int from = m.ptr->getFrom();
-		int to = from + m.ptr->getLength()-1;
-		m.is_in = (m.ptr->getFrom() <= frame) && (frame <= from + m.ptr->getLength()-1);
+	for(auto marker = marker_.begin(); marker != marker_.end(); ++marker) {
+		MarkerWork &w = marker->second;
+		std::shared_ptr<Marker> m = marker->first;
+		w.is_in_prev = w.is_in;
+		int from = m->getFrom();
+		int to = from + m->getLength()-1;
+		w.is_in = (m->getFrom() <= frame) && (frame <= from + m->getLength()-1);
 	}
 }
 
 void Composition::setActiveMarker(int index, float speed)
 {
-	Marker *marker = getMarker(index);
+	std::shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		setActiveMarker(marker, speed);
 	}
 }
 void Composition::setActiveMarker(const string& name, float speed)
 {
-	Marker *marker = getMarker(name);
+	std::shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		setActiveMarker(marker, speed);
 	}
 }
-void Composition::setActiveMarker(Marker *marker, float speed)
+void Composition::setActiveMarker(std::shared_ptr<Marker> marker, float speed)
 {
 	int from = marker->getFrom();
 	int length = max(marker->getLength(), 1);
@@ -120,13 +121,14 @@ void Composition::clearActiveMarker(bool reset_frame)
 		frame_ = frame_default_;
 		frame_.setFrame(current_frame);
 	}
-	active_marker_ = NULL;
+	active_marker_.reset();
 }
 
 bool Composition::isDuringMarker(int index)
 {
 	if(0 <= index && index < marker_.size()) {
-		return marker_[index].is_in;
+		auto &w = marker_[index].second;
+		return w.is_in;
 	}
 	return false;
 }
@@ -134,27 +136,16 @@ bool Composition::isDuringMarker(const string& name)
 {
 	return isDuringMarker(getMarkerIndex(name));
 }
-bool Composition::isDuringMarker(Marker *marker)
+bool Composition::isDuringMarker(std::shared_ptr<Marker> marker)
 {
 	return isDuringMarker(getMarkerIndex(marker));
 }
 
-bool Composition::isMarkerStartFrame(int index)
-{
-	return isMarkerBegin(index);
-}
-bool Composition::isMarkerStartFrame(const string& name)
-{
-	return isMarkerBegin(name);
-}
-bool Composition::isMarkerStartFrame(Marker *marker)
-{
-	return isMarkerBegin(marker);
-}
 bool Composition::isMarkerBegin(int index)
 {
 	if(0 <= index && index < marker_.size()) {
-		return !marker_[index].is_in_prev && marker_[index].is_in;
+		auto &w = marker_[index].second;
+		return !w.is_in_prev && w.is_in;
 	}
 	return false;
 }
@@ -162,27 +153,16 @@ bool Composition::isMarkerBegin(const string& name)
 {
 	return isMarkerBegin(getMarkerIndex(name));
 }
-bool Composition::isMarkerBegin(Marker *marker)
+bool Composition::isMarkerBegin(std::shared_ptr<Marker> marker)
 {
 	return isMarkerBegin(getMarkerIndex(marker));
 }
 
-bool Composition::isMarkerEndFrame(int index)
-{
-	return isMarkerEnd(index);
-}
-bool Composition::isMarkerEndFrame(const string& name)
-{
-	return isMarkerEnd(name);
-}
-bool Composition::isMarkerEndFrame(Marker *marker)
-{
-	return isMarkerEnd(marker);
-}
 bool Composition::isMarkerEnd(int index)
 {
 	if(0 <= index && index < marker_.size()) {
-		return marker_[index].is_in_prev && !marker_[index].is_in;
+		auto &w = marker_[index].second;
+		return w.is_in_prev && !w.is_in;
 	}
 	return false;
 }
@@ -190,41 +170,41 @@ bool Composition::isMarkerEnd(const string& name)
 {
 	return isMarkerEnd(getMarkerIndex(name));
 }
-bool Composition::isMarkerEnd(Marker *marker)
+bool Composition::isMarkerEnd(std::shared_ptr<Marker> marker)
 {
 	return isMarkerEnd(getMarkerIndex(marker));
 }
 
 bool Composition::isMarkerActive(int index)
 {
-	Marker *marker = getMarker(index);
+	std::shared_ptr<Marker> marker = getMarker(index);
 	return marker?isMarkerActive(marker):false;
 }
 bool Composition::isMarkerActive(const string& name)
 {
-	Marker *marker = getMarker(name);
+	std::shared_ptr<Marker> marker = getMarker(name);
 	return marker?isMarkerActive(marker):false;
 }
-bool Composition::isMarkerActive(Marker *marker)
+bool Composition::isMarkerActive(std::shared_ptr<Marker> marker)
 {
-	return active_marker_ == marker;
+	return active_marker_.lock() == marker;
 }
 
 void Composition::jumpToMarkerStartFrame(int index)
 {
-	Marker *marker = getMarker(index);
+	std::shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		jumpToMarkerStartFrame(marker);
 	}
 }
 void Composition::jumpToMarkerStartFrame(const string& name)
 {
-	Marker *marker = getMarker(name);
+	std::shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		jumpToMarkerStartFrame(marker);
 	}
 }
-void Composition::jumpToMarkerStartFrame(Marker *marker)
+void Composition::jumpToMarkerStartFrame(std::shared_ptr<Marker> marker)
 {
 	int jump_to = marker->getFrom() - frame_.getFrom();
 	frame_.resetFrame(jump_to);
@@ -232,33 +212,33 @@ void Composition::jumpToMarkerStartFrame(Marker *marker)
 
 void Composition::jumpToMarkerEndFrame(int index)
 {
-	Marker *marker = getMarker(index);
+	std::shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		jumpToMarkerEndFrame(marker);
 	}
 }
 void Composition::jumpToMarkerEndFrame(const string& name)
 {
-	Marker *marker = getMarker(name);
+	std::shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		jumpToMarkerEndFrame(marker);
 	}
 }
-void Composition::jumpToMarkerEndFrame(Marker *marker)
+void Composition::jumpToMarkerEndFrame(std::shared_ptr<Marker> marker)
 {
 	int jump_to = marker->getFrom()+marker->getLength() - frame_.getFrom();
 	frame_.resetFrame(jump_to);
 }
 
 
-Marker* Composition::getMarker(int index)
+std::shared_ptr<Marker>  Composition::getMarker(int index)
 {
 	if(0 <= index && index < marker_.size()) {
-		return marker_[index].ptr;
+		return marker_[index].first;
 	}
 	return NULL;
 }
-Marker* Composition::getMarker(const string& name)
+std::shared_ptr<Marker>  Composition::getMarker(const string& name)
 {
 	return getMarker(getMarkerIndex(name));
 }
@@ -267,27 +247,27 @@ int Composition::getMarkerIndex(const string &name)
 {
 	int size = marker_.size();
 	for(int i = 0; i < size; ++i) {
-		if(name == marker_[i].ptr->getName()) {
+		if(name == marker_[i].first->getName()) {
 			return i;
 		}
 	}
 	return -1;
 }
 
-int Composition::getMarkerIndex(Marker *marker)
+int Composition::getMarkerIndex(std::shared_ptr<Marker> marker)
 {
 	int size = marker_.size();
 	for(int i = 0; i < size; ++i) {
-		if(marker == marker_[i].ptr) {
+		if(marker == marker_[i].first) {
 			return i;
 		}
 	}
 	return -1;
 }
 
-void Composition::addMarker(Marker *marker)
+void Composition::addMarker(std::shared_ptr<Marker> marker)
 {
-	marker_.push_back(MarkerWrapper(marker));
+	marker_.push_back(std::make_pair(marker, MarkerWork()));
 }
 
 void Composition::draw(float alpha)

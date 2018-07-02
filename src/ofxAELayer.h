@@ -53,7 +53,7 @@ protected:
 	bool is_active_=true;
 	TransformNode transform_;
 	int frame_offset_, frame_in_, frame_out_;
-	vector<Marker*> marker_;
+	vector<std::shared_ptr<Marker>> marker_;
 	vector<PropertyBase*> properties_;
 	std::map<string, string> param_;
 	

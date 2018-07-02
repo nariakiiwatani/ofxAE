@@ -56,48 +56,40 @@ public:
 	
 	void setActiveMarker(int index, float speed=1);
 	void setActiveMarker(const string& name, float speed=1);
-	void setActiveMarker(Marker *marker, float speed=1);
+	void setActiveMarker(std::shared_ptr<Marker> marker, float speed=1);
 	void clearActiveMarker(bool reset_frame=false);
 	
 	bool isDuringMarker(int index);
 	bool isDuringMarker(const string& name);
-	bool isDuringMarker(Marker *marker);
+	bool isDuringMarker(std::shared_ptr<Marker> marker);
 	
-	bool isMarkerStartFrame(int index);				// duplicated. use isMarkerBegin
-	bool isMarkerStartFrame(const string& name);	// duplicated. use isMarkerBegin
-	bool isMarkerStartFrame(Marker *marker);		// duplicated. use isMarkerBegin
-	
-	bool isMarkerEndFrame(int index);				// duplicated. use isMarkerEnd
-	bool isMarkerEndFrame(const string& name);		// duplicated. use isMarkerEnd
-	bool isMarkerEndFrame(Marker *marker);			// duplicated. use isMarkerEnd
-
 	bool isMarkerBegin(int index);
 	bool isMarkerBegin(const string &name);
-	bool isMarkerBegin(Marker *marker);
+	bool isMarkerBegin(std::shared_ptr<Marker> marker);
 	
 	bool isMarkerEnd(int index);
 	bool isMarkerEnd(const string &name);
-	bool isMarkerEnd(Marker *marker);
+	bool isMarkerEnd(std::shared_ptr<Marker> marker);
 	
 	bool isMarkerActive(int index);
 	bool isMarkerActive(const string& name);
-	bool isMarkerActive(Marker *marker);
-	bool isSetActiveMarker() { return active_marker_!=NULL; }
+	bool isMarkerActive(std::shared_ptr<Marker> marker);
+	bool isSetActiveMarker() { return !active_marker_.expired(); }
 	
 	void jumpToMarkerStartFrame(int index);
 	void jumpToMarkerStartFrame(const string& name);
-	void jumpToMarkerStartFrame(Marker *marker);
+	void jumpToMarkerStartFrame(std::shared_ptr<Marker> marker);
 	
 	void jumpToMarkerEndFrame(int index);
 	void jumpToMarkerEndFrame(const string& name);
-	void jumpToMarkerEndFrame(Marker *marker);
+	void jumpToMarkerEndFrame(std::shared_ptr<Marker> marker);
 	
-	Marker* getMarker(int index);
-	Marker* getMarker(const string& name);
+	std::shared_ptr<Marker> getMarker(int index);
+	std::shared_ptr<Marker> getMarker(const string& name);
 	int getMarkerIndex(const string &name);
-	int getMarkerIndex(Marker *marker);
+	int getMarkerIndex(std::shared_ptr<Marker> marker);
 	
-	void addMarker(Marker *marker);
+	void addMarker(std::shared_ptr<Marker> marker);
 	
 private:
 	string name_;
@@ -109,13 +101,12 @@ private:
 	vector<std::shared_ptr<CameraLayer>> camera_;
 	vector<std::shared_ptr<AVLayer>> active_layers_;
 	std::shared_ptr<CameraLayer> active_camera_;
-	struct MarkerWrapper {
-		bool is_in, is_in_prev;
-		Marker *ptr;
-		MarkerWrapper(Marker *marker):is_in(false),is_in_prev(false),ptr(marker) {}
+	struct MarkerWork {
+		bool is_in=false, is_in_prev=false;
 	};
-	vector<MarkerWrapper> marker_;
-	Marker *active_marker_;
+	using Markers = std::vector<std::pair<std::shared_ptr<Marker>, MarkerWork>>;
+	Markers marker_;
+	std::weak_ptr<Marker> active_marker_;
 	
 	FrameCounter frame_;
 	FrameCounter frame_default_;

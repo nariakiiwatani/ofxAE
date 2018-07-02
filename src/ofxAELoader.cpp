@@ -151,7 +151,7 @@ void Loader::setupCompositionJson(Composition& comp, const ofJson& json)
 		int marker_count = markers->size();
 		for(int i = 0; i < marker_count; ++i) {
 			const ofJson& marker = (*markers)[i];
-			Marker *m = new Marker();
+			auto m = std::shared_ptr<Marker>(new Marker());
 			setupMarkerJson(*m, marker);
 			comp.addMarker(m);
 		}
@@ -188,7 +188,7 @@ void Loader::setupLayerJson(Layer& layer, const ofJson& json)
 		int marker_count = markers->size();
 		for(int i = 0; i < marker_count; ++i) {
 			const ofJson& marker = (*markers)[i];
-			Marker *m = new Marker();
+			auto m = std::shared_ptr<Marker>(new Marker());
 			setupMarkerJson(*m, marker);
 			layer.marker_.push_back(m);
 		}
