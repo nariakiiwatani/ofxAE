@@ -10,22 +10,6 @@ void Layer::setCap(std::shared_ptr<LayerCap> cap)
 	cap->setLayer(shared_from_this());
 }
 
-void Layer::addProperty(ofxAE::PropertyBase *prop)
-{
-	properties_.push_back(prop);
-}
-
-void Layer::removeProperty(ofxAE::PropertyBase *prop)
-{
-	for(vector<PropertyBase*>::iterator p = properties_.begin(); p != properties_.end(); ++p) {
-		if(prop == *p) {
-			properties_.erase(p);
-			return;
-		}
-	}
-	ofLog(OF_LOG_WARNING, "tried removing unexiting property: %s", prop->getName().c_str());
-}
-
 void Layer::setActive(bool active)
 {
 	if(cap_) {
@@ -69,11 +53,7 @@ void Layer::setPropertyFrame(int frame)
 {
 	frame -= frame_offset_;
 	if(frame_in_ <= frame && frame < frame_out_) {
-		for(vector<PropertyBase*>::iterator prop = properties_.begin(); prop != properties_.end(); ++prop) {
-			if((*prop)->isEnable()) {
-				(*prop)->setFrame(frame);
-			}
-		}
+		PropertyGroup::setFrame(frame);
 	}
 	else {
 		setActive(false);

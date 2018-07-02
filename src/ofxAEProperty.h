@@ -11,21 +11,19 @@ OFX_AE_NAMESPACE_BEGIN
 class PropertyBase
 {
 public:
-	PropertyBase(const string &name):name_(name),is_enable_(true){}
+	PropertyBase(){}
+	PropertyBase(const string &name):name_(name){}
 	virtual ~PropertyBase(){}
 	const string& getName() { return name_; }
 	virtual void setFrame(int frame)=0;
-	void setEnable(bool enable) { is_enable_=enable; }
-	bool isEnable() { return is_enable_; }
 protected:
-	string name_;
-	bool is_enable_;
+	string name_="";
 };
 template<typename Type>
 class Property : public PropertyBase
 {
 public:
-	Property(const string &name=""):PropertyBase(name),target_(NULL){}
+	using PropertyBase::PropertyBase;
 	void setTarget(Type *target) { target_=target; }
 	template<class ListenerClass>
 	void setCallback(ListenerClass *listener, void (ListenerClass::*listenerMethod)(const Type&)) { ofAddListener(event_, listener, listenerMethod); }
@@ -33,15 +31,15 @@ public:
 	void setFrame(int frame);
 	const Type& getValueAtFrame(int frame);
 private:
-	Type *target_;
+	Type *target_=nullptr;
 	ofEvent<const Type> event_;
 	std::map<int, Type> key_;
 };
 class PropertyGroup : public PropertyBase
 {
 public:
-	PropertyGroup(const string &name):PropertyBase(name){}
-	void setFrame(int frame);
+	using PropertyBase::PropertyBase;
+	virtual void setFrame(int frame);
 	void addProperty(PropertyBase *property);
 	void removeProperty(PropertyBase *property);
 protected:
@@ -64,7 +62,7 @@ class PathProperty : public PropertyGroup
 {
 	friend class Loader;
 public:
-	PathProperty(const string &name="path"):PropertyGroup(name),target_(NULL){}
+	PathProperty(const string &name="path"):PropertyGroup(name){}
 	void setTarget(ofPath *target) { target_=target; }
 	void setFrame(int frame);
 	void setInverted(bool inverted) { is_inverted_ = inverted; }
@@ -77,7 +75,7 @@ public:
 	void setInTangentSize(int size);
 	void setOutTangentSize(int size);
 private:
-	ofPath *target_;
+	ofPath *target_=nullptr;
 	bool is_inverted_;
 	ofVec2f size_;
 	vector<Property<ofVec2f> > vertices_;

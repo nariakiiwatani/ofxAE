@@ -9,7 +9,7 @@ OFX_AE_NAMESPACE_BEGIN
 class Marker;
 class LayerCap;
 
-class Layer : public std::enable_shared_from_this<Layer> {
+class Layer : public std::enable_shared_from_this<Layer>, public ofxAE::PropertyGroup {
 	friend class Loader;
 public:
 	void update();
@@ -38,9 +38,6 @@ public:
 	void addActiveProperty(Property<bool> *prop);
 	void addTransformProperty(TransformProperty *prop);
 	
-	void addProperty(PropertyBase *prop);
-	void removeProperty(PropertyBase *prop);
-
 	void setParamByComment(const string &comment);
 	const string& getParam(const string &key);
 protected:
@@ -54,7 +51,6 @@ protected:
 	TransformNode transform_;
 	int frame_offset_, frame_in_, frame_out_;
 	vector<std::shared_ptr<Marker>> marker_;
-	vector<PropertyBase*> properties_;
 	std::map<string, string> param_;
 	
 private:
