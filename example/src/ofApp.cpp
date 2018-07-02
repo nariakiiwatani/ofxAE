@@ -19,7 +19,7 @@ void ofApp::update(){
 void ofApp::draw(){
 	ofBackground(0);
 	composition_->draw();
-	ofxAE::AVLayer *layer = composition_->getAVLayer(0);
+	auto layer = composition_->getAVLayer(0);
 	float x = ofGetMouseX();
 	float y = ofGetMouseY();
 	if(layer && layer->isHit(x,y)) {

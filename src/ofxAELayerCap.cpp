@@ -5,17 +5,9 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-LayerCap::LayerCap(Layer *layer)
-:layer_(layer)
+void LayerCap::setLayer(std::shared_ptr<Layer> layer)
 {
-	layer_->setCap(this);
-}
-
-LayerCap::~LayerCap()
-{
-	if(this == layer_->getCap()) {
-		layer_->setCap(NULL);
-	}
+	layer_ = layer;
 }
 
 OFX_AE_NAMESPACE_END

@@ -4,11 +4,6 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-ImageCap::ImageCap(AVLayer *layer)
-:AVCap(layer)
-{
-}
-
 void ImageCap::loadImage(const string& filepath)
 {
 	ofLoadImage(texture_, filepath);

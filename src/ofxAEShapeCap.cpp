@@ -4,8 +4,7 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-ShapeCap::ShapeCap(AVLayer *layer)
-:AVCap(layer)
+ShapeCap::ShapeCap()
 {
 	path_.setMode(ofPath::COMMANDS);
 }
@@ -32,7 +31,9 @@ void ShapeCap::draw(float alpha)
 void ShapeCap::addContent(ShapeContent *content)
 {
 	content_.push_back(content);
-	layer_->addProperty(content);
+	if(auto layer = layer_.lock()) {
+		layer->addProperty(content);
+	}
 }
 
 /* =================== */

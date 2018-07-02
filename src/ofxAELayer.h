@@ -9,17 +9,16 @@ OFX_AE_NAMESPACE_BEGIN
 class Marker;
 class LayerCap;
 
-class Layer {
+class Layer : public std::enable_shared_from_this<Layer> {
 	friend class Loader;
 public:
-	Layer();
 	void update();
 	virtual void setPropertyFrame(int frame);
-	void setParent(Layer *parent);
-	Layer* getParent() { return parent_; }
+	void setParent(std::shared_ptr<Layer> parent);
+	std::shared_ptr<Layer> getParent() { return parent_.lock(); }
 	
-	void setCap(LayerCap *cap) { cap_=cap; }
-	LayerCap* getCap() { return cap_; }
+	void setCap(std::shared_ptr<LayerCap> cap);
+	std::shared_ptr<LayerCap> getCap() { return cap_; }
 	
 	bool isActive() { return is_active_; }
 	float getOpacity() { return opacity_; }
@@ -46,12 +45,12 @@ public:
 	const string& getParam(const string &key);
 protected:
 	string name_;
-	LayerCap *cap_;
-	int frame_;
+	std::weak_ptr<Layer> parent_;
+	std::shared_ptr<LayerCap> cap_;
+	int frame_=0;
 
-	Layer *parent_;
-	float opacity_;
-	bool is_active_;
+	float opacity_=1;
+	bool is_active_=true;
 	TransformNode transform_;
 	int frame_offset_, frame_in_, frame_out_;
 	vector<Marker*> marker_;

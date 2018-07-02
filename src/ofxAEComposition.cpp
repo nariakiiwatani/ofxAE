@@ -53,8 +53,8 @@ void Composition::update()
 	int frame = frame_.update(use_time?ofGetLastFrameTime()*frame_rate_:frame_rate_/ofGetTargetFrameRate());
 
 	active_layers_.clear();
-	for(vector<AVLayer*>::iterator layer = av_.begin(); layer != av_.end(); ++layer) {
-		AVLayer *l = *layer;
+	for(auto layer = av_.begin(); layer != av_.end(); ++layer) {
+		auto l = *layer;
 		l->setPropertyFrame(frame);
 		if(l->isActive()) {
 			l->update();
@@ -63,8 +63,8 @@ void Composition::update()
 	}
 
 	active_camera_ = NULL;
-	for(vector<CameraLayer*>::iterator camera = camera_.begin(); camera != camera_.end(); ++camera) {
-		CameraLayer *c = *camera;
+	for(auto camera = camera_.begin(); camera != camera_.end(); ++camera) {
+		auto c = *camera;
 		c->setPropertyFrame(frame);
 		if(c->isActive()) {
 			c->update();
@@ -297,9 +297,9 @@ void Composition::draw(float alpha)
 
 void Composition::draw(ofCamera *camera, float alpha)
 {
-	multimap<float,AVLayer*> work;
-	for(vector<AVLayer*>::iterator layer = active_layers_.begin(); layer != active_layers_.end(); ++layer) {
-		AVLayer *l = *layer;
+	multimap<float,std::shared_ptr<AVLayer>> work;
+	for(auto layer = active_layers_.begin(); layer != active_layers_.end(); ++layer) {
+		auto l = *layer;
 		if(l->getOpacity() == 0) {
 			continue;
 		}
@@ -309,14 +309,14 @@ void Composition::draw(ofCamera *camera, float alpha)
 				dist = camera->worldToCamera(dist);
 				dist.z = -dist.z;
 			}
-			work.insert(pair<float,AVLayer*>(dist.z, l));
+			work.insert(pair<float,std::shared_ptr<AVLayer>>(dist.z, l));
 		}
 		else {
 			if(!work.empty()) {
 				if(camera) {
 					camera->begin();
 				}
-				for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
+				for(auto w = work.begin(); w != work.end(); ++w) {
 					(*w).second->draw(alpha);
 				}
 				work.clear();
@@ -331,7 +331,7 @@ void Composition::draw(ofCamera *camera, float alpha)
 		if(camera) {
 			camera->begin();
 		}
-		for(multimap<float,AVLayer*>::iterator w = work.begin(); w != work.end(); ++w) {
+		for(auto w = work.begin(); w != work.end(); ++w) {
 			(*w).second->draw(alpha);
 		}
 		work.clear();
@@ -362,7 +362,7 @@ void Composition::resetFrameByRatio(float ratio)
 	resetFrame(ofMap(ratio, 0, 1, 0, frame_.getLength()-1));
 }
 
-void Composition::addAVLayer(AVLayer *layer)
+void Composition::addAVLayer(std::shared_ptr<AVLayer> layer)
 {
 	av_.push_back(layer);
 }
@@ -370,18 +370,18 @@ int Composition::getNumAVLayer()
 {
 	return av_.size();
 }
-vector<AVLayer*>& Composition::getAVLayers()
+vector<std::shared_ptr<AVLayer>>& Composition::getAVLayers()
 {
 	return av_;
 }
-AVLayer* Composition::getAVLayer(int index)
+std::shared_ptr<AVLayer> Composition::getAVLayer(int index)
 {
 	return av_[index];
 }
 
-AVLayer* Composition::getAVLayer(const string& name)
+std::shared_ptr<AVLayer> Composition::getAVLayer(const string& name)
 {
-	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
+	for(auto it = av_.begin(); it != av_.end(); ++it) {
 		if((*it)->getName() == name) {
 			return *it;
 		}
@@ -389,10 +389,10 @@ AVLayer* Composition::getAVLayer(const string& name)
 	return NULL;
 }
 
-vector<AVLayer*> Composition::getAVLayers(const string& name)
+vector<std::shared_ptr<AVLayer>> Composition::getAVLayers(const string& name)
 {
-	vector<AVLayer*> ret;
-	for(vector<AVLayer*>::iterator it = av_.begin(); it != av_.end(); ++it) {
+	vector<std::shared_ptr<AVLayer>> ret;
+	for(auto it = av_.begin(); it != av_.end(); ++it) {
 		if((*it)->getName() == name) {
 			ret.push_back(*it);
 		}
@@ -401,7 +401,7 @@ vector<AVLayer*> Composition::getAVLayers(const string& name)
 }
 
 
-void Composition::addCameraLayer(CameraLayer *layer)
+void Composition::addCameraLayer(std::shared_ptr<CameraLayer> layer)
 {
 	camera_.push_back(layer);
 }
@@ -409,18 +409,18 @@ int Composition::getNumCameraLayer()
 {
 	return camera_.size();
 }
-vector<CameraLayer*>& Composition::getCameraLayers()
+vector<std::shared_ptr<CameraLayer>>& Composition::getCameraLayers()
 {
 	return camera_;
 }
-CameraLayer* Composition::getCameraLayer(int index)
+std::shared_ptr<CameraLayer> Composition::getCameraLayer(int index)
 {
 	return camera_[index];
 }
 
-CameraLayer* Composition::getCameraLayer(const string& name)
+std::shared_ptr<CameraLayer> Composition::getCameraLayer(const string& name)
 {
-	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+	for(auto it = camera_.begin(); it != camera_.end(); ++it) {
 		if((*it)->getName() == name) {
 			return *it;
 		}
@@ -428,10 +428,10 @@ CameraLayer* Composition::getCameraLayer(const string& name)
 	return NULL;
 }
 
-vector<CameraLayer*> Composition::getCameraLayers(const string& name)
+vector<std::shared_ptr<CameraLayer>> Composition::getCameraLayers(const string& name)
 {
-	vector<CameraLayer*> ret;
-	for(vector<CameraLayer*>::iterator it = camera_.begin(); it != camera_.end(); ++it) {
+	vector<std::shared_ptr<CameraLayer>> ret;
+	for(auto it = camera_.begin(); it != camera_.end(); ++it) {
 		if((*it)->getName() == name) {
 			ret.push_back(*it);
 		}

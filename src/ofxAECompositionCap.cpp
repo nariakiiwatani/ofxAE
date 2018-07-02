@@ -4,15 +4,17 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-CompositionCap::CompositionCap(AVLayer *layer)
-:AVCap(layer)
+void CompositionCap::setLayer(std::shared_ptr<AVLayer> layer)
 {
+	AVCap::setLayer(layer);
 	fbo_.allocate(layer->getWidth(), layer->getHeight(), GL_RGBA);
 }
 
 void CompositionCap::update()
 {
-	composition_.setFrame(layer_->getFrame());
+	if(auto layer = layer_.lock()) {
+		composition_.setFrame(layer->getFrame());
+	}
 }
 void CompositionCap::draw(float alpha)
 {

@@ -24,5 +24,5 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 private:
 	ofxAE::Loader loader_;
-	ofxAE::Composition *composition_;
+	std::shared_ptr<ofxAE::Composition> composition_;
 };

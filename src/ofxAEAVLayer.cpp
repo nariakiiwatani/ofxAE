@@ -5,13 +5,6 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-AVLayer::AVLayer()
-:Layer()
-,is_3d_(false)
-,is_collapse_(false)
-{
-}
-
 void AVLayer::allocate(int width, int height)
 {
 	size_.set(width, height);

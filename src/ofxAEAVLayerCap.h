@@ -12,7 +12,8 @@ class AVLayer;
 class AVCap : public LayerCap
 {
 public:
-	AVCap(AVLayer *layer);
+	virtual void setLayer(std::shared_ptr<AVLayer> layer);
+	void setLayer(std::shared_ptr<Layer> layer);
 	
 	void setCollapseTansformation(bool collapse) { is_collapse_=collapse; }
 	void setOffsetX(float x) { rect_.x=x; }
@@ -41,7 +42,7 @@ protected:
 	bool is_collapse_;
 	ofRectangle rect_;
 	ofBlendMode blend_mode_;
-	float opacity_;
+	float opacity_=1;
 };
 
 OFX_AE_NAMESPACE_END

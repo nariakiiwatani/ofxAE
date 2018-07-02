@@ -11,7 +11,7 @@ class ShapeContent;
 class ShapeCap : public AVCap
 {
 public:
-	ShapeCap(AVLayer *layer);
+	ShapeCap();
 	void update();
 	void draw(float alpha=1);
 	void addContent(ShapeContent *content);

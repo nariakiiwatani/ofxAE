@@ -40,19 +40,19 @@ public:
 	void setEnableTimeUpdating(bool time_updating) { is_time_updating_=time_updating; }
 	float getSpeed() { return frame_.getSpeed(); }
 	
-	void addAVLayer(AVLayer *layer);
+	void addAVLayer(std::shared_ptr<AVLayer> layer);
 	int getNumAVLayer();
-	vector<AVLayer*>& getAVLayers();
-	AVLayer *getAVLayer(int index);
-	AVLayer *getAVLayer(const string& name);
-	vector<AVLayer*> getAVLayers(const string& name);
+	vector<std::shared_ptr<AVLayer>>& getAVLayers();
+	std::shared_ptr<AVLayer> getAVLayer(int index);
+	std::shared_ptr<AVLayer> getAVLayer(const string& name);
+	vector<std::shared_ptr<AVLayer>> getAVLayers(const string& name);
 	
-	void addCameraLayer(CameraLayer *layer);
+	void addCameraLayer(std::shared_ptr<CameraLayer> layer);
 	int getNumCameraLayer();
-	vector<CameraLayer*>& getCameraLayers();
-	CameraLayer *getCameraLayer(int index);
-	CameraLayer *getCameraLayer(const string& name);
-	vector<CameraLayer*> getCameraLayers(const string& name);
+	vector<std::shared_ptr<CameraLayer>>& getCameraLayers();
+	std::shared_ptr<CameraLayer> getCameraLayer(int index);
+	std::shared_ptr<CameraLayer> getCameraLayer(const string& name);
+	vector<std::shared_ptr<CameraLayer>> getCameraLayers(const string& name);
 	
 	void setActiveMarker(int index, float speed=1);
 	void setActiveMarker(const string& name, float speed=1);
@@ -105,10 +105,10 @@ private:
 	float height_;
 	int frame_rate_;
 	bool is_time_updating_;
-	vector<AVLayer*> av_;
-	vector<CameraLayer*> camera_;
-	vector<AVLayer*> active_layers_;
-	CameraLayer *active_camera_;
+	vector<std::shared_ptr<AVLayer>> av_;
+	vector<std::shared_ptr<CameraLayer>> camera_;
+	vector<std::shared_ptr<AVLayer>> active_layers_;
+	std::shared_ptr<CameraLayer> active_camera_;
 	struct MarkerWrapper {
 		bool is_in, is_in_prev;
 		Marker *ptr;

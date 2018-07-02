@@ -13,7 +13,7 @@ OFX_AE_NAMESPACE_BEGIN
 class SequenceCap : public ImageCap
 {
 public:
-	SequenceCap(AVLayer *layer);
+	SequenceCap();
 	~SequenceCap();
 	void setSequenceString(const string& str);
 	void update();
@@ -26,7 +26,7 @@ private:
 	int digit_;
 	int start_, end_;
 	string before_, after_;
-	int prev_frame_;
+	int prev_frame_=-1;
 };
 
 OFX_AE_NAMESPACE_END

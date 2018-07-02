@@ -3,12 +3,6 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-PlaneCap::PlaneCap(AVLayer *layer)
-:AVCap(layer)
-,color_(255)
-{
-}
-
 void PlaneCap::draw(float alpha)
 {
 	ofPushStyle();

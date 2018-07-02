@@ -4,10 +4,8 @@
 OFX_AE_NAMESPACE_BEGIN
 
 #ifdef TARGET_WIN32
-SequenceCap::SequenceCap(AVLayer *layer)
-:ImageCap(layer)
-,regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
-,prev_frame_(-1)
+SequenceCap::SequenceCap()
+:regex_("(.*)\\[([0-9]+)-([0-9]+)\\](.+)")
 {
 }
 SequenceCap::~SequenceCap()
@@ -34,9 +32,7 @@ void SequenceCap::setSequenceString(const string& str)
 	after_ = matches[4].str();
 }
 #else
-SequenceCap::SequenceCap(AVLayer *layer)
-:ImageCap(layer)
-,prev_frame_(-1)
+SequenceCap::SequenceCap()
 {
 	regcomp( &regex_, "(.*)\\[([0-9]+)-([0-9]+)](.+)", REG_EXTENDED );
 }
@@ -75,7 +71,8 @@ void SequenceCap::setSequenceString(const string& str)
 #endif
 void SequenceCap::update()
 {
-	int frame = layer_->getFrame();
+	auto layer = layer_.lock();
+	int frame = layer ? layer->getFrame() : prev_frame_+1;
 	if(prev_frame_ != frame && 0 <= frame && frame <= end_-start_) {
 		loadImage(before_+ofToString(min(start_+frame, end_), digit_, '0')+after_);
 		prev_frame_ = frame;

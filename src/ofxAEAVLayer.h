@@ -12,7 +12,6 @@ class Marker;
 class AVLayer : public Layer {
 	friend class Loader;
 public:
-	AVLayer();
 	void allocate(int width, int height);
 	void draw(float alpha=1);
 	float getWidth() { return size_.x; }
@@ -27,8 +26,8 @@ public:
 	bool isHit(const ofVec3f &point);
 
 protected:
-	bool is_3d_;
-	bool is_collapse_;
+	bool is_3d_=false;
+	bool is_collapse_=false;
 	ofBlendMode blend_mode_;
 	ofVec2f size_;
 	vector<Mask*> mask_;

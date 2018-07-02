@@ -4,13 +4,10 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-Layer::Layer()
-:is_active_(true)
-,opacity_(1)
-,parent_(NULL)
-,frame_(0)
-,cap_(NULL)
+void Layer::setCap(std::shared_ptr<LayerCap> cap)
 {
+	cap_ = cap;
+	cap->setLayer(shared_from_this());
 }
 
 void Layer::addProperty(ofxAE::PropertyBase *prop)
@@ -37,7 +34,7 @@ void Layer::setActive(bool active)
 	is_active_ = active;
 }
 
-void Layer::setParent(Layer *layer)
+void Layer::setParent(std::shared_ptr<Layer> layer)
 {
 	parent_ = layer;
 	if(layer) {
@@ -47,8 +44,8 @@ void Layer::setParent(Layer *layer)
 
 void Layer::update()
 {
-	if(parent_) {
-		parent_->update();
+	if(auto parent = parent_.lock()) {
+		parent->update();
 	}
 	if(transform_.isDirty()) {
 		transform_.refreshMatrix();

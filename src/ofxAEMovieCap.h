@@ -11,7 +11,8 @@ class Composition;
 class MovieCap : public AVCap
 {
 public:
-	MovieCap(AVLayer *layer);
+	MovieCap();
+	void setLayer(std::shared_ptr<AVLayer> layer);
 	void loadMovie(const string& filepath);
 	void setComposition(Composition *comp) { comp_=comp; }
 	void setActive(bool active);
@@ -22,8 +23,8 @@ private:
 	ofVideoPlayer movie_;
 	Composition *comp_;
 	float frame_rate_;
-	bool use_audio_;
-	float lazy_seconds_;
+	bool use_audio_=true;
+	float lazy_seconds_=1;
 };
 
 OFX_AE_NAMESPACE_END

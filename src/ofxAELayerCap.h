@@ -9,13 +9,12 @@ class Layer;
 class LayerCap
 {
 public:
-	LayerCap(Layer *layer);
-	virtual ~LayerCap();
+	virtual void setLayer(std::shared_ptr<Layer> layer);
 	virtual void update(){}
 	virtual void draw(float alpha=1){}
 	virtual void setActive(bool active){}
 protected:
-	Layer *layer_;
+	std::weak_ptr<Layer> layer_;
 };
 
 

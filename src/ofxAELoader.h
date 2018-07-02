@@ -3,6 +3,7 @@
 #include "ofxAEDef.h"
 #include "ofConstants.h"
 #include "ofxAEProperty.h"
+#include "ofParameter.h"
 #include "ofJson_compatible.h"
 
 OFX_AE_NAMESPACE_BEGIN
@@ -27,10 +28,8 @@ class CompositionCap;
 class Loader {
 public:
 	Loader(const string& base_path="");
-	~Loader();
 	void setBasePath(const string& base_path);
-	Composition* loadComposition(const string& filepath);
-	Composition* getComposition(int index);
+	std::shared_ptr<Composition> loadComposition(const string& filepath);
 	
 private:
 	void setupCompositionJson(Composition& comp, const ofJson& json);
@@ -40,13 +39,13 @@ private:
 	void setupAVLayerJson(AVLayer& layer, const ofJson& json);
 	void setupCameraLayerJson(CameraLayer& layer, const ofJson& json, Composition& comp);
 	
-	void setupCompositionJson(CompositionCap *cap, const ofJson& json);
-	void setupPlaneJson(PlaneCap *cap, const ofJson &json);
-	void setupImageJson(ImageCap *cap, const ofJson &json);
-	void setupSequenceJson(SequenceCap *cap, const ofJson &json);
-	void setupMovieJson(MovieCap *cap, const ofJson &json);
-	void setupShapeJson(ShapeCap *cap, const ofJson &json);
-	void setupShapeContentsJson(ShapeCap *cap, const ofJson& contents, ShapeContentGroup *parent=NULL);
+	void setupCompositionJson(CompositionCap &cap, const ofJson& json);
+	void setupPlaneJson(PlaneCap &cap, const ofJson &json);
+	void setupImageJson(ImageCap &cap, const ofJson &json);
+	void setupSequenceJson(SequenceCap &cap, const ofJson &json);
+	void setupMovieJson(MovieCap &cap, const ofJson &json);
+	void setupShapeJson(ShapeCap &cap, const ofJson &json);
+	void setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, ShapeContentGroup *parent=NULL);
 
 	void setupPropertyKeysJson(Property<bool>& prop, const ofJson& json);
 	void setupPropertyKeysJson(Property<float>& prop, const ofJson& json, float scale=1, float offset=0);
@@ -58,13 +57,6 @@ private:
 private:
 	string base_path_;
 	static map<string,string> file_cache_;
-	struct {
-		vector<Composition*> comp;
-		vector<Layer*> layer;
-		vector<LayerCap*> cap;
-		vector<PropertyBase*> property;
-		vector<Marker*> marker;
-	} allocated_;
 };
 
 OFX_AE_NAMESPACE_END

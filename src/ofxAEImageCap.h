@@ -9,7 +9,6 @@ OFX_AE_NAMESPACE_BEGIN
 class ImageCap : public AVCap
 {
 public:
-	ImageCap(AVLayer *layer);
 	void loadImage(const string& filepath);
 	void draw(float alpha=1);
 private:

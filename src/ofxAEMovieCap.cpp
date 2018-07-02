@@ -1,22 +1,21 @@
 #include "ofxAEMovieCap.h"
 #include "ofGraphics.h"
-#include "ofxAELayer.h"
+#include "ofxAEAVLayer.h"
 #include "ofAppRunner.h"
 #include "ofxAEComposition.h"
 
 OFX_AE_NAMESPACE_BEGIN
 
-MovieCap::MovieCap(AVLayer *layer)
-:AVCap(layer)
-,frame_rate_(ofGetTargetFrameRate())
-,comp_(NULL)
-,use_audio_(true)
+MovieCap::MovieCap()
+:frame_rate_(ofGetTargetFrameRate())
 {
-	const string &lazy = layer_->getParam("lazy");
-	if(lazy == "") {
-		lazy_seconds_ = 1;
-	}
-	else {
+}
+
+void MovieCap::setLayer(std::shared_ptr<AVLayer> layer)
+{
+	AVCap::setLayer(layer);
+	const string &lazy = layer->getParam("lazy");
+	if(lazy != "") {
 		lazy_seconds_ = ofToFloat(lazy);
 	}
 }
@@ -39,25 +38,29 @@ void MovieCap::setActive(bool active)
 void MovieCap::setUseAudio(bool use_audio)
 {
 	use_audio_ = use_audio;
-	setActive(layer_->isActive());
+	if(auto layer = layer_.lock()) {
+		setActive(layer->isActive());
+	}
 }
 
 void MovieCap::update()
 {
 	if(comp_) {
-		float movie_position, app_position;
 		if(comp_->isBackward()) {
 			movie_.setSpeed(-comp_->getSpeed());
-			movie_position = movie_.getPosition()*movie_.getDuration();
-			app_position = movie_.getDuration()-layer_->getFrame()/comp_->getFrameRate();
 		}
 		else {
 			movie_.setSpeed(comp_->getSpeed());
-			movie_position = movie_.getPosition()*movie_.getDuration();
-			app_position = layer_->getFrame()/comp_->getFrameRate();
 		}
-		if(!use_audio_ || abs(app_position-movie_position) > abs(comp_->getSpeed()*lazy_seconds_)) {
-			movie_.setPosition(app_position/movie_.getDuration());
+		if(auto layer = layer_.lock()) {
+			float movie_position = movie_.getPosition()*movie_.getDuration();
+			float app_position = layer->getFrame()/comp_->getFrameRate();
+			if(comp_->isBackward()) {
+				app_position = movie_.getDuration() - app_position;
+			}
+			if(!use_audio_ || abs(app_position-movie_position) > abs(comp_->getSpeed()*lazy_seconds_)) {
+				movie_.setPosition(app_position/movie_.getDuration());
+			}
 		}
 	}
 	movie_.update();
