@@ -265,6 +265,13 @@ int Composition::getMarkerIndex(shared_ptr<Marker> marker)
 	return -1;
 }
 
+shared_ptr<Marker> Composition::addMarker()
+{
+	auto marker = shared_ptr<Marker>(new Marker());
+	addMarker(marker);
+	return marker;
+}
+
 void Composition::addMarker(shared_ptr<Marker> marker)
 {
 	marker_.push_back(make_pair(marker, MarkerWork()));

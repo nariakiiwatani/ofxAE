@@ -152,10 +152,7 @@ void Loader::setupCompositionJson(Composition& comp, const ofJson& json)
 	if(markers != end(json) && markers->is_array()) {
 		int marker_count = markers->size();
 		for(int i = 0; i < marker_count; ++i) {
-			const ofJson& marker = (*markers)[i];
-			auto m = shared_ptr<Marker>(new Marker());
-			setupMarkerJson(*m, marker);
-			comp.addMarker(m);
+			setupMarkerJson(*comp.addMarker(), (*markers)[i]);
 		}
 	}
 	comp.setFrame(0);
