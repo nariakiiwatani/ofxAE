@@ -31,7 +31,7 @@ void Loader::setBasePath(const string &base_path)
 }
 shared_ptr<Composition> Loader::loadComposition(const string& filepath)
 {
-	shared_ptr<Composition> comp = shared_ptr<Composition>(new Composition());
+	shared_ptr<Composition> comp = make_shared<Composition>();
 	string ext = ofFilePath::getFileExt(filepath);
 	if(ext == "json") {
 		if(file_cache_.find(base_path_+filepath) == end(file_cache_)) {
@@ -66,45 +66,45 @@ void Loader::setupCompositionJson(Composition& comp, const ofJson& json)
 			shared_ptr<Layer> l = nullptr;
 			shared_ptr<LayerCap> c = nullptr;
 			if(type_name == "composition") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<CompositionCap>(new CompositionCap());
+				auto cap = make_shared<CompositionCap>();
 				setupCompositionJson(*cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 				c = cap;
 			}
 			else if(type_name == "solid") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<PlaneCap>(new PlaneCap());
+				auto cap = make_shared<PlaneCap>();
 				setupPlaneJson(*cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 				c = cap;
 			}
 			else if(type_name == "sequence") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<SequenceCap>(new SequenceCap());
+				auto cap = make_shared<SequenceCap>();
 				setupSequenceJson(*cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 				c = cap;
 			}
 			else if(type_name == "image") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<ImageCap>(new ImageCap());
+				auto cap = make_shared<ImageCap>();
 				setupImageJson(*cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
 				c = cap;
 			}
 			else if(type_name == "movie") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<MovieCap>(new MovieCap());
+				auto cap = make_shared<MovieCap>();
 				setupMovieJson(*cap, layer);
 				cap->setComposition(&comp);
 				comp.av_.push_back(ll);
@@ -112,15 +112,15 @@ void Loader::setupCompositionJson(Composition& comp, const ofJson& json)
 				c = cap;
 			}
 			else if(type_name == "camera") {
-				auto ll = shared_ptr<CameraLayer>(new CameraLayer());
+				auto ll = make_shared<CameraLayer>();
 				setupCameraLayerJson(*ll, layer, comp);
 				comp.camera_.push_back(ll);
 				l = ll;
 			}
 			else if(type_name == "shape") {
-				auto ll = shared_ptr<AVLayer>(new AVLayer());
+				auto ll = make_shared<AVLayer>();
 				setupAVLayerJson(*ll, layer);
-				auto cap = shared_ptr<ShapeCap>(new ShapeCap());
+				auto cap = make_shared<ShapeCap>();
 				setupShapeJson(*cap, layer);
 				comp.av_.push_back(ll);
 				l = ll;
@@ -273,7 +273,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 		const ofJson& content = contents[i];
 		const string& type = content.value("type", "");
 		if(type == "group") {
-			auto target = shared_ptr<ShapeContentGroup>(new ShapeContentGroup());
+			auto target = make_shared<ShapeContentGroup>();
 			auto content = contents.find("contents");
 			if(content != end(contents)) {
 				setupShapeContentsJson(cap, *content, target);
@@ -286,7 +286,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 			}
 		}
 		else if(type == "ellipse") {
-			auto target = shared_ptr<ShapeContentEllipse>(new ShapeContentEllipse());
+			auto target = make_shared<ShapeContentEllipse>();
 			setupPropertyKeysJson(*target->getPositionProperty(), content["Position"]);
 			setupPropertyKeysJson(*target->getSizeProperty(), content["Size"]);
 			if(parent) {
@@ -297,7 +297,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 			}
 		}
 		else if(type == "rect") {
-			auto target = shared_ptr<ShapeContentRect>(new ShapeContentRect());
+			auto target = make_shared<ShapeContentRect>();
 			setupPropertyKeysJson(*target->getPositionProperty(), content["Position"]);
 			setupPropertyKeysJson(*target->getSizeProperty(), content["Size"]);
 			setupPropertyKeysJson(*target->getRoundnessProperty(), content["Roundness"]);
@@ -309,7 +309,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 			}
 		}
 		else if(type == "path") {
-			auto target = shared_ptr<ShapeContentPath>(new ShapeContentPath());
+			auto target = make_shared<ShapeContentPath>();
 			{
 				auto prop = target->getPathProperty();
 				prop->setSize(cap.getSize());
@@ -323,7 +323,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 			}
 		}
 		else if(type == "stroke") {
-			auto target = shared_ptr<ShapeContentStroke>(new ShapeContentStroke());
+			auto target = make_shared<ShapeContentStroke>();
 			setupPropertyKeysJson(*target->getColorProperty(), content["Color"]);
 			setupPropertyKeysJson(*target->getOpacityProperty(), content["Opacity"], 0.01f);
 			setupPropertyKeysJson(*target->getStrokeWidthProperty(), content["StrokeWidth"]);
@@ -335,7 +335,7 @@ void Loader::setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, share
 			}
 		}
 		else if(type == "fill") {
-			auto target = shared_ptr<ShapeContentFill>(new ShapeContentFill());
+			auto target = make_shared<ShapeContentFill>();
 			setupPropertyKeysJson(*target->getColorProperty(), content["Color"]);
 			setupPropertyKeysJson(*target->getOpacityProperty(), content["Opacity"], 0.01f);
 			if(parent) {

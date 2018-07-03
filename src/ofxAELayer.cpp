@@ -43,7 +43,7 @@ void Layer::setParent(shared_ptr<Layer> layer)
 
 shared_ptr<Marker> Layer::addNewMarker()
 {
-	auto marker = shared_ptr<Marker>(new Marker());
+	auto marker = make_shared<Marker>();
 	addMarker(marker);
 	return marker;
 }

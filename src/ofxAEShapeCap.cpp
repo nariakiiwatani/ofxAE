@@ -11,7 +11,7 @@ OFX_AE_NAMESPACE_BEGIN
 ShapeCap::ShapeCap()
 {
 	path_.setMode(ofPath::COMMANDS);
-	shape_prop_ = shared_ptr<PropertyGroup>(new PropertyGroup());
+	shape_prop_ = make_shared<PropertyGroup>();
 }
 
 void ShapeCap::setLayer(shared_ptr<AVLayer> layer)

@@ -50,7 +50,7 @@ private:
 
 template<typename T>
 inline std::shared_ptr<T> PropertyGroup::add(const std::string &name) {
-	auto prop = std::shared_ptr<T>(new T());
+	auto prop = std::make_shared<T>();
 	add(name, prop);
 	return prop;
 }
