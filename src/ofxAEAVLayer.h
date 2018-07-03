@@ -20,6 +20,7 @@ public:
 	bool is3D() { return is_3d_; }
 	bool isCollapse() { return is_collapse_; }
 	void addMask(std::shared_ptr<Mask> mask);
+	std::shared_ptr<Mask> addNewMask(const std::string &name);
 	ofBlendMode getBlendMode() { return blend_mode_; }
 	
 	bool isHit(float x, float y);

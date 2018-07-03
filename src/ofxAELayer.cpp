@@ -41,6 +41,18 @@ void Layer::setParent(shared_ptr<Layer> layer)
 	}
 }
 
+shared_ptr<Marker> Layer::addNewMarker()
+{
+	auto marker = shared_ptr<Marker>(new Marker());
+	addMarker(marker);
+	return marker;
+}
+
+void Layer::addMarker(shared_ptr<Marker> marker)
+{
+	marker_.push_back(marker);
+}
+
 void Layer::update()
 {
 	if(auto parent = parent_.lock()) {

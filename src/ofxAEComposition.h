@@ -89,7 +89,7 @@ public:
 	int getMarkerIndex(const std::string &name);
 	int getMarkerIndex(std::shared_ptr<Marker> marker);
 	
-	std::shared_ptr<Marker> addMarker();
+	std::shared_ptr<Marker> addNewMarker();
 	void addMarker(std::shared_ptr<Marker> marker);
 	
 private:

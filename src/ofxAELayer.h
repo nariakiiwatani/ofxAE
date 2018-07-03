@@ -41,6 +41,9 @@ public:
 	
 	void setParamByComment(const std::string &comment);
 	const std::string& getParam(const std::string &key);
+	
+	std::shared_ptr<Marker> addNewMarker();
+	void addMarker(std::shared_ptr<Marker> marker);
 protected:
 	std::string name_;
 	std::weak_ptr<Layer> parent_;

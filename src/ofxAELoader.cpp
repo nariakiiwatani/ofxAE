@@ -152,7 +152,7 @@ void Loader::setupCompositionJson(Composition& comp, const ofJson& json)
 	if(markers != end(json) && markers->is_array()) {
 		int marker_count = markers->size();
 		for(int i = 0; i < marker_count; ++i) {
-			setupMarkerJson(*comp.addMarker(), (*markers)[i]);
+			setupMarkerJson(*comp.addNewMarker(), (*markers)[i]);
 		}
 	}
 	comp.setFrame(0);
@@ -174,10 +174,7 @@ void Loader::setupLayerJson(Layer& layer, const ofJson& json)
 	if(markers != end(json) && markers->is_array()) {
 		int marker_count = markers->size();
 		for(int i = 0; i < marker_count; ++i) {
-			const ofJson& marker = (*markers)[i];
-			auto m = shared_ptr<Marker>(new Marker());
-			setupMarkerJson(*m, marker);
-			layer.marker_.push_back(m);
+			setupMarkerJson(*layer.addNewMarker(), (*markers)[i]);
 		}
 	}
 }
@@ -196,10 +193,7 @@ void Loader::setupAVLayerJson(AVLayer& layer, const ofJson& json)
 	if(masks != end(properties) && masks->is_array()) {
 		int mask_count = masks->size();
 		for(int i = 0; i < mask_count; ++i) {
-			const ofJson& mask = (*masks)[i];
-			auto target = shared_ptr<Mask>(new Mask());
-			setupMaskJson(*target, mask, ofVec2f(layer.getWidth(),layer.getHeight()));
-			layer.addMask(target);
+			setupMaskJson(*layer.addNewMask("mask"+ofToString(i,2,'0')), (*masks)[i], ofVec2f(layer.getWidth(),layer.getHeight()));
 		}
 	}
 }

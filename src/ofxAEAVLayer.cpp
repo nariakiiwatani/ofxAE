@@ -45,6 +45,13 @@ void AVLayer::draw(float alpha)
 	getNode().popMatrix();
 }
 
+shared_ptr<Mask> AVLayer::addNewMask(const string &name)
+{
+	auto mask = add<Mask>(name);
+	mask_.push_back(mask);
+	return mask;
+}
+
 void AVLayer::addMask(shared_ptr<Mask> mask)
 {
 	mask_.push_back(mask);
