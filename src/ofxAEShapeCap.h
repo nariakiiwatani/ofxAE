@@ -136,13 +136,13 @@ public:
 	void setInnerRoundness(float roundness) { inner_roundness_=roundness; }
 	
 	std::shared_ptr<Property<float>> getStarProperty() { return getProperty<float>("star"); }
-	std::shared_ptr<Property<float>> addCornerCountProperty() { return getProperty<float>("corner count"); }
-	std::shared_ptr<Property<ofVec2f>> addPositionProperty() { return getProperty<ofVec2f>("position"); }
-	std::shared_ptr<Property<float>> addRotationProperty() { return getProperty<float>("rotation"); }
-	std::shared_ptr<Property<float>> addOuterRadiusProperty() { return getProperty<float>("outer radius"); }
-	std::shared_ptr<Property<float>> addOuterRoundnessProperty() { return getProperty<float>("outer roundness"); }
-	std::shared_ptr<Property<float>> addInnerRadiusProperty() { return getProperty<float>("inner radius"); }
-	std::shared_ptr<Property<float>> addInnerRoundnessProperty() { return getProperty<float>("inner roundness"); }
+	std::shared_ptr<Property<float>> getCornerCountProperty() { return getProperty<float>("corner count"); }
+	std::shared_ptr<Property<ofVec2f>> getPositionProperty() { return getProperty<ofVec2f>("position"); }
+	std::shared_ptr<Property<float>> getRotationProperty() { return getProperty<float>("rotation"); }
+	std::shared_ptr<Property<float>> getOuterRadiusProperty() { return getProperty<float>("outer radius"); }
+	std::shared_ptr<Property<float>> getOuterRoundnessProperty() { return getProperty<float>("outer roundness"); }
+	std::shared_ptr<Property<float>> getInnerRadiusProperty() { return getProperty<float>("inner radius"); }
+	std::shared_ptr<Property<float>> getInnerRoundnessProperty() { return getProperty<float>("inner roundness"); }
 
 private:
 	bool is_star_;

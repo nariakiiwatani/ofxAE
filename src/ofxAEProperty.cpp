@@ -49,6 +49,11 @@ void PropertyGroup::setFrame(int frame)
 	}
 }
 
+void PropertyGroup::add(const std::string &name, std::shared_ptr<PropertyBase> prop)
+{
+	properties_.push_back(std::make_pair(name, prop));
+}
+
 void PropertyGroup::removeProperty(const string &name)
 {
 	properties_.erase(remove_if(begin(properties_), end(properties_), [&](const pair<string, shared_ptr<PropertyBase>> &p) {

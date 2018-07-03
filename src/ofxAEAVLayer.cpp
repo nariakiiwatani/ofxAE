@@ -5,6 +5,8 @@
 
 using namespace std;
 
+template<> const ofColor ofColor::white;
+
 OFX_AE_NAMESPACE_BEGIN
 
 void AVLayer::allocate(int width, int height)

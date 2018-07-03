@@ -96,9 +96,11 @@ void FrameCounter::setBackward(bool backward)
 				int looped = (frame_/length_) * length_;
 				frame_ = length_-(frame_-looped)+looped;
 			}	break;
-			case LOOP_PINGPONG:
+			case LOOP_PINGPONG: {
 				int looped = (frame_/(length_-1)*2) * (length_-1)*2;
 				frame_ = length_-(frame_-looped)+looped;
+			}	break;
+			case LOOP_RANDOM:
 				break;
 		}
 	}

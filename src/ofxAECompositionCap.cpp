@@ -4,6 +4,8 @@
 
 using namespace std;
 
+template<> const ofColor ofColor::white;
+
 OFX_AE_NAMESPACE_BEGIN
 
 void CompositionCap::setLayer(shared_ptr<AVLayer> layer)

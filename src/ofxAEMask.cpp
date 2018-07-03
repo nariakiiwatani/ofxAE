@@ -1,6 +1,8 @@
 #include "ofxAEMask.h"
 #include "ofGraphics.h"
 
+template<> const ofColor ofColor::white;
+
 OFX_AE_NAMESPACE_BEGIN
 
 Mask::Mask()

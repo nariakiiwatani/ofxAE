@@ -28,33 +28,17 @@ private:
 	ofEvent<const Type> event_;
 	std::map<int, Type> key_;
 };
+
 class PropertyGroup : public PropertyBase
 {
 public:
 	virtual void setFrame(int frame);
 	
-	template<typename T> std::shared_ptr<T> add(const std::string &name) {
-		auto prop = std::shared_ptr<T>(new T());
-		add(name, prop);
-		return prop;
-	}
-	template<typename T> std::shared_ptr<Property<T>> addProperty(const std::string &name) {
-		return add<Property<T>>(name);
-	}
-	void add(const std::string &name, std::shared_ptr<PropertyBase> prop) {
-		properties_.push_back(std::make_pair(name, prop));
-	}
-	template<typename T> std::shared_ptr<T> get(const std::string &name, int index=0) {
-		auto found = find(name, index);
-		if(found != std::end(properties_)) {
-			return std::static_pointer_cast<T>(found->second);
-		}
-		return nullptr;
-	}
-	template<typename T> std::shared_ptr<Property<T>> getProperty(const std::string &name, int index=0) {
-		return get<Property<T>>(name, index);
-	}
-
+	void add(const std::string &name, std::shared_ptr<PropertyBase> prop);
+	template<typename T> std::shared_ptr<T> add(const std::string &name);
+	template<typename T> std::shared_ptr<Property<T>> addProperty(const std::string &name);
+	template<typename T> std::shared_ptr<T> get(const std::string &name, int index=0);
+	template<typename T> std::shared_ptr<Property<T>> getProperty(const std::string &name, int index=0);
 	void removeProperty(const std::string &name);
 	void removeProperty(const std::string &name, int index);
 protected:
@@ -63,6 +47,29 @@ protected:
 private:
 	Properties::iterator find(const std::string &name, int index);
 };
+
+template<typename T>
+inline std::shared_ptr<T> PropertyGroup::add(const std::string &name) {
+	auto prop = std::shared_ptr<T>(new T());
+	add(name, prop);
+	return prop;
+}
+template<typename T>
+inline std::shared_ptr<Property<T>> PropertyGroup::addProperty(const std::string &name) {
+	return add<Property<T>>(name);
+}
+template<typename T>
+inline std::shared_ptr<T> PropertyGroup::get(const std::string &name, int index) {
+	auto found = find(name, index);
+	if(found != std::end(properties_)) {
+		return std::static_pointer_cast<T>(found->second);
+	}
+	return nullptr;
+}
+template<typename T>
+inline std::shared_ptr<Property<T>> PropertyGroup::getProperty(const std::string &name, int index) {
+	return get<Property<T>>(name, index);
+}
 
 class TransformProperty : public PropertyGroup
 {
