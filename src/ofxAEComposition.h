@@ -100,7 +100,7 @@ private:
 	vector<std::shared_ptr<AVLayer>> av_;
 	vector<std::shared_ptr<CameraLayer>> camera_;
 	vector<std::shared_ptr<AVLayer>> active_layers_;
-	std::shared_ptr<CameraLayer> active_camera_;
+	std::weak_ptr<CameraLayer> active_camera_;
 	struct MarkerWork {
 		bool is_in=false, is_in_prev=false;
 	};

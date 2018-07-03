@@ -12,6 +12,7 @@ class LayerCap;
 class Layer : public std::enable_shared_from_this<Layer>, public ofxAE::PropertyGroup {
 	friend class Loader;
 public:
+	Layer();
 	void update();
 	virtual void setPropertyFrame(int frame);
 	void setParent(std::shared_ptr<Layer> parent);
@@ -34,9 +35,9 @@ public:
 	void setScale(const ofVec3f& scale) { transform_.setScale(scale); }
 	void setAnchorPoint(const ofVec3f& anchor_point) { transform_.setAnchorPoint(anchor_point); }
 	
-	void addOpacityProperty(Property<float> *prop);
-	void addActiveProperty(Property<bool> *prop);
-	void addTransformProperty(TransformProperty *prop);
+	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
+	std::shared_ptr<Property<bool>> getActiveProperty() { return getProperty<bool>("active"); }
+	std::shared_ptr<TransformProperty> getTransformProperty() { return get<TransformProperty>("transform"); }
 	
 	void setParamByComment(const string &comment);
 	const string& getParam(const string &key);

@@ -15,7 +15,7 @@ void Property<Type>::setFrame(int frame)
 	if(key_.size() <= 0) {
 		return;
 	}
-	const Type &val = getValueAtFrame(frame);
+	Type val = getValueAtFrame(frame);
 	if(target_) {
 		*target_ = val;
 	}
@@ -38,42 +38,42 @@ template class Property<ofVec2f>;
 template class Property<ofVec3f>;
 template class Property<ofFloatColor>;
 
+/* =================== */
+
 void PropertyGroup::setFrame(int frame)
 {
-	for(vector<PropertyBase*>::iterator it = properties_.begin(); it != properties_.end(); ++it) {
-		(*it)->setFrame(frame);
-	}
-}
-void PropertyGroup::addProperty(PropertyBase *property)
-{
-	properties_.push_back(property);
-}
-
-void PropertyGroup::removeProperty(PropertyBase *property)
-{
-	vector<PropertyBase*>::iterator element = find(properties_.begin(), properties_.end(), property);
-	if(element != properties_.end()) {
-		properties_.erase(element);
+	for(auto &p : properties_) {
+		p.second->setFrame(frame);
 	}
 }
 
-TransformProperty::TransformProperty(const string &name)
-:PropertyGroup(name)
-,translation_("translation")
-,rotation_("rotation")
-,orientation_("orientation")
-,scale_("scale")
-,anchor_point_("anchor point")
+void PropertyGroup::removeProperty(const std::string &name)
 {
-	addProperty(&translation_);
-	addProperty(&rotation_);
-//	addProperty(&orientation_);
-	addProperty(&scale_);
-	addProperty(&anchor_point_);
+	properties_.erase(std::remove_if(std::begin(properties_), std::end(properties_), [&](const std::pair<std::string, std::shared_ptr<PropertyBase>> &p) {
+		return p.first == name;
+	}), std::end(properties_));
 }
+
+void PropertyGroup::removeProperty(const std::string &name, int index)
+{
+	auto found = find(name, index);
+	if(found != std::end(properties_)) {
+		properties_.erase(found);
+	}
+}
+
+PropertyGroup::Properties::iterator PropertyGroup::find(const std::string &name, int index)
+{
+	return std::find_if(std::begin(properties_), std::end(properties_), [&](const std::pair<std::string, std::shared_ptr<PropertyBase>> &p) {
+		return p.first == name && --index<0;
+	});
+}
+
+/* =================== */
 
 void PathProperty::setFrame(int frame)
 {
+	PropertyGroup::setFrame(frame);
 	if(target_) {
 		ofPath &path = *target_;
 		path.clear();
@@ -85,27 +85,27 @@ void PathProperty::setFrame(int frame)
 			path.lineTo(0,0);
 			path.close();
 			
-			path.moveTo((ofPoint)vertices_.back().getValueAtFrame(frame));
+			path.moveTo((ofPoint)vertices_.back());
 			int vertex_count = vertices_.size();
 			for(int i0 = vertex_count; i0-- > 0;) {
-				const ofVec2f& p0 = vertices_[i0].getValueAtFrame(frame);
-				ofPoint c0 = p0+in_tangents_[i0].getValueAtFrame(frame);
+				const ofVec2f& p0 = vertices_[i0];
+				ofPoint c0 = p0+in_tangents_[i0];
 				int i1 = i0>0?(i0-1):(vertex_count-1);
-				const ofVec2f& p1 = vertices_[i1].getValueAtFrame(frame);
-				ofPoint c1 = p1+out_tangents_[i1].getValueAtFrame(frame);
+				const ofVec2f& p1 = vertices_[i1];
+				ofPoint c1 = p1+out_tangents_[i1];
 				path.bezierTo(c0, c1, p1);
 			}
 			path.close();
 		}
 		else {
-			path.moveTo((ofPoint)vertices_.front().getValueAtFrame(frame));
+			path.moveTo((ofPoint)vertices_.front());
 			int vertex_count = vertices_.size();
 			for(int i0 = 0; i0 < vertex_count; ++i0) {
-				const ofVec2f& p0 = vertices_[i0].getValueAtFrame(frame);
-				ofPoint c0 = p0+out_tangents_[i0].getValueAtFrame(frame);
+				const ofVec2f& p0 = vertices_[i0];
+				ofPoint c0 = p0+out_tangents_[i0];
 				int i1 = (i0+1<vertex_count)?i0+1:0;
-				const ofVec2f& p1 = vertices_[i1].getValueAtFrame(frame);
-				ofPoint c1 = p1+in_tangents_[i1].getValueAtFrame(frame);
+				const ofVec2f& p1 = vertices_[i1];
+				ofPoint c1 = p1+in_tangents_[i1];
 				path.bezierTo(c0, c1, p1);
 			}
 			path.close();
@@ -115,34 +115,30 @@ void PathProperty::setFrame(int frame)
 	
 void PathProperty::setVertexSize(int size)
 {
-	for(vector<Property<ofVec2f> >::iterator it = vertices_.begin(); it != vertices_.end(); ++it) {
-		removeProperty(&*it);
-	}
+	removeProperty("vertex");
 	vertices_.resize(size);
-	for(vector<Property<ofVec2f> >::iterator it = vertices_.begin(); it != vertices_.end(); ++it) {
-		addProperty(&*it);
+	for(int i = 0; i < size; ++i) {
+		addProperty<ofVec2f>("vertex")->setTarget(&vertices_[i]);
 	}
 }
 void PathProperty::setInTangentSize(int size)
 {
-	for(vector<Property<ofVec2f> >::iterator it = in_tangents_.begin(); it != in_tangents_.end(); ++it) {
-		removeProperty(&*it);
-	}
+	removeProperty("in tangent");
 	in_tangents_.resize(size);
-	for(vector<Property<ofVec2f> >::iterator it = in_tangents_.begin(); it != in_tangents_.end(); ++it) {
-		addProperty(&*it);
+	for(int i = 0; i < size; ++i) {
+		addProperty<ofVec2f>("in tangent")->setTarget(&in_tangents_[i]);
 	}
 }
 void PathProperty::setOutTangentSize(int size)
 {
-	for(vector<Property<ofVec2f> >::iterator it = out_tangents_.begin(); it != out_tangents_.end(); ++it) {
-		removeProperty(&*it);
-	}
+	removeProperty("out tangent");
 	out_tangents_.resize(size);
-	for(vector<Property<ofVec2f> >::iterator it = out_tangents_.begin(); it != out_tangents_.end(); ++it) {
-		addProperty(&*it);
+	for(int i = 0; i < size; ++i) {
+		addProperty<ofVec2f>("out tangent")->setTarget(&out_tangents_[i]);
 	}
 }
+
+/* =================== */
 
 OFX_AE_NAMESPACE_END
 /* EOF */

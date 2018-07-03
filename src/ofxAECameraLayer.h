@@ -13,8 +13,8 @@ public:
 	ofCamera* getCamera() { return &camera_; }
 	void prepare();
 	
-	void addLookAtProperty(Property<ofVec3f> *prop);
-	void addFovProperty(Property<float> *prop);
+	std::shared_ptr<Property<ofVec3f>> getLookAtProperty() { return getProperty<ofVec3f>("look at"); }
+	std::shared_ptr<Property<float>> getFovProperty() { return getProperty<float>("fov"); }
 
 private:
 	ofCamera camera_;

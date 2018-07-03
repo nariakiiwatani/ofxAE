@@ -19,7 +19,7 @@ public:
 	const ofVec2f& getSize() { return size_; }
 	bool is3D() { return is_3d_; }
 	bool isCollapse() { return is_collapse_; }
-	void addMask(Mask *mask);
+	void addMask(std::shared_ptr<Mask> mask);
 	ofBlendMode getBlendMode() { return blend_mode_; }
 	
 	bool isHit(float x, float y);
@@ -30,8 +30,9 @@ protected:
 	bool is_collapse_=false;
 	ofBlendMode blend_mode_;
 	ofVec2f size_;
-	vector<Mask*> mask_;
+	std::vector<std::shared_ptr<Mask>> mask_;
 	ofxMask ofx_mask_;
+	bool is_mask_allocated_=false;
 };
 
 OFX_AE_NAMESPACE_END

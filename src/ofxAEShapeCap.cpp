@@ -1,5 +1,5 @@
 #include "ofxAEShapeCap.h"
-#include "ofxAELayer.h"
+#include "ofxAEAVLayer.h"
 #include "ofGraphics.h"
 
 OFX_AE_NAMESPACE_BEGIN
@@ -7,13 +7,19 @@ OFX_AE_NAMESPACE_BEGIN
 ShapeCap::ShapeCap()
 {
 	path_.setMode(ofPath::COMMANDS);
+	shape_prop_ = std::shared_ptr<PropertyGroup>(new PropertyGroup());
+}
+
+void ShapeCap::setLayer(std::shared_ptr<AVLayer> layer)
+{
+	layer->add("shape", shape_prop_);
 }
 
 void ShapeCap::update()
 {
 	path_.clear();
-	for(vector<ShapeContent*>::iterator it = content_.begin(); it != content_.end(); ++it) {
-		(*it)->push(path_);
+	for(auto &c : content_) {
+		c->push(path_);
 	}
 }
 void ShapeCap::draw(float alpha)
@@ -22,26 +28,37 @@ void ShapeCap::draw(float alpha)
 	ofEnableBlendMode(blend_mode_);
 	path_.setStrokeColor(ofColor(ofColor::white, opacity_*alpha*255));
 	path_.setFillColor(ofColor(ofColor::white, opacity_*alpha*255));
-	for(vector<ShapeContent*>::reverse_iterator it = content_.rbegin(); it != content_.rend(); ++it) {
-		(*it)->pop(path_);
+	for(auto &c : content_) {
+		c->pop(path_);
 	}
 	ofPopStyle();
 }
 
-void ShapeCap::addContent(ShapeContent *content)
+void ShapeCap::addContent(std::shared_ptr<ShapeContent> content)
 {
 	content_.push_back(content);
-	if(auto layer = layer_.lock()) {
-		layer->addProperty(content);
-	}
+	shape_prop_->add("content", content);
 }
 
 /* =================== */
 
+ShapeContentGroup::ShapeContentGroup()
+{
+	auto transform = add<TransformProperty>("transform");
+	transform->getTranslation()->setCallback(&transform_, &TransformNode::setTranslation);
+	transform->getScale()->setCallback(&transform_, &TransformNode::setScale);
+	transform->getAnchorPoint()->setCallback(&transform_, &TransformNode::setAnchorPoint);
+	
+	addProperty<float>("opacity")->setTarget(&opacity_);
+	addProperty<float>("rotation z")->setCallback(this, &ShapeContentGroup::rotationZPropCallback);
+	addProperty<float>("skew")->setTarget(&skew_);
+	addProperty<float>("skew axis")->setTarget(&skew_axis_);
+}
+
 void ShapeContentGroup::push(ofPath& path)
 {
-	for(vector<ShapeContent*>::iterator it = content_.begin(); it != content_.end(); ++it) {
-		(*it)->push(path);
+	for(auto &c : content_) {
+		c->push(path);
 	}
 }
 void ShapeContentGroup::pop(ofPath& path)
@@ -56,17 +73,17 @@ void ShapeContentGroup::pop(ofPath& path)
 	float opacity_fi = prev_fi.a/255.f*opacity_;
 	path.setStrokeColor(ofColor(prev_st, opacity_st*255));
 	path.setFillColor(ofColor(prev_fi, opacity_fi*255));
-	for(vector<ShapeContent*>::reverse_iterator it = content_.rbegin(); it != content_.rend(); ++it) {
-		(*it)->pop(path);
+	for(auto &c : content_) {
+		c->pop(path);
 	}
 	path.setStrokeColor(prev_st);
 	path.setFillColor(prev_fi);
 	transform_.popMatrix();
 }
-void ShapeContentGroup::addContent(ShapeContent *content)
+void ShapeContentGroup::addContent(std::shared_ptr<ShapeContent> content)
 {
 	content_.push_back(content);
-	addProperty(content);
+	add("content", content);
 }
 void ShapeContentGroup::setPosition(const ofVec2f& position)
 {
@@ -85,42 +102,9 @@ void ShapeContentGroup::setAnchorPoint(const ofVec2f& anchor)
 	transform_.setAnchorPoint(anchor);
 }
 
-void ShapeContentGroup::addTransformProperty(ofxAE::TransformProperty *prop)
-{
-	prop->translation_.setCallback(&transform_, &TransformNode::setTranslation);
-//	prop->rotation_.setCallback(&transform_, &TransformNode::setRotation);
-	prop->scale_.setCallback(&transform_, &TransformNode::setScale);
-//	prop->orientation_.setCallback(&transform_, &TransformNode::setOrientation);
-	prop->anchor_point_.setCallback(&transform_, &TransformNode::setAnchorPoint);
-	addProperty(prop);
-}
-
-void ShapeContentGroup::addOpacityProperty(Property<float> *prop)
-{
-	prop->setTarget(&opacity_);
-	addProperty(prop);
-}
-
-void ShapeContentGroup::addRotationZProperty(Property<float> *prop)
-{
-	prop->setCallback(this, &ShapeContentGroup::rotationZPropCallback);
-	addProperty(prop);
-}
 void ShapeContentGroup::rotationZPropCallback(const float &val)
 {
 	setRotation(val);
-}
-
-void ShapeContentGroup::addSkewProperty(Property<float> *prop)
-{
-	prop->setTarget(&skew_);
-	addProperty(prop);
-}
-
-void ShapeContentGroup::addSkewAxisProperty(Property<float> *prop)
-{
-	prop->setTarget(&skew_axis_);
-	addProperty(prop);
 }
 
 /* =================== */
@@ -135,29 +119,27 @@ void ShapeContentShape::pop(ofPath& path)
 
 /* =================== */
 
-ShapeContentPath::ShapeContentPath(const string &name)
-:ShapeContentShape(name)
+ShapeContentPath::ShapeContentPath()
 {
 	path_.setMode(ofPath::COMMANDS);
+	add<PathProperty>("path")->setTarget(&path_);
 }
 void ShapeContentPath::push(ofPath& path)
 {
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
 	vector<ofPath::Command>& my_command = path_.getCommands();
-	for(vector<ofPath::Command>::iterator it = my_command.begin(); it != my_command.end(); ++it) {
-		command.push_back(*it);
-	}
+	command.insert(std::end(command), std::begin(my_command), std::end(my_command));
 	command_count_ = command.size() - command_count_prev;
 }
 
-void ShapeContentPath::addPathProperty(PathProperty *prop)
-{
-	prop->setTarget(&path_);
-	addProperty(prop);
-}
-
 /* =================== */
+
+ShapeContentEllipse::ShapeContentEllipse()
+{
+	addProperty<ofVec2f>("position")->setTarget(&pos_);
+	addProperty<ofVec2f>("size")->setTarget(&size_);
+}
 
 void ShapeContentEllipse::push(ofPath& path)
 {
@@ -168,19 +150,14 @@ void ShapeContentEllipse::push(ofPath& path)
 	command_count_ = command.size() - command_count_prev;
 }
 
-void ShapeContentEllipse::addPositionProperty(Property<ofVec2f> *prop)
-{
-	prop->setTarget(&pos_);
-	addProperty(prop);
-}
-
-void ShapeContentEllipse::addSizeProperty(Property<ofVec2f> *prop)
-{
-	prop->setTarget(&size_);
-	addProperty(prop);
-}
-
 /* =================== */
+
+ShapeContentRect::ShapeContentRect()
+{
+	addProperty<ofVec2f>("size")->setTarget(&size_);
+	addProperty<ofVec2f>("position")->setTarget(&pos_);
+	addProperty<float>("roundness")->setTarget(&roundness_);
+}
 
 void ShapeContentRect::push(ofPath& path)
 {
@@ -190,25 +167,19 @@ void ShapeContentRect::push(ofPath& path)
 	command_count_ = command.size() - command_count_prev;
 }
 
-void ShapeContentRect::addSizeProperty(Property<ofVec2f> *prop)
-{
-	prop->setTarget(&size_);
-	addProperty(prop);
-}
-
-void ShapeContentRect::addPositionProperty(Property<ofVec2f> *prop)
-{
-	prop->setTarget(&pos_);
-	addProperty(prop);
-}
-
-void ShapeContentRect::addRoundnessProperty(Property<float> *prop)
-{
-	prop->setTarget(&roundness_);
-	addProperty(prop);
-}
-
 /* =================== */
+
+ShapeContentPoly::ShapeContentPoly()
+{
+	addProperty<bool>("star")->setTarget(&is_star_);
+	addProperty<float>("corner count")->setTarget(&corner_count_);
+	addProperty<ofVec2f>("position")->setTarget(&pos_);
+	addProperty<float>("rotation")->setTarget(&rotation_);
+	addProperty<float>("outer radius")->setTarget(&outer_radius_);
+	addProperty<float>("outer roundness")->setTarget(&outer_roundness_);
+	addProperty<float>("inner radius")->setTarget(&inner_radius_);
+	addProperty<float>("inner roundness")->setTarget(&inner_roundness_);
+}
 
 void ShapeContentPoly::push(ofPath& path)
 {
@@ -221,55 +192,14 @@ void ShapeContentPoly::push(ofPath& path)
 	command_count_ = command.size() - command_count_prev;
 }
 
-void ShapeContentPoly::addStarProperty(Property<bool> *prop)
-{
-	prop->setTarget(&is_star_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addCornerCountProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addPositionProperty(Property<ofVec2f> *prop)
-{
-	prop->setTarget(&pos_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addRotationProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addOuterRadiusProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addOuterRoundnessProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addInnerRadiusProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
-void ShapeContentPoly::addInnerRoundnessProperty(Property<float> *prop)
-{
-	prop->setTarget(&corner_count_);
-	addProperty(prop);
-}
-
 /* =================== */
+
+ShapeContentStroke::ShapeContentStroke()
+{
+	addProperty<ofFloatColor>("color")->setTarget(&color_);
+	addProperty<float>("opacity")->setTarget(&opacity_);
+	addProperty<float>("stroke width")->setTarget(&stroke_width_);
+}
 
 void ShapeContentStroke::pop(ofPath& path)
 {
@@ -285,25 +215,13 @@ void ShapeContentStroke::pop(ofPath& path)
 	ofPopStyle();
 }
 
-void ShapeContentStroke::addColorProperty(Property<ofFloatColor> *prop)
-{
-	prop->setTarget(&color_);
-	addProperty(prop);
-}
-
-void ShapeContentStroke::addOpacityProperty(Property<float> *prop)
-{
-	prop->setTarget(&opacity_);
-	addProperty(prop);
-}
-
-void ShapeContentStroke::addStrokeWidthProperty(Property<float> *prop)
-{
-	prop->setTarget(&stroke_width_);
-	addProperty(prop);
-}
-
 /* =================== */
+
+ShapeContentFill::ShapeContentFill()
+{
+	addProperty<ofFloatColor>("color")->setTarget(&color_);
+	addProperty<float>("opacity")->setTarget(&opacity_);
+}
 
 void ShapeContentFill::pop(ofPath& path)
 {
@@ -316,18 +234,6 @@ void ShapeContentFill::pop(ofPath& path)
 	path.draw();
 	path.setFillColor(prev);
 	ofPopStyle();
-}
-
-void ShapeContentFill::addColorProperty(Property<ofFloatColor> *prop)
-{
-	prop->setTarget(&color_);
-	addProperty(prop);
-}
-
-void ShapeContentFill::addOpacityProperty(Property<float> *prop)
-{
-	prop->setTarget(&opacity_);
-	addProperty(prop);
 }
 
 OFX_AE_NAMESPACE_END

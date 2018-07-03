@@ -12,19 +12,21 @@ class ShapeCap : public AVCap
 {
 public:
 	ShapeCap();
+	void setLayer(std::shared_ptr<AVLayer> layer);
 	void update();
 	void draw(float alpha=1);
-	void addContent(ShapeContent *content);
+	void addContent(std::shared_ptr<ShapeContent> content);
 private:
 	ofPath path_;
-	vector<ShapeContent*> content_;
+	std::vector<std::shared_ptr<ShapeContent>> content_;
+
+	std::shared_ptr<PropertyGroup> shape_prop_;
 };
 
 class ShapeContent : public PropertyGroup
 {
 	friend class Loader;
 public:
-	ShapeContent(const string &name="content"):PropertyGroup(name){}
 	virtual void push(ofPath& path){};
 	virtual void pop(ofPath& path){};
 };
@@ -33,18 +35,17 @@ class ShapeContentGroup : public ShapeContent
 {
 	friend class Loader;
 public:
-	ShapeContentGroup(const string &name="group"):ShapeContent(name){}
-
+	ShapeContentGroup();
 	void push(ofPath& path);
 	void pop(ofPath& path);
 	
-	void addContent(ShapeContent *content);
+	void addContent(std::shared_ptr<ShapeContent> content);
 	
-	void addTransformProperty(TransformProperty *prop);
-	void addRotationZProperty(Property<float> *prop);
-	void addOpacityProperty(Property<float> *prop);
-	void addSkewProperty(Property<float> *prop);
-	void addSkewAxisProperty(Property<float> *prop);
+	std::shared_ptr<TransformProperty> getTransformProperty() { return get<TransformProperty>("transform"); }
+	std::shared_ptr<Property<float>> getRotationZProperty() { return getProperty<float>("rotation z"); }
+	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
+	std::shared_ptr<Property<float>> getSkewProperty() { return getProperty<float>("skew"); }
+	std::shared_ptr<Property<float>> getSkewAxisProperty() { return getProperty<float>("skew axis"); }
 	
 	void setPosition(const ofVec2f& position);
 	void setRotation(float z);
@@ -54,7 +55,7 @@ public:
 	void setSkew(float skew) { skew_ = skew; }	// not supoprted
 	void setSkewAxis(float axis) { skew_axis_ = axis; }	// not supported
 private:
-	vector<ShapeContent*> content_;
+	std::vector<std::shared_ptr<ShapeContent>> content_;
 	TransformNode transform_;
 	float rotation_z_;
 	float opacity_;
@@ -68,7 +69,6 @@ class ShapeContentShape : public ShapeContent
 {
 	friend class Loader;
 public:
-	ShapeContentShape(const string &name="shape"):ShapeContent(name){}
 	void pop(ofPath& path);
 protected:
 	int command_count_;
@@ -78,9 +78,9 @@ class ShapeContentPath : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentPath(const string &name="path");
+	ShapeContentPath();
 	void push(ofPath& path);
-	void addPathProperty(PathProperty *prop);
+	std::shared_ptr<PathProperty> getPathProperty() { return get<PathProperty>("path"); }
 private:
 	ofPath path_;
 };
@@ -89,13 +89,13 @@ class ShapeContentEllipse : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentEllipse(const string &name="ellipse"):ShapeContentShape(name){}
+	ShapeContentEllipse();
 	void push(ofPath& path);
 	void setSize(const ofVec2f& size) { size_=size; }
 	void setPosition(const ofVec2f& pos) { pos_=pos; }
 	
-	void addSizeProperty(Property<ofVec2f> *prop);
-	void addPositionProperty(Property<ofVec2f> *prop);
+	std::shared_ptr<Property<ofVec2f>> getPositionProperty() { return getProperty<ofVec2f>("position"); }
+	std::shared_ptr<Property<ofVec2f>> getSizeProperty() { return getProperty<ofVec2f>("size"); }
 private:
 	ofVec2f size_;
 	ofVec2f pos_;
@@ -105,15 +105,15 @@ class ShapeContentRect : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentRect(const string &name="rect"):ShapeContentShape(name){}
+	ShapeContentRect();
 	void push(ofPath& path);
 	void setSize(const ofVec2f& size) { size_=size; }
 	void setPosition(const ofVec2f& pos) { pos_=pos; }
 	void setRoundness(float roundness) { roundness_=roundness; }
 
-	void addSizeProperty(Property<ofVec2f> *prop);
-	void addPositionProperty(Property<ofVec2f> *prop);
-	void addRoundnessProperty(Property<float> *prop);
+	std::shared_ptr<Property<ofVec2f>> getSizeProperty() { return getProperty<ofVec2f>("size"); }
+	std::shared_ptr<Property<ofVec2f>> getPositionProperty() { return getProperty<ofVec2f>("position"); }
+	std::shared_ptr<Property<float>> getRoundnessProperty() { return getProperty<float>("roundness"); }
 private:
 	ofVec2f size_;
 	ofVec2f pos_;
@@ -124,7 +124,7 @@ class ShapeContentPoly : public ShapeContentShape
 {
 	friend class Loader;
 public:
-	ShapeContentPoly(const string &name="poly");
+	ShapeContentPoly();
 	void push(ofPath& path);
 	void setIsStar(bool star) { is_star_=star; }
 	void setCornerCount(float count) { corner_count_=count; }
@@ -135,14 +135,14 @@ public:
 	void setInnerRadius(float radius) { inner_radius_=radius; }
 	void setInnerRoundness(float roundness) { inner_roundness_=roundness; }
 	
-	void addStarProperty(Property<bool> *prop);
-	void addCornerCountProperty(Property<float> *prop);
-	void addPositionProperty(Property<ofVec2f> *prop);
-	void addRotationProperty(Property<float> *prop);
-	void addOuterRadiusProperty(Property<float> *prop);
-	void addOuterRoundnessProperty(Property<float> *prop);
-	void addInnerRadiusProperty(Property<float> *prop);
-	void addInnerRoundnessProperty(Property<float> *prop);
+	std::shared_ptr<Property<float>> getStarProperty() { return getProperty<float>("star"); }
+	std::shared_ptr<Property<float>> addCornerCountProperty() { return getProperty<float>("corner count"); }
+	std::shared_ptr<Property<ofVec2f>> addPositionProperty() { return getProperty<ofVec2f>("position"); }
+	std::shared_ptr<Property<float>> addRotationProperty() { return getProperty<float>("rotation"); }
+	std::shared_ptr<Property<float>> addOuterRadiusProperty() { return getProperty<float>("outer radius"); }
+	std::shared_ptr<Property<float>> addOuterRoundnessProperty() { return getProperty<float>("outer roundness"); }
+	std::shared_ptr<Property<float>> addInnerRadiusProperty() { return getProperty<float>("inner radius"); }
+	std::shared_ptr<Property<float>> addInnerRoundnessProperty() { return getProperty<float>("inner roundness"); }
 
 private:
 	bool is_star_;
@@ -158,7 +158,6 @@ class ShapeContentGraphic : public ShapeContent
 {
 	friend class Loader;
 public:
-	ShapeContentGraphic(const string &name="graphic"):ShapeContent(name){}
 protected:
 	ofBlendMode blend_mode_;
 };
@@ -167,15 +166,15 @@ class ShapeContentStroke : public ShapeContentGraphic
 {
 	friend class Loader;
 public:
-	ShapeContentStroke(const string &name="stroke"):ShapeContentGraphic(name){}
+	ShapeContentStroke();
 	void pop(ofPath& path);
 	void setColor(const ofFloatColor& color) { color_=color; }
 	void setOpacity(float opacity) { opacity_=opacity; }
 	void setStrokeWidth(float width) { stroke_width_=width; }
 
-	void addColorProperty(Property<ofFloatColor> *prop);
-	void addOpacityProperty(Property<float> *prop);
-	void addStrokeWidthProperty(Property<float> *prop);
+	std::shared_ptr<Property<ofFloatColor>> getColorProperty() { return getProperty<ofFloatColor>("color"); }
+	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
+	std::shared_ptr<Property<float>> getStrokeWidthProperty() { return getProperty<float>("stroke width"); }
 private:
 	ofFloatColor color_;
 	float opacity_;
@@ -186,13 +185,13 @@ class ShapeContentFill : public ShapeContentGraphic
 {
 	friend class Loader;
 public:
-	ShapeContentFill(const string &name="fill"):ShapeContentGraphic(name){}
+	ShapeContentFill();
 	void pop(ofPath& path);
 	void setColor(const ofFloatColor& color) { color_=color; }
 	void setOpacity(float opacity) { opacity_=opacity; }
 	
-	void addColorProperty(Property<ofFloatColor> *prop);
-	void addOpacityProperty(Property<float> *prop);
+	std::shared_ptr<Property<ofFloatColor>> getColorProperty() { return getProperty<ofFloatColor>("color"); }
+	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
 private:
 	ofFloatColor color_;
 	float opacity_;

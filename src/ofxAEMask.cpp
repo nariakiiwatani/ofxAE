@@ -3,11 +3,13 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
-Mask::Mask(const string &name)
-:PropertyGroup(name)
+Mask::Mask()
 {
 	path_.setPolyWindingMode(OF_POLY_WINDING_POSITIVE);
 	path_.setColor(ofColor::white);
+	
+	add<PathProperty>("path")->setTarget(&path_);
+	addProperty<float>("opacity")->setTarget(&opacity_);
 }
 
 void Mask::draw()
@@ -22,18 +24,6 @@ void Mask::draw()
 bool Mask::isSubtract()
 {
 	return blend_mode_==OF_BLENDMODE_SUBTRACT;
-}
-
-void Mask::addPathProperty(PathProperty *prop)
-{
-	prop->setTarget(&path_);
-	addProperty(prop);
-}
-
-void Mask::addOpacityProperty(Property<float> *prop)
-{
-	prop->setTarget(&opacity_);
-	addProperty(prop);
 }
 
 OFX_AE_NAMESPACE_END

@@ -9,15 +9,15 @@ class Mask : public PropertyGroup
 {
 	friend class Loader;
 public:
-	Mask(const string &name="mask");
+	Mask();
 	void draw();
 	void prepare();
 	
 	bool isSubtract();
 	float getOpacity() { return opacity_; }
 	
-	void addPathProperty(PathProperty *prop);
-	void addOpacityProperty(Property<float> *prop);
+	std::shared_ptr<PathProperty> getPathProperty() { return get<PathProperty>("path"); }
+	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
 private:
 	string name_;
 	ofBlendMode blend_mode_;

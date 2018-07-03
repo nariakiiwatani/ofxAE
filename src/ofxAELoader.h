@@ -45,7 +45,7 @@ private:
 	void setupSequenceJson(SequenceCap &cap, const ofJson &json);
 	void setupMovieJson(MovieCap &cap, const ofJson &json);
 	void setupShapeJson(ShapeCap &cap, const ofJson &json);
-	void setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, ShapeContentGroup *parent=NULL);
+	void setupShapeContentsJson(ShapeCap &cap, const ofJson& contents, std::shared_ptr<ShapeContentGroup> parent=nullptr);
 
 	void setupPropertyKeysJson(Property<bool>& prop, const ofJson& json);
 	void setupPropertyKeysJson(Property<float>& prop, const ofJson& json, float scale=1, float offset=0);

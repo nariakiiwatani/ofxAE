@@ -14,19 +14,16 @@ void AVLayer::draw(float alpha)
 {
 	getNode().pushMatrix();
 	if(!mask_.empty()) {
+		if(!is_mask_allocated_) {
+			ofx_mask_.allocate(getWidth(), getHeight(), ofxMask::ALPHA);
+			is_mask_allocated_ = true;
+		}
 		ofx_mask_.beginMask();
-		if(mask_.empty()) {
+		if(mask_.front()->isSubtract()) {
 			ofClear(ofColor::white);
 		}
-		else {
-			vector<Mask*>::iterator it = mask_.begin();
-			if((*it)->isSubtract()) {
-				ofClear(ofColor::white);
-			}
-			while(it != mask_.end()) {
-				(*it)->draw();
-				++it;
-			}
+		for(auto &m : mask_) {
+			m->draw();
 		}
 		ofx_mask_.endMask();
 		ofx_mask_.begin();
@@ -44,13 +41,10 @@ void AVLayer::draw(float alpha)
 	getNode().popMatrix();
 }
 
-void AVLayer::addMask(Mask *mask)
+void AVLayer::addMask(std::shared_ptr<Mask> mask)
 {
-	if(mask_.empty()) {
-		ofx_mask_.allocate(getWidth(), getHeight(), ofxMask::ALPHA);
-	}
 	mask_.push_back(mask);
-	addProperty(mask);
+	add("mask", mask);
 }
 
 

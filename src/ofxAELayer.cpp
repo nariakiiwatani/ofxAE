@@ -4,6 +4,19 @@
 
 OFX_AE_NAMESPACE_BEGIN
 
+Layer::Layer()
+{
+	addProperty<float>("opacity")->setTarget(&opacity_);
+	addProperty<bool>("active")->setCallback(this, &Layer::setActiveCallback);
+	
+	auto transform = add<TransformProperty>("transform");
+	transform->getTranslation()->setCallback(&transform_, &TransformNode::setTranslation);
+	transform->getRotation()->setCallback(&transform_, &TransformNode::setRotation);
+	transform->getScale()->setCallback(&transform_, &TransformNode::setScale);
+	transform->getOrientation()->setCallback(&transform_, &TransformNode::setOrientation);
+	transform->getAnchorPoint()->setCallback(&transform_, &TransformNode::setAnchorPoint);
+}
+
 void Layer::setCap(std::shared_ptr<LayerCap> cap)
 {
 	cap_ = cap;
@@ -60,29 +73,6 @@ void Layer::setPropertyFrame(int frame)
 	}
 	frame_ = frame;
 }
-
-
-void Layer::addOpacityProperty(Property<float> *prop)
-{
-	prop->setTarget(&opacity_);
-	addProperty(prop);
-}
-void Layer::addActiveProperty(Property<bool> *prop)
-{
-	prop->setCallback(this, &Layer::setActiveCallback);
-//	prop->setTarget(&is_active_);
-	addProperty(prop);
-}
-void Layer::addTransformProperty(TransformProperty *prop)
-{
-	prop->translation_.setCallback(&transform_, &TransformNode::setTranslation);
-	prop->rotation_.setCallback(&transform_, &TransformNode::setRotation);
-	prop->scale_.setCallback(&transform_, &TransformNode::setScale);
-	prop->orientation_.setCallback(&transform_, &TransformNode::setOrientation);
-	prop->anchor_point_.setCallback(&transform_, &TransformNode::setAnchorPoint);
-	addProperty(prop);
-}
-
 
 OFX_AE_NAMESPACE_END
 /* EOF */
