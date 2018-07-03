@@ -18,9 +18,8 @@ void AVLayer::draw(float alpha)
 {
 	getNode().pushMatrix();
 	if(!mask_.empty()) {
-		if(!is_mask_allocated_) {
+		if(!ofx_mask_.isAllocated()) {
 			ofx_mask_.allocate(getWidth(), getHeight(), ofxMask::ALPHA);
-			is_mask_allocated_ = true;
 		}
 		ofx_mask_.beginMask();
 		if(mask_.front()->isSubtract()) {

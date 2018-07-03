@@ -33,7 +33,6 @@ protected:
 	ofVec2f size_;
 	std::vector<std::shared_ptr<Mask>> mask_;
 	ofxMask ofx_mask_;
-	bool is_mask_allocated_=false;
 };
 
 OFX_AE_NAMESPACE_END
