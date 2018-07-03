@@ -1,12 +1,14 @@
 #include "ofxAEProperty.h"
 #include "ofColor.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 template<typename Type>
 void Property<Type>::addKey(int frame, const Type& val)
 {
-	key_.insert(std::pair<int,Type>(frame,val));
+	key_.insert(pair<int,Type>(frame,val));
 }
 
 template<typename Type>
@@ -25,8 +27,8 @@ void Property<Type>::setFrame(int frame)
 template<typename Type>
 const Type& Property<Type>::getValueAtFrame(int frame)
 {
-	typename std::map<int, Type>::iterator it = key_.find(frame);
-	if(it != key_.end()) {
+	auto it = key_.find(frame);
+	if(it != end(key_)) {
 		return it->second;
 	}
 	return (--key_.upper_bound(frame))->second;
@@ -47,24 +49,24 @@ void PropertyGroup::setFrame(int frame)
 	}
 }
 
-void PropertyGroup::removeProperty(const std::string &name)
+void PropertyGroup::removeProperty(const string &name)
 {
-	properties_.erase(std::remove_if(std::begin(properties_), std::end(properties_), [&](const std::pair<std::string, std::shared_ptr<PropertyBase>> &p) {
+	properties_.erase(remove_if(begin(properties_), end(properties_), [&](const pair<string, shared_ptr<PropertyBase>> &p) {
 		return p.first == name;
-	}), std::end(properties_));
+	}), end(properties_));
 }
 
-void PropertyGroup::removeProperty(const std::string &name, int index)
+void PropertyGroup::removeProperty(const string &name, int index)
 {
 	auto found = find(name, index);
-	if(found != std::end(properties_)) {
+	if(found != end(properties_)) {
 		properties_.erase(found);
 	}
 }
 
-PropertyGroup::Properties::iterator PropertyGroup::find(const std::string &name, int index)
+PropertyGroup::Properties::iterator PropertyGroup::find(const string &name, int index)
 {
-	return std::find_if(std::begin(properties_), std::end(properties_), [&](const std::pair<std::string, std::shared_ptr<PropertyBase>> &p) {
+	return find_if(begin(properties_), end(properties_), [&](const pair<string, shared_ptr<PropertyBase>> &p) {
 		return p.first == name && --index<0;
 	});
 }

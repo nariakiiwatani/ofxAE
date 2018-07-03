@@ -16,7 +16,7 @@ void Hierarchical::setParent(Hierarchical* p)
 				c = c->sibling_;
 			}
 		}
-		sibling_ = NULL;
+		sibling_ = nullptr;
 	}
 	if(p) {
 		sibling_ = p->child_;

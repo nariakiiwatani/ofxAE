@@ -9,18 +9,18 @@
 OFX_AE_NAMESPACE_BEGIN
 
 namespace comment {
-static const string NEW_LINE = "\\r\\n";
-static const string EMPTY = "";
+static const std::string NEW_LINE = "\\r\\n";
+static const std::string EMPTY = "";
 
-static void extractParam(map<string,string>& dst, const string& src, size_t pos=0)
+static void extractParam(std::map<std::string,std::string>& dst, const std::string& src, std::size_t pos=0)
 {
-	while(pos != string::npos) {
-		size_t delim = src.find_first_of('=', pos);
-		if(delim != string::npos) {
-			string key = src.substr(pos, delim-pos);
+	while(pos != std::string::npos) {
+		std::size_t delim = src.find_first_of('=', pos);
+		if(delim != std::string::npos) {
+			std::string key = src.substr(pos, delim-pos);
 			delim += 1;
 			pos = src.find(NEW_LINE, delim);
-			if(pos == string::npos) {
+			if(pos == std::string::npos) {
 				dst[key] = src.substr(delim);
 			}
 			else {
@@ -33,9 +33,9 @@ static void extractParam(map<string,string>& dst, const string& src, size_t pos=
 		}
 	}
 }
-static const string& getParam(map<string,string>& param, const string& key)
+static const std::string& getParam(std::map<std::string,std::string>& param, const std::string& key)
 {
-	if(param.find(key) != param.end()) {
+	if(param.find(key) != end(param)) {
 		return param[key];
 	}
 	return EMPTY;

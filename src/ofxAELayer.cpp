@@ -2,6 +2,8 @@
 #include "ofxAELayerCap.h"
 #include "ofxAEMarker.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 Layer::Layer()
@@ -17,7 +19,7 @@ Layer::Layer()
 	transform->getAnchorPoint()->setCallback(&transform_, &TransformNode::setAnchorPoint);
 }
 
-void Layer::setCap(std::shared_ptr<LayerCap> cap)
+void Layer::setCap(shared_ptr<LayerCap> cap)
 {
 	cap_ = cap;
 	cap->setLayer(shared_from_this());
@@ -31,7 +33,7 @@ void Layer::setActive(bool active)
 	is_active_ = active;
 }
 
-void Layer::setParent(std::shared_ptr<Layer> layer)
+void Layer::setParent(shared_ptr<Layer> layer)
 {
 	parent_ = layer;
 	if(layer) {

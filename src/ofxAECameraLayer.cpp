@@ -1,5 +1,7 @@
 #include "ofxAECameraLayer.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 CameraLayer::CameraLayer()

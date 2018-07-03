@@ -2,15 +2,17 @@
 #include "ofxAEAVLayer.h"
 #include "ofGraphics.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 ShapeCap::ShapeCap()
 {
 	path_.setMode(ofPath::COMMANDS);
-	shape_prop_ = std::shared_ptr<PropertyGroup>(new PropertyGroup());
+	shape_prop_ = shared_ptr<PropertyGroup>(new PropertyGroup());
 }
 
-void ShapeCap::setLayer(std::shared_ptr<AVLayer> layer)
+void ShapeCap::setLayer(shared_ptr<AVLayer> layer)
 {
 	layer->add("shape", shape_prop_);
 }
@@ -34,7 +36,7 @@ void ShapeCap::draw(float alpha)
 	ofPopStyle();
 }
 
-void ShapeCap::addContent(std::shared_ptr<ShapeContent> content)
+void ShapeCap::addContent(shared_ptr<ShapeContent> content)
 {
 	content_.push_back(content);
 	shape_prop_->add("content", content);
@@ -80,7 +82,7 @@ void ShapeContentGroup::pop(ofPath& path)
 	path.setFillColor(prev_fi);
 	transform_.popMatrix();
 }
-void ShapeContentGroup::addContent(std::shared_ptr<ShapeContent> content)
+void ShapeContentGroup::addContent(shared_ptr<ShapeContent> content)
 {
 	content_.push_back(content);
 	add("content", content);
@@ -129,7 +131,7 @@ void ShapeContentPath::push(ofPath& path)
 	vector<ofPath::Command>& command = path.getCommands();
 	int command_count_prev = command.size();
 	vector<ofPath::Command>& my_command = path_.getCommands();
-	command.insert(std::end(command), std::begin(my_command), std::end(my_command));
+	command.insert(end(command), begin(my_command), end(my_command));
 	command_count_ = command.size() - command_count_prev;
 }
 

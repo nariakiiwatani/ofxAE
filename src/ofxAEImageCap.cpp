@@ -2,6 +2,8 @@
 #include "ofImage.h"
 #include "ofGraphics.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 void ImageCap::loadImage(const string& filepath)

@@ -27,9 +27,9 @@ class CompositionCap;
 
 class Loader {
 public:
-	Loader(const string& base_path="");
-	void setBasePath(const string& base_path);
-	std::shared_ptr<Composition> loadComposition(const string& filepath);
+	Loader(const std::string& base_path="");
+	void setBasePath(const std::string& base_path);
+	std::shared_ptr<Composition> loadComposition(const std::string& filepath);
 	
 private:
 	void setupCompositionJson(Composition& comp, const ofJson& json);
@@ -55,8 +55,8 @@ private:
 	void setupPropertyKeysJson(TransformProperty& prop, const ofJson& json);
 	void setupPropertyKeysJson(PathProperty& prop, const ofJson& json);
 private:
-	string base_path_;
-	static map<string,string> file_cache_;
+	std::string base_path_;
+	static std::map<std::string, std::string> file_cache_;
 };
 
 OFX_AE_NAMESPACE_END

@@ -5,7 +5,7 @@
 class Hierarchical
 {
 public:
-	Hierarchical():parent_(NULL),child_(NULL),sibling_(NULL),dirty_flags_(NONE){}
+	Hierarchical():parent_(nullptr),child_(nullptr),sibling_(nullptr),dirty_flags_(NONE){}
 	
 	void setParent(Hierarchical* p);
 	Hierarchical* getParent() { return parent_; }

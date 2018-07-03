@@ -4,6 +4,8 @@
 #include "ofxAECameraLayer.h"
 #include "ofxAEMarker.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 Composition::Composition()
@@ -76,7 +78,7 @@ void Composition::update()
 	}
 	for(auto &marker : marker_) {
 		MarkerWork &w = marker.second;
-		std::shared_ptr<Marker> m = marker.first;
+		shared_ptr<Marker> m = marker.first;
 		w.is_in_prev = w.is_in;
 		int from = m->getFrom();
 		int to = from + m->getLength()-1;
@@ -86,19 +88,19 @@ void Composition::update()
 
 void Composition::setActiveMarker(int index, float speed)
 {
-	std::shared_ptr<Marker> marker = getMarker(index);
+	shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		setActiveMarker(marker, speed);
 	}
 }
 void Composition::setActiveMarker(const string& name, float speed)
 {
-	std::shared_ptr<Marker> marker = getMarker(name);
+	shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		setActiveMarker(marker, speed);
 	}
 }
-void Composition::setActiveMarker(std::shared_ptr<Marker> marker, float speed)
+void Composition::setActiveMarker(shared_ptr<Marker> marker, float speed)
 {
 	int from = marker->getFrom();
 	int length = max(marker->getLength(), 1);
@@ -134,7 +136,7 @@ bool Composition::isDuringMarker(const string& name)
 {
 	return isDuringMarker(getMarkerIndex(name));
 }
-bool Composition::isDuringMarker(std::shared_ptr<Marker> marker)
+bool Composition::isDuringMarker(shared_ptr<Marker> marker)
 {
 	return isDuringMarker(getMarkerIndex(marker));
 }
@@ -151,7 +153,7 @@ bool Composition::isMarkerBegin(const string& name)
 {
 	return isMarkerBegin(getMarkerIndex(name));
 }
-bool Composition::isMarkerBegin(std::shared_ptr<Marker> marker)
+bool Composition::isMarkerBegin(shared_ptr<Marker> marker)
 {
 	return isMarkerBegin(getMarkerIndex(marker));
 }
@@ -168,41 +170,41 @@ bool Composition::isMarkerEnd(const string& name)
 {
 	return isMarkerEnd(getMarkerIndex(name));
 }
-bool Composition::isMarkerEnd(std::shared_ptr<Marker> marker)
+bool Composition::isMarkerEnd(shared_ptr<Marker> marker)
 {
 	return isMarkerEnd(getMarkerIndex(marker));
 }
 
 bool Composition::isMarkerActive(int index)
 {
-	std::shared_ptr<Marker> marker = getMarker(index);
+	shared_ptr<Marker> marker = getMarker(index);
 	return marker?isMarkerActive(marker):false;
 }
 bool Composition::isMarkerActive(const string& name)
 {
-	std::shared_ptr<Marker> marker = getMarker(name);
+	shared_ptr<Marker> marker = getMarker(name);
 	return marker?isMarkerActive(marker):false;
 }
-bool Composition::isMarkerActive(std::shared_ptr<Marker> marker)
+bool Composition::isMarkerActive(shared_ptr<Marker> marker)
 {
 	return active_marker_.lock() == marker;
 }
 
 void Composition::jumpToMarkerStartFrame(int index)
 {
-	std::shared_ptr<Marker> marker = getMarker(index);
+	shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		jumpToMarkerStartFrame(marker);
 	}
 }
 void Composition::jumpToMarkerStartFrame(const string& name)
 {
-	std::shared_ptr<Marker> marker = getMarker(name);
+	shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		jumpToMarkerStartFrame(marker);
 	}
 }
-void Composition::jumpToMarkerStartFrame(std::shared_ptr<Marker> marker)
+void Composition::jumpToMarkerStartFrame(shared_ptr<Marker> marker)
 {
 	int jump_to = marker->getFrom() - frame_.getFrom();
 	frame_.resetFrame(jump_to);
@@ -210,33 +212,33 @@ void Composition::jumpToMarkerStartFrame(std::shared_ptr<Marker> marker)
 
 void Composition::jumpToMarkerEndFrame(int index)
 {
-	std::shared_ptr<Marker> marker = getMarker(index);
+	shared_ptr<Marker> marker = getMarker(index);
 	if(marker) {
 		jumpToMarkerEndFrame(marker);
 	}
 }
 void Composition::jumpToMarkerEndFrame(const string& name)
 {
-	std::shared_ptr<Marker> marker = getMarker(name);
+	shared_ptr<Marker> marker = getMarker(name);
 	if(marker) {
 		jumpToMarkerEndFrame(marker);
 	}
 }
-void Composition::jumpToMarkerEndFrame(std::shared_ptr<Marker> marker)
+void Composition::jumpToMarkerEndFrame(shared_ptr<Marker> marker)
 {
 	int jump_to = marker->getFrom()+marker->getLength() - frame_.getFrom();
 	frame_.resetFrame(jump_to);
 }
 
 
-std::shared_ptr<Marker>  Composition::getMarker(int index)
+shared_ptr<Marker>  Composition::getMarker(int index)
 {
 	if(0 <= index && index < marker_.size()) {
 		return marker_[index].first;
 	}
 	return nullptr;
 }
-std::shared_ptr<Marker>  Composition::getMarker(const string& name)
+shared_ptr<Marker>  Composition::getMarker(const string& name)
 {
 	return getMarker(getMarkerIndex(name));
 }
@@ -252,7 +254,7 @@ int Composition::getMarkerIndex(const string &name)
 	return -1;
 }
 
-int Composition::getMarkerIndex(std::shared_ptr<Marker> marker)
+int Composition::getMarkerIndex(shared_ptr<Marker> marker)
 {
 	int size = marker_.size();
 	for(int i = 0; i < size; ++i) {
@@ -263,9 +265,9 @@ int Composition::getMarkerIndex(std::shared_ptr<Marker> marker)
 	return -1;
 }
 
-void Composition::addMarker(std::shared_ptr<Marker> marker)
+void Composition::addMarker(shared_ptr<Marker> marker)
 {
-	marker_.push_back(std::make_pair(marker, MarkerWork()));
+	marker_.push_back(make_pair(marker, MarkerWork()));
 }
 
 void Composition::draw(float alpha)
@@ -276,7 +278,7 @@ void Composition::draw(float alpha)
 
 void Composition::draw(ofCamera *camera, float alpha)
 {
-	multimap<float,std::shared_ptr<AVLayer>> work;
+	multimap<float,shared_ptr<AVLayer>> work;
 	for(auto &l : active_layers_) {
 		if(l->getOpacity() == 0) {
 			continue;
@@ -287,7 +289,7 @@ void Composition::draw(ofCamera *camera, float alpha)
 				dist = camera->worldToCamera(dist);
 				dist.z = -dist.z;
 			}
-			work.insert(pair<float,std::shared_ptr<AVLayer>>(dist.z, l));
+			work.insert(pair<float,shared_ptr<AVLayer>>(dist.z, l));
 		}
 		else {
 			if(!work.empty()) {
@@ -340,7 +342,7 @@ void Composition::resetFrameByRatio(float ratio)
 	resetFrame(ofMap(ratio, 0, 1, 0, frame_.getLength()-1));
 }
 
-void Composition::addAVLayer(std::shared_ptr<AVLayer> layer)
+void Composition::addAVLayer(shared_ptr<AVLayer> layer)
 {
 	av_.push_back(layer);
 }
@@ -348,16 +350,16 @@ int Composition::getNumAVLayer()
 {
 	return av_.size();
 }
-vector<std::shared_ptr<AVLayer>>& Composition::getAVLayers()
+vector<shared_ptr<AVLayer>>& Composition::getAVLayers()
 {
 	return av_;
 }
-std::shared_ptr<AVLayer> Composition::getAVLayer(int index)
+shared_ptr<AVLayer> Composition::getAVLayer(int index)
 {
 	return av_[index];
 }
 
-std::shared_ptr<AVLayer> Composition::getAVLayer(const string& name)
+shared_ptr<AVLayer> Composition::getAVLayer(const string& name)
 {
 	for(auto &l : av_) {
 		if(l->getName() == name) {
@@ -367,9 +369,9 @@ std::shared_ptr<AVLayer> Composition::getAVLayer(const string& name)
 	return nullptr;
 }
 
-vector<std::shared_ptr<AVLayer>> Composition::getAVLayers(const string& name)
+vector<shared_ptr<AVLayer>> Composition::getAVLayers(const string& name)
 {
-	vector<std::shared_ptr<AVLayer>> ret;
+	vector<shared_ptr<AVLayer>> ret;
 	for(auto &l :av_) {
 		if(l->getName() == name) {
 			ret.push_back(l);
@@ -379,7 +381,7 @@ vector<std::shared_ptr<AVLayer>> Composition::getAVLayers(const string& name)
 }
 
 
-void Composition::addCameraLayer(std::shared_ptr<CameraLayer> layer)
+void Composition::addCameraLayer(shared_ptr<CameraLayer> layer)
 {
 	camera_.push_back(layer);
 }
@@ -387,16 +389,16 @@ int Composition::getNumCameraLayer()
 {
 	return camera_.size();
 }
-vector<std::shared_ptr<CameraLayer>>& Composition::getCameraLayers()
+vector<shared_ptr<CameraLayer>>& Composition::getCameraLayers()
 {
 	return camera_;
 }
-std::shared_ptr<CameraLayer> Composition::getCameraLayer(int index)
+shared_ptr<CameraLayer> Composition::getCameraLayer(int index)
 {
 	return camera_[index];
 }
 
-std::shared_ptr<CameraLayer> Composition::getCameraLayer(const string& name)
+shared_ptr<CameraLayer> Composition::getCameraLayer(const string& name)
 {
 	for(auto &c : camera_) {
 		if(c->getName() == name) {
@@ -406,9 +408,9 @@ std::shared_ptr<CameraLayer> Composition::getCameraLayer(const string& name)
 	return nullptr;
 }
 
-vector<std::shared_ptr<CameraLayer>> Composition::getCameraLayers(const string& name)
+vector<shared_ptr<CameraLayer>> Composition::getCameraLayers(const string& name)
 {
-	vector<std::shared_ptr<CameraLayer>> ret;
+	vector<shared_ptr<CameraLayer>> ret;
 	for(auto &c : camera_) {
 		if(c->getName() == name) {
 			ret.push_back(c);

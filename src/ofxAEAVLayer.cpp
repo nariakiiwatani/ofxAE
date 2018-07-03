@@ -3,6 +3,8 @@
 #include "ofGraphics.h"
 #include "ofxAEMask.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 void AVLayer::allocate(int width, int height)
@@ -41,7 +43,7 @@ void AVLayer::draw(float alpha)
 	getNode().popMatrix();
 }
 
-void AVLayer::addMask(std::shared_ptr<Mask> mask)
+void AVLayer::addMask(shared_ptr<Mask> mask)
 {
 	mask_.push_back(mask);
 	add("mask", mask);

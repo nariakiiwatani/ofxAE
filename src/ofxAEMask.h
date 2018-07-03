@@ -19,7 +19,7 @@ public:
 	std::shared_ptr<PathProperty> getPathProperty() { return get<PathProperty>("path"); }
 	std::shared_ptr<Property<float>> getOpacityProperty() { return getProperty<float>("opacity"); }
 private:
-	string name_;
+	std::string name_;
 	ofBlendMode blend_mode_;
 	ofPath path_;
 	float opacity_;

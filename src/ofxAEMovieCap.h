@@ -13,7 +13,7 @@ class MovieCap : public AVCap
 public:
 	MovieCap();
 	void setLayer(std::shared_ptr<AVLayer> layer);
-	void loadMovie(const string& filepath);
+	void loadMovie(const std::string& filepath);
 	void setComposition(Composition *comp) { comp_=comp; }
 	void setActive(bool active);
 	void setUseAudio(bool use_audio);

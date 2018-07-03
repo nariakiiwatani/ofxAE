@@ -1,6 +1,8 @@
 #include "ofxAESequenceCap.h"
 #include "ofxAELayer.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 #ifdef TARGET_WIN32

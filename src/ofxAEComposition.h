@@ -42,51 +42,51 @@ public:
 	
 	void addAVLayer(std::shared_ptr<AVLayer> layer);
 	int getNumAVLayer();
-	vector<std::shared_ptr<AVLayer>>& getAVLayers();
+	std::vector<std::shared_ptr<AVLayer>>& getAVLayers();
 	std::shared_ptr<AVLayer> getAVLayer(int index);
-	std::shared_ptr<AVLayer> getAVLayer(const string& name);
-	vector<std::shared_ptr<AVLayer>> getAVLayers(const string& name);
+	std::shared_ptr<AVLayer> getAVLayer(const std::string& name);
+	std::vector<std::shared_ptr<AVLayer>> getAVLayers(const std::string& name);
 	
 	void addCameraLayer(std::shared_ptr<CameraLayer> layer);
 	int getNumCameraLayer();
-	vector<std::shared_ptr<CameraLayer>>& getCameraLayers();
+	std::vector<std::shared_ptr<CameraLayer>>& getCameraLayers();
 	std::shared_ptr<CameraLayer> getCameraLayer(int index);
-	std::shared_ptr<CameraLayer> getCameraLayer(const string& name);
-	vector<std::shared_ptr<CameraLayer>> getCameraLayers(const string& name);
+	std::shared_ptr<CameraLayer> getCameraLayer(const std::string& name);
+	std::vector<std::shared_ptr<CameraLayer>> getCameraLayers(const std::string& name);
 	
 	void setActiveMarker(int index, float speed=1);
-	void setActiveMarker(const string& name, float speed=1);
+	void setActiveMarker(const std::string& name, float speed=1);
 	void setActiveMarker(std::shared_ptr<Marker> marker, float speed=1);
 	void clearActiveMarker(bool reset_frame=false);
 	
 	bool isDuringMarker(int index);
-	bool isDuringMarker(const string& name);
+	bool isDuringMarker(const std::string& name);
 	bool isDuringMarker(std::shared_ptr<Marker> marker);
 	
 	bool isMarkerBegin(int index);
-	bool isMarkerBegin(const string &name);
+	bool isMarkerBegin(const std::string &name);
 	bool isMarkerBegin(std::shared_ptr<Marker> marker);
 	
 	bool isMarkerEnd(int index);
-	bool isMarkerEnd(const string &name);
+	bool isMarkerEnd(const std::string &name);
 	bool isMarkerEnd(std::shared_ptr<Marker> marker);
 	
 	bool isMarkerActive(int index);
-	bool isMarkerActive(const string& name);
+	bool isMarkerActive(const std::string& name);
 	bool isMarkerActive(std::shared_ptr<Marker> marker);
 	bool isSetActiveMarker() { return !active_marker_.expired(); }
 	
 	void jumpToMarkerStartFrame(int index);
-	void jumpToMarkerStartFrame(const string& name);
+	void jumpToMarkerStartFrame(const std::string& name);
 	void jumpToMarkerStartFrame(std::shared_ptr<Marker> marker);
 	
 	void jumpToMarkerEndFrame(int index);
-	void jumpToMarkerEndFrame(const string& name);
+	void jumpToMarkerEndFrame(const std::string& name);
 	void jumpToMarkerEndFrame(std::shared_ptr<Marker> marker);
 	
 	std::shared_ptr<Marker> getMarker(int index);
-	std::shared_ptr<Marker> getMarker(const string& name);
-	int getMarkerIndex(const string &name);
+	std::shared_ptr<Marker> getMarker(const std::string& name);
+	int getMarkerIndex(const std::string &name);
 	int getMarkerIndex(std::shared_ptr<Marker> marker);
 	
 	void addMarker(std::shared_ptr<Marker> marker);
@@ -97,9 +97,9 @@ private:
 	float height_;
 	int frame_rate_;
 	bool is_time_updating_;
-	vector<std::shared_ptr<AVLayer>> av_;
-	vector<std::shared_ptr<CameraLayer>> camera_;
-	vector<std::shared_ptr<AVLayer>> active_layers_;
+	std::vector<std::shared_ptr<AVLayer>> av_;
+	std::vector<std::shared_ptr<CameraLayer>> camera_;
+	std::vector<std::shared_ptr<AVLayer>> active_layers_;
 	std::weak_ptr<CameraLayer> active_camera_;
 	struct MarkerWork {
 		bool is_in=false, is_in_prev=false;

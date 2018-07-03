@@ -2,9 +2,11 @@
 #include "ofGraphics.h"
 #include "ofxAEAVLayer.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
-void CompositionCap::setLayer(std::shared_ptr<AVLayer> layer)
+void CompositionCap::setLayer(shared_ptr<AVLayer> layer)
 {
 	AVCap::setLayer(layer);
 	fbo_.allocate(layer->getWidth(), layer->getHeight(), GL_RGBA);
@@ -19,7 +21,7 @@ void CompositionCap::update()
 void CompositionCap::draw(float alpha)
 {
 	if(isCollapseTransformation()) {
-		composition_.draw(NULL, opacity_*alpha);
+		composition_.draw(nullptr, opacity_*alpha);
 	}
 	else {
 		fbo_.begin();

@@ -1,5 +1,7 @@
 #include "ofxAEMarker.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 Marker::Marker()

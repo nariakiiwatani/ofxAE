@@ -12,7 +12,6 @@ public:
 	void draw(float alpha=1);
 	
 	void setColor(const ofColor &color) { color_=color; }
-	
 	const ofColor& getColor() { return color_; }
 private:
 	ofColor color_ = ofColor::white;

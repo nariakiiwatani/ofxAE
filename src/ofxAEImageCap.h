@@ -9,7 +9,7 @@ OFX_AE_NAMESPACE_BEGIN
 class ImageCap : public AVCap
 {
 public:
-	void loadImage(const string& filepath);
+	void loadImage(const std::string& filepath);
 	void draw(float alpha=1);
 private:
 	ofTexture texture_;

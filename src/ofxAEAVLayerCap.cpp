@@ -1,17 +1,19 @@
 #include "ofxAEAVLayerCap.h"
 #include "ofxAEAVLayer.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
-void AVCap::setLayer(std::shared_ptr<Layer> layer)
+void AVCap::setLayer(shared_ptr<Layer> layer)
 {
 	LayerCap::setLayer(layer);
-	if(auto av = std::dynamic_pointer_cast<AVLayer>(layer)) {
+	if(auto av = dynamic_pointer_cast<AVLayer>(layer)) {
 		setLayer(av);
 	}
 }
 
-void AVCap::setLayer(std::shared_ptr<AVLayer> layer)
+void AVCap::setLayer(shared_ptr<AVLayer> layer)
 {
 	rect_.set(0,0,layer->getWidth(),layer->getHeight());
 	blend_mode_ = layer->getBlendMode();

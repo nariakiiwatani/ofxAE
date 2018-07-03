@@ -15,7 +15,7 @@ class SequenceCap : public ImageCap
 public:
 	SequenceCap();
 	~SequenceCap();
-	void setSequenceString(const string& str);
+	void setSequenceString(const std::string& str);
 	void update();
 private:
 #ifdef TARGET_WIN32
@@ -25,7 +25,7 @@ private:
 #endif
 	int digit_;
 	int start_, end_;
-	string before_, after_;
+	std::string before_, after_;
 	int prev_frame_=-1;
 };
 

@@ -4,6 +4,8 @@
 #include "ofAppRunner.h"
 #include "ofxAEComposition.h"
 
+using namespace std;
+
 OFX_AE_NAMESPACE_BEGIN
 
 MovieCap::MovieCap()
@@ -11,7 +13,7 @@ MovieCap::MovieCap()
 {
 }
 
-void MovieCap::setLayer(std::shared_ptr<AVLayer> layer)
+void MovieCap::setLayer(shared_ptr<AVLayer> layer)
 {
 	AVCap::setLayer(layer);
 	const string &lazy = layer->getParam("lazy");

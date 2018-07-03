@@ -39,10 +39,10 @@ public:
 	std::shared_ptr<Property<bool>> getActiveProperty() { return getProperty<bool>("active"); }
 	std::shared_ptr<TransformProperty> getTransformProperty() { return get<TransformProperty>("transform"); }
 	
-	void setParamByComment(const string &comment);
-	const string& getParam(const string &key);
+	void setParamByComment(const std::string &comment);
+	const std::string& getParam(const std::string &key);
 protected:
-	string name_;
+	std::string name_;
 	std::weak_ptr<Layer> parent_;
 	std::shared_ptr<LayerCap> cap_;
 	int frame_=0;
@@ -51,8 +51,8 @@ protected:
 	bool is_active_=true;
 	TransformNode transform_;
 	int frame_offset_, frame_in_, frame_out_;
-	vector<std::shared_ptr<Marker>> marker_;
-	std::map<string, string> param_;
+	std::vector<std::shared_ptr<Marker>> marker_;
+	std::map<std::string, std::string> param_;
 	
 private:
 	void setActiveCallback(const bool &active) { setActive(active); }
