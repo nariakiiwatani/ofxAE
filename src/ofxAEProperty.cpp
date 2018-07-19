@@ -1,5 +1,6 @@
 #include "ofxAEProperty.h"
 #include "ofColor.h"
+#include "ofPoint.h"
 
 using namespace std;
 
@@ -96,10 +97,10 @@ void PathProperty::setFrame(int frame)
 			int vertex_count = vertices_.size();
 			for(int i0 = vertex_count; i0-- > 0;) {
 				const ofVec2f& p0 = vertices_[i0];
-				ofPoint c0 = p0+in_tangents_[i0];
+				glm::vec2 c0 = p0+in_tangents_[i0];
 				int i1 = i0>0?(i0-1):(vertex_count-1);
 				const ofVec2f& p1 = vertices_[i1];
-				ofPoint c1 = p1+out_tangents_[i1];
+				glm::vec2 c1 = p1+out_tangents_[i1];
 				path.bezierTo(c0, c1, p1);
 			}
 			path.close();
@@ -109,10 +110,10 @@ void PathProperty::setFrame(int frame)
 			int vertex_count = vertices_.size();
 			for(int i0 = 0; i0 < vertex_count; ++i0) {
 				const ofVec2f& p0 = vertices_[i0];
-				ofPoint c0 = p0+out_tangents_[i0];
+				glm::vec2 c0 = p0+out_tangents_[i0];
 				int i1 = (i0+1<vertex_count)?i0+1:0;
 				const ofVec2f& p1 = vertices_[i1];
-				ofPoint c1 = p1+in_tangents_[i1];
+				glm::vec2 c1 = p1+in_tangents_[i1];
 				path.bezierTo(c0, c1, p1);
 			}
 			path.close();
