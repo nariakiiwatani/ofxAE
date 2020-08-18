@@ -4,6 +4,7 @@
 #include "ofxAELayerCap.h"
 #include "ofVec2f.h"
 #include "ofRectangle.h"
+#include "ofGraphicsConstants.h"
 
 OFX_AE_NAMESPACE_BEGIN
 

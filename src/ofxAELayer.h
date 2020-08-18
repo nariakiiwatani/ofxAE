@@ -24,7 +24,7 @@ public:
 	bool isActive() { return is_active_; }
 	float getOpacity() { return opacity_; }
 	TransformNode& getNode() { return transform_; }
-	const string& getName() { return name_; }
+	const std::string& getName() { return name_; }
 	int getFrame() { return frame_; }
 
 	void setActive(bool active);

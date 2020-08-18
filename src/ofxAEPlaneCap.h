@@ -3,7 +3,6 @@
 #include "ofxAEDef.h"
 #include "ofxAEAVLayerCap.h"
 #include "ofColor.h"
-template<> const ofColor ofColor::white;
 
 OFX_AE_NAMESPACE_BEGIN
 

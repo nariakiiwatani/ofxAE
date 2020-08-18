@@ -1,5 +1,6 @@
 #include "ofxAEProperty.h"
 #include "ofColor.h"
+#include "ofPoint.h"
 
 using namespace std;
 

@@ -4,7 +4,7 @@
 #include "ofConstants.h"
 #include "ofxAEProperty.h"
 #include "ofParameter.h"
-#include "ofJson_compatible.h"
+#include "ofJson.h"
 
 OFX_AE_NAMESPACE_BEGIN
 

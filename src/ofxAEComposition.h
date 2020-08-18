@@ -93,7 +93,7 @@ public:
 	void addMarker(std::shared_ptr<Marker> marker);
 	
 private:
-	string name_;
+	std::string name_;
 	float width_;
 	float height_;
 	int frame_rate_;
