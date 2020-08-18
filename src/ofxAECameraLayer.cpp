@@ -14,7 +14,10 @@ void CameraLayer::prepare()
 {
 	camera_.setFov(fov_);
 	camera_.lookAt(look_at_);
-	camera_.setTransformMatrix(*(getNode().getWorldMatrix()));
+	auto &&matrix = *getNode().getWorldMatrix();
+	camera_.setPosition(matrix.getTranslation());
+	camera_.setOrientation(matrix.getRotate());
+	camera_.setScale(matrix.getScale());
 }
 
 OFX_AE_NAMESPACE_END
