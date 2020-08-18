@@ -101,7 +101,7 @@ void PathProperty::setFrame(int frame)
 				int i1 = i0>0?(i0-1):(vertex_count-1);
 				const ofVec2f& p1 = vertices_[i1];
 				ofPoint c1 = p1+out_tangents_[i1];
-				path.bezierTo(c0, c1, p1);
+				path.bezierTo(glm::vec3(c0), glm::vec3(c1), p1);
 			}
 			path.close();
 		}
@@ -114,7 +114,7 @@ void PathProperty::setFrame(int frame)
 				int i1 = (i0+1<vertex_count)?i0+1:0;
 				const ofVec2f& p1 = vertices_[i1];
 				ofPoint c1 = p1+in_tangents_[i1];
-				path.bezierTo(c0, c1, p1);
+				path.bezierTo(glm::vec3(c0), glm::vec3(c1), p1);
 			}
 			path.close();
 		}
