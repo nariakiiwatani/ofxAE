@@ -162,6 +162,7 @@ for(var i = 0; i < comps.length; ++i) {
 	if(!file) return $.writeln("failed");
 	var flag = file.open("w","txt","");
 	if (!flag) return $.writeln("failed");
+	file.encoding = "UTF-8";
 	file.write(ExportUtil.toSource(exp));
 	file.close();
 }
